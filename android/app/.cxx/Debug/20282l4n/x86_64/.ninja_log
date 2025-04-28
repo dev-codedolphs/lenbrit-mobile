@@ -1,0 +1,5 @@
+# ninja log v5
+0	8	0	/Users/apple/Downloads/lenbrit/mobile/android/app/.cxx/Debug/20282l4n/x86_64/CMakeFiles/cmake.verify_globs	72971736f8b7d0fe
+1	1311	1745875590249993519	CMakeFiles/appmodules.dir/Users/apple/Downloads/lenbrit/mobile/android/app/build/generated/autolinking/src/main/jni/autolinking.cpp.o	55e259d094987e95
+1	1438	1745875590376526788	CMakeFiles/appmodules.dir/OnLoad.cpp.o	dfda2692043118b9
+1438	1498	1745875590441865731	/Users/apple/Downloads/lenbrit/mobile/android/app/build/intermediates/cxx/Debug/20282l4n/obj/x86_64/libappmodules.so	424d4eb628efe3b8
