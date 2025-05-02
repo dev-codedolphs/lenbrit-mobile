@@ -1,0 +1,1 @@
+/Users/apple/Downloads/lenbrit/mobile/android/app/build/intermediates/cxx/RelWithDebInfo/352q381i/obj/x86_64
