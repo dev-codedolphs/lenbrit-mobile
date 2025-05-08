@@ -1,5 +1,7 @@
 // const Default = '#6C63FF';
 const Default = '#A020F0';
+const Default2 = "#A020F01C";
+const Default3 = "#A020F00D";
 
 const lilac = '#979CFF';
 const lilac2 = '#B8BDFF';
@@ -30,6 +32,8 @@ const dkgray = '#888888';
 
 export const color = {
     Default: Default,
+    Default2: Default2,
+    Default3: Default3,
     Lilac: lilac,
     Lilac2: lilac2,
     Lilac3: lilac3,

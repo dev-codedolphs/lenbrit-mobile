@@ -5,6 +5,7 @@ import OtpVerification from '../screens/auth/OtpVerification';
 import AccountCreated from '../screens/auth/AccountCreated';
 import ResetPassword from '../screens/auth/ResetPassword';
 import ResetPasswordSuccess from '../screens/auth/ResetPasswordSuccess';
+import OnboardingScreen from '../screens/auth/OnboardingScreen';
 
 export type AuthStackParamList = {
   Login: undefined;
@@ -13,6 +14,7 @@ export type AuthStackParamList = {
   AccountCreated: undefined;
   ResetPassword: undefined;
   ResetPasswordSuccess: undefined;
+  OnboardingScreen: undefined;
 };
 
 const Stack = createNativeStackNavigator<AuthStackParamList>();
@@ -20,6 +22,7 @@ const Stack = createNativeStackNavigator<AuthStackParamList>();
 const AuthStack = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="SignUp" component={SignUp} />
       <Stack.Screen name="OtpVerification" component={OtpVerification} />
