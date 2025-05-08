@@ -1,5 +1,5 @@
 // const Default = '#6C63FF';
-const Default = '#f47b53';
+const Default = '#A020F0';
 
 const lilac = '#979CFF';
 const lilac2 = '#B8BDFF';

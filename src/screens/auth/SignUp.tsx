@@ -1,4 +1,4 @@
-import { SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState, useMemo } from 'react';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/Feather';
@@ -40,7 +40,7 @@ const SignUp = () => {
                 <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginTop: hp(0.5) }}>
                     <Icon name='arrow-left' size={24} />
                 </TouchableOpacity>
-                <space.s6 />
+                <Image style={styles.logo} source={require('../../assets/icons/logo.png')} />
                 <Text style={styles.header}>Sign Up</Text>
                 <Text style={styles.subHeader}>Enter your credentials to create a new account on the app</Text>
 
@@ -141,4 +141,10 @@ const styles = StyleSheet.create({
     ruleItem: {
         marginVertical: 2,
     },
+    logo: {
+        width: 120,
+        height: 120,
+        resizeMode: 'contain',
+        alignSelf: 'center',
+      },
 });

@@ -1,20 +1,19 @@
 import React from 'react';
-import { View, Image, ImageBackground, StyleSheet } from 'react-native';
+import { View, Image, Text, StyleSheet } from 'react-native';
+import { color } from '../../theme/colors';
+import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
 
 const SplashScreen = () => {
   return (
-    <ImageBackground
-      source={require('../../assets/icons/Splash.png')} 
-      style={styles.background}
-      resizeMode="cover"
-    >
+    <View style={styles.background}>
       <View style={styles.overlay}>
-      <Image
+        <Image
           source={require('../../assets/icons/logo.png')} // logo
           style={styles.logo}
         />
+        <Text style={styles.tagLine}>Lend, Borrow, Repeat </Text>
       </View>
-    </ImageBackground>
+    </View>
   );
 };
 
@@ -28,13 +27,18 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: 'center',
     alignItems: 'center',
-    backgroundColor: 'rgba(255, 255, 255, 0.6)', // optional overlay tint
+    backgroundColor: 'rgba(255, 255, 255, 0.6)',
   },
   logo: {
-    width: 200,
-    height: 200,
+    width: wp(52),
+    height: wp(25),
     resizeMode: 'contain',
   },
+  tagLine: {
+    fontSize: 18,
+    fontWeight: '500',
+    color: color.Default,
+  }
 });
 
 export default SplashScreen;

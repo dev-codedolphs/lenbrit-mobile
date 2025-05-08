@@ -1,7 +1,8 @@
 import React, { useState } from 'react'
-import { StyleSheet, Text, View, SafeAreaView, Image, TouchableOpacity } from 'react-native'
+import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
-import Icon from 'react-native-vector-icons/FontAwesome';
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { Google } from '../../assets/icons'
 import InputField from '../../components/TextInput'
 import Button from '../../components/Button'
 import { color } from '../../theme/colors'
@@ -40,7 +41,7 @@ const Login = () => {
           onRightIconPress={() => setHidePassword(!hidePassword)}
         />
         <space.s1 />
-        <TouchableOpacity>
+        <TouchableOpacity onPress={() => navigation.navigate('ResetPassword')}>
           <Text style={{ textAlign: 'right' }}>Forget Password?</Text>
         </TouchableOpacity>
         <space.s2 />
@@ -49,8 +50,8 @@ const Login = () => {
         <Text style={{ fontSize: 14, fontWeight: '700', textAlign: 'center' }}>OR</Text>
         <space.s3 />
         <TouchableOpacity style={styles.button} onPress={() => console.log('pressed')}>
-          <Icon name="facebook" size={20} color="#fff" style={styles.icon} />
-          <Text style={styles.text}>Continue with Facebook</Text>
+          <Google />
+          <Text style={styles.text}>Continue with Google</Text>
         </TouchableOpacity>
         <space.s3 />
         <TouchableOpacity onPress={() => navigation.navigate("SignUp")}>
@@ -77,18 +78,21 @@ const styles = StyleSheet.create({
   },
   button: {
     flexDirection: 'row',
-    backgroundColor: '#4267B2',
-    padding: wp(3),
+    backgroundColor: color.White,
+    padding: wp(2.5),
     borderRadius: wp(1.5),
     alignItems: 'center',
     justifyContent: 'center',
+    borderColor: color.Black,
+    borderWidth: 1,
   },
   icon: {
     marginRight: 10,
   },
   text: {
-    color: '#fff',
+    color: color.Black,
     fontWeight: '600',
     fontSize: 16,
+    marginLeft: wp(4),
   },
 })
