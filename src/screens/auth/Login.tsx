@@ -8,9 +8,13 @@ import Button from '../../components/Button'
 import { color } from '../../theme/colors'
 import * as space from '../../utils/spacer'
 import { useNavigation } from '@react-navigation/native';
+import { useDispatch } from 'react-redux'
+import authSlice from './redux/Slice'
+import { AuthNavigationProp } from '../../types/navigation'
 
 const Login = () => {
-  const navigation = useNavigation();
+  const dispatch = useDispatch();
+  const navigation = useNavigation<AuthNavigationProp>();
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [hidePassword, setHidePassword] = useState(true);
@@ -45,7 +49,7 @@ const Login = () => {
           <Text style={{ textAlign: 'right' }}>Forget Password?</Text>
         </TouchableOpacity>
         <space.s2 />
-        <Button title='SIGN IN' backgroundColor={color.Default} />
+        <Button title='SIGN IN' backgroundColor={color.Default} onPress={() => dispatch(authSlice.actions.authenticate())} />
         <space.s3 />
         <Text style={{ fontSize: 14, fontWeight: '700', textAlign: 'center' }}>OR</Text>
         <space.s3 />

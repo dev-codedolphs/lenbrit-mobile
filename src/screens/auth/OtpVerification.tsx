@@ -7,9 +7,10 @@ import { OtpInput } from "react-native-otp-entry";
 import { color } from '../../theme/colors';
 import Button from '../../components/Button';
 import { useNavigation } from '@react-navigation/native';
+import { AuthNavigationProp } from '../../types/navigation';
 
 const OtpVerification = () => {
-    const navigation = useNavigation();
+    const navigation = useNavigation<AuthNavigationProp>();
 
     return (
         <SafeAreaView style={{ flex: 1 }}>

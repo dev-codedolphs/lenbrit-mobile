@@ -4,9 +4,11 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import Button from '../../components/Button'
 import { color } from '../../theme/colors'
 import { useNavigation } from '@react-navigation/native'
+import authSlice from './redux/Slice'
+import { useDispatch } from 'react-redux'
 
 const AccountCreated = () => {
-    const navigation = useNavigation();
+    const dispatch = useDispatch();
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -16,7 +18,7 @@ const AccountCreated = () => {
                 <Text style={styles.subHeader}>Login to your account and start using the banquet hall application for event bookings, marriage halls and a lot more! </Text>
             </View>
             <View style={{ padding: wp(2), backgroundColor: color.White }}>
-                <Button onPress={() => navigation.navigate('ResetPassword')} title='Next' backgroundColor={color.Default} style={{ width: '94%' }} />
+                <Button onPress={() => dispatch(authSlice.actions.authenticate())} title='Next' backgroundColor={color.Default} style={{ width: '94%' }} />
             </View>
         </SafeAreaView>
     )

@@ -1,10 +1,3 @@
-/**
- * Sample React Native App
- * https://github.com/facebook/react-native
- *
- * @format
- */
-
 import React, { useState, useEffect } from 'react';
 import {  StatusBar, useColorScheme } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -18,8 +11,6 @@ import { AppNavigator } from './src/navigation/AppNavigator';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
-  const [isAuthenticated, setIsAuthenticated] = useState(true);
-
   const backgroundStyle = {
     backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
   };
@@ -44,7 +35,7 @@ function App(): React.JSX.Element {
         {isLoading ? (
           <SplashScreen />
         ) : (
-          <AppNavigator isAuthenticated={isAuthenticated} />
+          <AppNavigator />
         )}
       </NavigationContainer>   
     </SafeAreaProvider>

@@ -7,9 +7,10 @@ import { color } from '../../theme/colors';
 import Button from '../../components/Button';
 import { useNavigation } from '@react-navigation/native';
 import InputField from '../../components/TextInput';
+import { AuthNavigationProp } from '../../types/navigation';
 
 const ResetPassword = () => {
-    const navigation = useNavigation();
+    const navigation = useNavigation<AuthNavigationProp>();
     const [email, setEmail] = useState('');
 
     return (

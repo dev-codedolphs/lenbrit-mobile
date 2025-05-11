@@ -4,9 +4,10 @@ import Button from '../../components/Button'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import { color } from '../../theme/colors'
 import { useNavigation } from '@react-navigation/native'
+import { AuthNavigationProp } from '../../types/navigation'
 
 const ResetPasswordSuccess = () => {
-    const navigation = useNavigation();
+    const navigation = useNavigation<AuthNavigationProp>();
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: color.White }}>
@@ -16,7 +17,7 @@ const ResetPasswordSuccess = () => {
                 <Text style={styles.subHeader}>Login to your account and start using the banquet hall application for event bookings, marriage halls and a lot more! </Text>
             </View>
             <View style={{ padding: wp(2), backgroundColor: color.White }}>
-                <Button onPress={() => navigation.navigate('ResetPassword')} title='Next' backgroundColor={color.Default} style={{ width: '94%' }} />
+                <Button onPress={() => navigation.navigate('Login')} title='Next' backgroundColor={color.Default} style={{ width: '94%' }} />
             </View>
         </SafeAreaView>
     )

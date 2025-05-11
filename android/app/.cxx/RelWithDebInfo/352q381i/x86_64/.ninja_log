@@ -62,3 +62,5 @@
 20327	20380	1746184840697807675	/Users/apple/Downloads/lenbrit/mobile/android/app/build/intermediates/cxx/RelWithDebInfo/352q381i/obj/x86_64/libreact_codegen_rnsvg.so	5854b32cc105b2df
 0	21304	1746184841582833094	CMakeFiles/appmodules.dir/Users/apple/Downloads/lenbrit/mobile/android/app/build/generated/autolinking/src/main/jni/autolinking.cpp.o	6cdc7e345fab563c
 21304	21383	1746184841689606115	/Users/apple/Downloads/lenbrit/mobile/android/app/build/intermediates/cxx/RelWithDebInfo/352q381i/obj/x86_64/libappmodules.so	8039270c223b30e
+0	10	0	/Users/apple/Downloads/lenbrit/mobile/android/app/.cxx/RelWithDebInfo/352q381i/x86_64/CMakeFiles/cmake.verify_globs	ceb76be50bb81d3c
+0	14	0	clean	19032e23f5748419
