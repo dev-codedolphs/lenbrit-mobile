@@ -2,6 +2,7 @@
 import React from 'react';
 import { View, Text, StyleSheet, Image } from 'react-native';
 import { ArrowForward } from '../../assets/icons';
+import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const Header = () => {
   return (
@@ -25,7 +26,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
-    marginTop: 16,
+    marginTop: hp(2),
   },
   welcome: {
     fontSize: 14,
@@ -43,11 +44,12 @@ const styles = StyleSheet.create({
   avatar: {
     width: 36,
     height: 36,
-    borderRadius: 18,
-    marginRight: 8,
+    borderRadius: wp(5),
+    marginRight: wp(2),
   },
   notification: {
-    alignSelf: 'center'
+    alignSelf: 'center',
+    marginBottom: hp(1.5)
   }
 });
 
