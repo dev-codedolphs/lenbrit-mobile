@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
+  SafeAreaView,
 } from 'react-native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../../navigation/MainStack';
@@ -83,6 +84,7 @@ const AddItemScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   return (
+    <SafeAreaView style={{ flex: 1 }}>
     <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
       {/* Header */}
       <Header title="Add New Item" goBack={() => navigation.goBack()} />
@@ -144,6 +146,7 @@ const AddItemScreen: React.FC<Props> = ({ navigation }) => {
         onPress={handleSubmit}
       />
     </ScrollView>
+    </SafeAreaView>
   );
 };
 

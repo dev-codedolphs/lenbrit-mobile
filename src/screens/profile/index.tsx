@@ -22,7 +22,8 @@ const ProfileScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
   
   return (
-      <SafeAreaView style={styles.container}>
+      <SafeAreaView style={{ flex: 1 }}>
+        <View style={styles.container}>
         {/* Profile Info */}
         <View style={styles.profileSection}>
           <Image
@@ -44,6 +45,7 @@ const ProfileScreen = () => {
         <OptionCard CardIcon={<PrivacyPolicy />} label="Privacy Policy" />
         <OptionCard CardIcon={<SupportIcon />} label="Help & Support" />
         <OptionCard CardIcon={<PaymentIcon />} label="Payments Method" />
+        </View>
       </SafeAreaView>
     );
 }

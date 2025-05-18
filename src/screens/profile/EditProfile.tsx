@@ -29,7 +29,8 @@ const EditProfile = () => {
     const [showLogoutModal, setShowLogoutModal] = useState<boolean>(false);
 
     return (
-        <SafeAreaView style={styles.container}>
+        <SafeAreaView style={{ flex: 1 }}>
+            <View style={styles.container}>
             <Header title='Edit Profile' goBack={() => navigation.goBack()} />
             <TouchableOpacity style={{ alignSelf: 'center', marginTop: hp(4) }}>
                 <Image
@@ -128,6 +129,7 @@ const EditProfile = () => {
                 </View>
             </Modal>
 
+             {/* Logout Modal */}
             <Modal animationType="slide" transparent visible={showLogoutModal} onRequestClose={() => setShowLogoutModal(false)}>
                 <View style={styles.overlay}>
                     <View style={styles.modalBox}>
@@ -142,6 +144,7 @@ const EditProfile = () => {
                     </View>
                 </View>
             </Modal>
+            </View>
         </SafeAreaView>
     )
 }

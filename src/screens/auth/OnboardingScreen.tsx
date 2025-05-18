@@ -11,6 +11,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { Onboarding1, Onboarding2, Onboarding3, Forward } from '../../assets/icons';
 import { color } from '../../theme/colors';
 import * as space from '../../utils/spacer'
+import { SafeAreaView } from 'react-native';
 
 interface SlideProps {
     title: string;
@@ -52,7 +53,8 @@ const OnboardingScreen = ({ navigation }: any) => {
     }, [currentIndex, navigation]);
 
     return (
-        <View style={styles.container}>
+        <SafeAreaView style={{ flex: 1 }}>
+            <View style={styles.container} >
             <StatusBar barStyle="dark-content" backgroundColor="#fff" />
 
             <TouchableOpacity style={styles.skipButton} onPress={() => navigation.replace('Login')}>
@@ -118,13 +120,15 @@ const OnboardingScreen = ({ navigation }: any) => {
                     </View>
                 ))}
             </Swiper>
-        </View>
+            </View>
+        </SafeAreaView>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
+        paddingTop: wp(4),
         backgroundColor: color.White,
     },
     skipButton: {

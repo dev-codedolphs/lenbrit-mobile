@@ -58,8 +58,8 @@ const OrderDetailScreen: React.FC<Props> = ({ route }) => {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView contentContainerStyle={styles.contentContainer}>
+        <SafeAreaView style={{ flex: 1 }}>
+            <ScrollView contentContainerStyle={styles.container}>
 
                 {/* Header */}
                 <Header title='Details' goBack={() => navigation.goBack()} />
@@ -132,7 +132,6 @@ const styles = StyleSheet.create({
         color: '#000',
     },
     imageContainer: {
-        marginTop: hp('2%'),
         backgroundColor: '#F8F8F8',
         borderRadius: 12,
         alignItems: 'center',
@@ -176,9 +175,9 @@ const styles = StyleSheet.create({
         lineHeight: hp('2.4%'),
     },
     detailsContainer: {
-        marginTop: hp('3%'),
+        marginTop: hp('2%'),
         marginBottom: hp('3%'),
-        gap: hp('1.5%'),
+        gap: hp('1.3%'),
     },
     detailRow: {
         flexDirection: 'row',

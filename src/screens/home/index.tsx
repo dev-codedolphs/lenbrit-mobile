@@ -1,5 +1,5 @@
 import React from 'react';
-import { ScrollView, StyleSheet, Text } from 'react-native';
+import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Header from '../../components/home/Header';
 import PromoBanner from '../../components/home/Banner';
 import QuickStats from '../../components/home/QuickStats';
@@ -58,15 +58,17 @@ const HomeScreen = () => {
   ];
 
   return (
-    <ScrollView contentContainerStyle={styles.container} showsVerticalScrollIndicator={false}>
-      <Header />
-      <PromoBanner />
-      <Text style={{ fontSize: 20, fontWeight: '600'}}>Quick Stats</Text>
-      <QuickStats />
+    <SafeAreaView style={{ flex: 1 }} >
+      <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
+        <Header />
+        <PromoBanner />
+        <Text style={{ fontSize: 20, fontWeight: '600' }}>Quick Stats</Text>
+        <QuickStats />
 
-      <YourListings title="Your Listings" data={listings} />
-      <YourListings title="Incoming Requests" data={requests} />
-    </ScrollView>
+        <YourListings title="Your Listings" data={listings} />
+        <YourListings title="Incoming Requests" data={requests} />
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

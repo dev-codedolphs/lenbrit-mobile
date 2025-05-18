@@ -12,7 +12,7 @@ import { AppNavigator } from './src/navigation/AppNavigator';
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
   const backgroundStyle = {
-    backgroundColor: isDarkMode ? Colors.darker : Colors.lighter,
+    backgroundColor: 'white',
   };
 
   const [isLoading, setIsLoading] = useState(true);
@@ -28,7 +28,7 @@ function App(): React.JSX.Element {
   return (
     <SafeAreaProvider>
       <StatusBar
-        barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+        barStyle={'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
       <NavigationContainer>

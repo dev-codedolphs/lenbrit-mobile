@@ -44,8 +44,8 @@ const ItemDetailScreen: React.FC<Props> = ({ route }) => {
     };
 
     return (
-        <SafeAreaView style={styles.container}>
-            <ScrollView contentContainerStyle={styles.contentContainer}>
+        <SafeAreaView style={{ flex: 1 }}>
+            <ScrollView contentContainerStyle={styles.container}>
 
                 {/* Header */}
                 <Header title='Item Details' goBack={() => navigation.goBack()} />
