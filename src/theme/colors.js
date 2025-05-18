@@ -19,7 +19,7 @@ const gold = '#EFCA30';
 const gold2 = '#F9EAAC';
 const gold3 = '#FCF6DB';
 
-const red = '#da451d';
+const red = '#FF0004';
 const pink = '#FFA4A4';
 const pink2 = '#FFD8D7';
 const pink3 = '#FFF5F5';

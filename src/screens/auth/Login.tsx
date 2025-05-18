@@ -71,8 +71,9 @@ export default Login
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: hp(1.5),
-    marginHorizontal: wp(4),
+    paddingTop: hp(1.5),
+    paddingHorizontal: wp(4),
+    backgroundColor: color.White,
   },
   logo: {
     width: 150,
@@ -84,7 +85,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     backgroundColor: color.White,
     padding: wp(2.5),
-    borderRadius: wp(1.5),
+    borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
     borderColor: color.Black,

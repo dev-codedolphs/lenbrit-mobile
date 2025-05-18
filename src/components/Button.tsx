@@ -39,15 +39,16 @@ const styles = StyleSheet.create({
     width: '100%',
     marginVertical: hp(1),
     paddingVertical: hp(1.5),
-    borderRadius: 6,
+    borderRadius: 10,
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
   },
   title: {
+    fontFamily: 'DM Sans',
     color: '#fff',
-    fontSize: 14,
-    fontWeight: '600',
+    fontSize: 16,
+    fontWeight: '500',
   },
 });
 

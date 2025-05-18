@@ -5,6 +5,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { color } from '../../theme/colors'
 import { useNavigation } from '@react-navigation/native'
 import { AuthNavigationProp } from '../../types/navigation'
+import { SuccessIcon } from '../../assets/icons'
 
 const ResetPasswordSuccess = () => {
     const navigation = useNavigation<AuthNavigationProp>();
@@ -12,7 +13,7 @@ const ResetPasswordSuccess = () => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: color.White }}>
             <View style={styles.container}>
-                <Image source={require('../../assets/icons/Success.png')} />
+                <SuccessIcon />
                 <Text style={styles.header}>Password Reset Successful!</Text>
                 <Text style={styles.subHeader}>Login to your account and start using the banquet hall application for event bookings, marriage halls and a lot more! </Text>
             </View>
@@ -28,10 +29,11 @@ export default ResetPasswordSuccess
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: hp(2),
-        marginHorizontal: wp(4),
+        paddingTop: hp(2),
+        paddingHorizontal: wp(4),
         alignItems: 'center',
         justifyContent: 'center',
+        backgroundColor: color.White,
     },
     header: {
         fontSize: 24,

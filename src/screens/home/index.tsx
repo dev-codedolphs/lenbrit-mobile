@@ -72,7 +72,7 @@ const HomeScreen = () => {
 
 const styles = StyleSheet.create({
   container: {
-    paddingHorizontal: 20,
+    paddingHorizontal: 16,
     paddingBottom: 40,
     backgroundColor: '#fff',
   },

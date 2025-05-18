@@ -97,8 +97,9 @@ export default SignUp;
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        marginTop: hp(2),
-        marginHorizontal: wp(4),
+        paddingTop: hp(2),
+        paddingHorizontal: wp(4),
+        backgroundColor: color.White,
     },
     header: {
         fontSize: 24,

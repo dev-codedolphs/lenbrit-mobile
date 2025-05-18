@@ -8,11 +8,12 @@ import {
   TouchableOpacity,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
+import { color } from '../theme/colors';
 
 interface CustomTextInputProps extends TextInputProps {
-  label: string;
+  label?: string;
   value: string;
-  onChangeText: (text: string) => void;
+  onChangeText?: (text: string) => void;
   placeholder?: string;
   leftIcon: string;
   rightIcon?: string;
@@ -33,9 +34,12 @@ const InputField: React.FC<CustomTextInputProps> = ({
 }) => {
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>{label}</Text>
+      {
+        label &&
+        <Text style={styles.title}>{label}</Text>
+      }
       <View style={styles.inputWrapper}>
-        <Icon name={leftIcon} size={20} style={styles.leftIcon} />
+        <Icon name={leftIcon} size={20} color={color.Default} style={styles.leftIcon} />
         <TextInput
           style={styles.input}
           value={value}
@@ -77,7 +81,6 @@ const styles = StyleSheet.create({
   },
   leftIcon: {
     marginRight: 8,
-    color: '#888',
   },
   rightIcon: {
     marginLeft: 8,
@@ -87,6 +90,8 @@ const styles = StyleSheet.create({
     flex: 1,
     height: 44,
     fontSize: 16,
+    fontWeight: '400',
+    fontFamily: 'DM Sans',
     color: '#000',
   },
 });

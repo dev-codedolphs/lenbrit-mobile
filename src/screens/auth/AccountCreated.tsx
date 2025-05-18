@@ -11,7 +11,7 @@ const AccountCreated = () => {
     const dispatch = useDispatch();
 
     return (
-        <SafeAreaView style={{ flex: 1 }}>
+        <SafeAreaView style={{ flex: 1, backgroundColor: color.White }}>
             <View style={styles.container}>
                 <Image source={require('../../assets/icons/AccountCreated.png')} />
                 <Text style={styles.header}>Enter OTP for verification </Text>

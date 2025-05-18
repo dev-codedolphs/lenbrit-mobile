@@ -2,6 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TabNavigator from './TabNavigator';
 import AuthStack from './AuthStack';
 import { useSelector } from 'react-redux';
+import MainStack from './MainStack';
 
 export type RootStackParamList = {
   AuthStack: undefined,
@@ -16,7 +17,7 @@ export const AppNavigator = () => {
   return (
     <Stack.Navigator screenOptions={{ headerShown: false }}>
       {isAuthenticated ? (
-        <Stack.Screen name="MainTabs" component={TabNavigator} />
+        <Stack.Screen name="MainTabs" component={MainStack} /> 
       ) : (
         <Stack.Screen name="AuthStack" component={AuthStack} />
       )}

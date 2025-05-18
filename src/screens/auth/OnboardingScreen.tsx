@@ -125,11 +125,11 @@ const OnboardingScreen = ({ navigation }: any) => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        backgroundColor: '#fff',
+        backgroundColor: color.White,
     },
     skipButton: {
         position: 'absolute',
-        top: hp('3%'),
+        top: hp('1%'),
         right: wp('5%'),
         zIndex: 1,
     },
