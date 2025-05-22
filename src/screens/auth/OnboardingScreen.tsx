@@ -5,13 +5,13 @@ import {
     StyleSheet,
     TouchableOpacity,
     StatusBar,
+    SafeAreaView
 } from 'react-native';
 import Swiper from 'react-native-swiper';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Onboarding1, Onboarding2, Onboarding3, Forward } from '../../assets/icons';
 import { color } from '../../theme/colors';
 import * as space from '../../utils/spacer'
-import { SafeAreaView } from 'react-native';
 
 interface SlideProps {
     title: string;
@@ -55,71 +55,71 @@ const OnboardingScreen = ({ navigation }: any) => {
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container} >
-            <StatusBar barStyle="dark-content" backgroundColor="#fff" />
+                <StatusBar barStyle="dark-content" backgroundColor="#fff" />
 
-            <TouchableOpacity style={styles.skipButton} onPress={() => navigation.replace('Login')}>
-                <Text style={styles.skipText}>Skip</Text>
-            </TouchableOpacity>
+                <TouchableOpacity style={styles.skipButton} onPress={() => navigation.replace('Login')}>
+                    <Text style={styles.skipText}>Skip</Text>
+                </TouchableOpacity>
 
-            <Swiper
-                ref={swiperRef}
-                loop={false}
-                showsPagination={false}
-                index={currentIndex}
-                onIndexChanged={setCurrentIndex}
-                removeClippedSubviews={false}
-            >
-                {slides.map((slide, index) => (
-                    <View style={styles.slide} key={index}>
-                        <View style={styles.iconWrapper}>
-                            <slide.icon />
-                        </View>
-                        <View style={styles.bottomCard}>
-                            <View style={styles.pagination}>
-                                {slides.map((_, i) => (
-                                    <View
-                                        key={i}
-                                        style={[
-                                            styles.customDot,
-                                            currentIndex === i && styles.customActiveDot,
-                                        ]}
-                                    />
-                                ))}
+                <Swiper
+                    ref={swiperRef}
+                    loop={false}
+                    showsPagination={false}
+                    index={currentIndex}
+                    onIndexChanged={setCurrentIndex}
+                    removeClippedSubviews={false}
+                >
+                    {slides.map((slide, index) => (
+                        <View style={styles.slide} key={index}>
+                            <View style={styles.iconWrapper}>
+                                <slide.icon />
                             </View>
-                            <space.s2 />
-                            <Text style={styles.title}>{slide.title}</Text>
-                            <Text style={styles.description}>{slide.description}</Text>
-                            <TouchableOpacity
-                                style={[
-                                    styles.nextButton,
-                                    currentIndex === slides.length - 1 && styles.lastNextButton,
-                                ]}
-                                onPress={handleNext}
-                            >
-                                <View style={styles.buttonWrapper}>
-                                    {currentIndex === slides.length - 1 ? (
-                                        <>
-                                            <View style={styles.leftIconWrapper}>
-                                                <Forward />
-                                            </View>
-                                            <Text style={styles.centeredNextText}>Get Started</Text>
-                                            <View style={{ width: wp(10) }} />
-                                        </>
-                                    ) : (
-                                        <>
-                                            <Text style={styles.nextText}>Next</Text>
-                                            <View style={styles.forwardButton}>
-                                                <Forward />
-                                            </View>
-                                        </>
-                                    )}
+                            <View style={styles.bottomCard}>
+                                <View style={styles.pagination}>
+                                    {slides.map((_, i) => (
+                                        <View
+                                            key={i}
+                                            style={[
+                                                styles.customDot,
+                                                currentIndex === i && styles.customActiveDot,
+                                            ]}
+                                        />
+                                    ))}
                                 </View>
-                            </TouchableOpacity>
+                                <space.s2 />
+                                <Text style={styles.title}>{slide.title}</Text>
+                                <Text style={styles.description}>{slide.description}</Text>
+                                <TouchableOpacity
+                                    style={[
+                                        styles.nextButton,
+                                        currentIndex === slides.length - 1 && styles.lastNextButton,
+                                    ]}
+                                    onPress={handleNext}
+                                >
+                                    <View style={styles.buttonWrapper}>
+                                        {currentIndex === slides.length - 1 ? (
+                                            <>
+                                                <View style={styles.leftIconWrapper}>
+                                                    <Forward />
+                                                </View>
+                                                <Text style={styles.centeredNextText}>Get Started</Text>
+                                                <View style={{ width: wp(10) }} />
+                                            </>
+                                        ) : (
+                                            <>
+                                                <Text style={styles.nextText}>Next</Text>
+                                                <View style={styles.forwardButton}>
+                                                    <Forward />
+                                                </View>
+                                            </>
+                                        )}
+                                    </View>
+                                </TouchableOpacity>
 
+                            </View>
                         </View>
-                    </View>
-                ))}
-            </Swiper>
+                    ))}
+                </Swiper>
             </View>
         </SafeAreaView>
     );

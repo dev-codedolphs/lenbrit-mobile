@@ -15,7 +15,6 @@ import OptionCard from '../../components/profile/OptionCard';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../../navigation/MainStack';
-import Button from '../../components/Button';
 
 
 const ProfileScreen = () => {
@@ -41,10 +40,10 @@ const ProfileScreen = () => {
         </View>
   
         {/* Option Cards */}
-        <OptionCard CardIcon={<EarningIcon />} label="Earnings" />
-        <OptionCard CardIcon={<PrivacyPolicy />} label="Privacy Policy" />
-        <OptionCard CardIcon={<SupportIcon />} label="Help & Support" />
-        <OptionCard CardIcon={<PaymentIcon />} label="Payments Method" />
+        <OptionCard CardIcon={<EarningIcon />} label="Earnings" onPress={() => navigation.navigate('Earnings')} />
+        <OptionCard CardIcon={<PrivacyPolicy />} label="Privacy Policy" onPress={() => navigation.navigate('PrivacyPolicy')} />
+        <OptionCard CardIcon={<SupportIcon />} label="Help & Support" onPress={() => navigation.navigate('HelpAndSupport')} />
+        <OptionCard CardIcon={<PaymentIcon />} label="Payments Method" onPress={() => navigation.navigate('Earnings')} />
         </View>
       </SafeAreaView>
     );

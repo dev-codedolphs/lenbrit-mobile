@@ -22,4 +22,15 @@ export type OrderItemType = {
     rating: string;
     image: any;
   }
+
+export type MessageItem = {
+  id: string;
+  name: string;
+  message: string;
+  time: string;
+  unreadCount?: number;
+  highlight?: boolean;
+  online?: boolean;
+  image: string;
+}
   

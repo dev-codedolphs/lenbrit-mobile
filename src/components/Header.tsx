@@ -6,11 +6,12 @@ import { color } from '../theme/colors';
 
 interface Props {
     title: string,
+    style?: any,
     goBack: () => void
 }
-const Header: React.FC <Props> = ({title, goBack}) => {
+const Header: React.FC <Props> = ({title, style, goBack}) => {
   return (
-      <View style={styles.header}>
+      <View style={[styles.header, style]}>
           <TouchableOpacity onPress={goBack}>
               <Icon name='arrow-back' size={24} />
           </TouchableOpacity>

@@ -12,12 +12,14 @@ import { color } from '../../theme/colors';
 const OptionCard = ({
     CardIcon,
     label,
+    onPress,
 }: {
     CardIcon: any;
     label: string;
+    onPress: () => void;
 }) => {
     return (
-        <TouchableOpacity style={styles.optionCard}>
+        <TouchableOpacity style={styles.optionCard} onPress={onPress}>
             <View style={styles.iconBox}>
                 {CardIcon}
             </View>
