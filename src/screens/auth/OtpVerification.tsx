@@ -23,7 +23,7 @@ const OtpVerification = () => {
                 <Text style={styles.subHeader}>We’ve send you the verification code on abc@gmail.com</Text>
                 <space.s4 />
                 <OtpInput
-                    numberOfDigits={4}
+                    numberOfDigits={5}
                     focusColor={color.Default}
                     placeholder="----"
                     type="numeric"

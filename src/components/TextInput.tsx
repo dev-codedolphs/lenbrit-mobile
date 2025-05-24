@@ -88,7 +88,7 @@ const styles = StyleSheet.create({
   },
   input: {
     flex: 1,
-    height: 44,
+    height: 47,
     fontSize: 16,
     fontWeight: '400',
     fontFamily: 'DM Sans',

@@ -7,11 +7,14 @@ import InputField from '../../components/TextInput';
 import Button from '../../components/Button';
 import { color } from '../../theme/colors';
 import { useNavigation } from '@react-navigation/native';
+import { AuthNavigationProp } from '../../types/navigation';
 
 const SignUp = () => {
-    const navigation = useNavigation();
+    const navigation = useNavigation<AuthNavigationProp>();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [name, setName] = useState('');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const [hidePassword, setHidePassword] = useState(true);
 
     // Password validation logic
@@ -54,6 +57,15 @@ const SignUp = () => {
                 />
 
                 <InputField
+                    label="NAME"
+                    value={name}
+                    onChangeText={setName}
+                    placeholder="Enter your name"
+                    leftIcon="email-outline"
+                    keyboardType="email-address"
+                />
+
+                <InputField
                     label="PASSWORD"
                     value={password}
                     onChangeText={setPassword}
@@ -64,25 +76,42 @@ const SignUp = () => {
                     rightIcon={hidePassword ? "eye-off-outline" : "eye-outline"}
                     onRightIconPress={() => setHidePassword(!hidePassword)}
                 />
+                
+                <InputField
+                    label="CONFIRM PASSWORD"
+                    value={confirmPassword}
+                    onChangeText={setConfirmPassword}
+                    placeholder="Re enter password to confirm"
+                    leftIcon="lock-outline"
+                    keyboardType="default"
+                    secureTextEntry={hidePassword}
+                    rightIcon={hidePassword ? "eye-off-outline" : "eye-outline"}
+                    onRightIconPress={() => setHidePassword(!hidePassword)}
+                />
 
                 {/* Password Strength Bar */}
-                <View style={styles.strengthBarRow}>
-                    <View style={styles.strengthBarWrapper}>
-                        <View style={[styles.strengthBar, { width: `${(passedChecksCount / 4) * 100}%`, backgroundColor: passedChecksCount >= 3 ? 'green' : 'red' }]} />
-                    </View>
-                    <Text style={[styles.strengthText, { color: passedChecksCount >= 3 ? 'green' : 'red' }]}>
-                        {passedChecksCount >= 3 ? 'Strong Password' : 'Weak Password'}
-                    </Text>
-                </View>
-                
+                {
+                    password.length > 1 &&
+                    <>
+                        <View style={styles.strengthBarRow}>
+                            <View style={styles.strengthBarWrapper}>
+                                <View style={[styles.strengthBar, { width: `${(passedChecksCount / 4) * 100}%`, backgroundColor: passedChecksCount >= 3 ? 'green' : 'red' }]} />
+                            </View>
+                            <Text style={[styles.strengthText, { color: passedChecksCount >= 3 ? 'green' : 'red' }]}>
+                                {passedChecksCount >= 3 ? 'Strong Password' : 'Weak Password'}
+                            </Text>
+                        </View>
 
-                {/* Rules */}
-                <View style={styles.rulesWrapper}>
-                    <RuleItem text="Use at least 1 lower case letter" passed={passwordChecks.hasLowercase} />
-                    <RuleItem text="Use at least 1 number" passed={passwordChecks.hasNumber} />
-                    <RuleItem text="Use at least 8 characters" passed={passwordChecks.hasMinLength} />
-                    <RuleItem text="Use a special character (Recommended)" passed={passwordChecks.hasSpecialChar} isRecommended />
-                </View>
+
+                        {/* Rules */}
+                        <View style={styles.rulesWrapper}>
+                            <RuleItem text="Use at least 1 lower case letter" passed={passwordChecks.hasLowercase} />
+                            <RuleItem text="Use at least 1 number" passed={passwordChecks.hasNumber} />
+                            <RuleItem text="Use at least 8 characters" passed={passwordChecks.hasMinLength} />
+                            <RuleItem text="Use a special character (Recommended)" passed={passwordChecks.hasSpecialChar} isRecommended />
+                        </View>
+                    </>
+                }
                 <space.s1 />
             </View>
             <View style={{ padding: wp(2), backgroundColor: color.White }}>
@@ -114,8 +143,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent:'space-between',
         alignItems: 'center',
-        marginTop: hp(1),
-        marginBottom: hp(0.5),
+        marginTop: hp(0.5),
     },
     strengthBarWrapper: {
         width:'70%',

@@ -49,7 +49,17 @@ const Login = () => {
           <Text style={{ textAlign: 'right' }}>Forget Password?</Text>
         </TouchableOpacity>
         <space.s2 />
-        <Button title='SIGN IN' backgroundColor={color.Default} onPress={() => dispatch(authSlice.actions.authenticate())} />
+        <Button
+          title='SIGN IN AS LENTER'
+          backgroundColor={color.Default}
+          onPress={() => dispatch(authSlice.actions.authenticate())}
+        />
+        <Button
+          title='SIGN IN AS RENTER'
+          backgroundColor='' textStyle={{ color: color.Default }}
+          style={{ borderColor: color.Default, borderWidth: 1 }}
+          onPress={() => dispatch(authSlice.actions.authenticate())}
+        />
         <space.s3 />
         <Text style={{ fontSize: 14, fontWeight: '700', textAlign: 'center' }}>OR</Text>
         <space.s3 />
@@ -84,7 +94,7 @@ const styles = StyleSheet.create({
   button: {
     flexDirection: 'row',
     backgroundColor: color.White,
-    padding: wp(2.5),
+    paddingVertical: hp(1.6),
     borderRadius: 10,
     alignItems: 'center',
     justifyContent: 'center',
@@ -96,8 +106,9 @@ const styles = StyleSheet.create({
   },
   text: {
     color: color.Black,
-    fontWeight: '600',
+    fontWeight: '500',
     fontSize: 16,
+    fontFamily: 'DM Sans',
     marginLeft: wp(4),
   },
 })

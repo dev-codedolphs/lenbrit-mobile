@@ -6,6 +6,7 @@ import { color } from '../../theme/colors'
 import { useNavigation } from '@react-navigation/native'
 import authSlice from './redux/Slice'
 import { useDispatch } from 'react-redux'
+import { SuccessIcon } from '../../assets/icons'
 
 const AccountCreated = () => {
     const dispatch = useDispatch();
@@ -13,9 +14,9 @@ const AccountCreated = () => {
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: color.White }}>
             <View style={styles.container}>
-                <Image source={require('../../assets/icons/AccountCreated.png')} />
-                <Text style={styles.header}>Enter OTP for verification </Text>
-                <Text style={styles.subHeader}>Login to your account and start using the banquet hall application for event bookings, marriage halls and a lot more! </Text>
+                <SuccessIcon />
+                <Text style={styles.header}>Your account has been created </Text>
+                <Text style={styles.subHeader}>Login to your account and start using the Lenbrit application for lending and renting accessories and many more things! </Text>
             </View>
             <View style={{ padding: wp(2), backgroundColor: color.White }}>
                 <Button onPress={() => dispatch(authSlice.actions.authenticate())} title='Next' backgroundColor={color.Default} style={{ width: '94%' }} />
