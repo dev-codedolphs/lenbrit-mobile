@@ -1,9 +1,18 @@
 import React from 'react';
-import { TouchableOpacity, Text, StyleSheet, ViewStyle, TextStyle, ActivityIndicator } from 'react-native';
-import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen';
+import {
+  TouchableOpacity,
+  Text,
+  StyleSheet,
+  ViewStyle,
+  TextStyle,
+  ActivityIndicator,
+  View,
+} from 'react-native';
+import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 interface CustomButtonProps {
   title: string;
+  icon?: React.ReactNode;
   loading?: boolean;
   backgroundColor: string;
   style?: ViewStyle;
@@ -13,6 +22,7 @@ interface CustomButtonProps {
 
 const Button: React.FC<CustomButtonProps> = ({
   title,
+  icon,
   loading,
   backgroundColor,
   style,
@@ -24,9 +34,16 @@ const Button: React.FC<CustomButtonProps> = ({
       style={[styles.button, { backgroundColor }, style]}
       onPress={onPress}
       activeOpacity={0.8}
+      disabled={loading}
     >
       {loading ? (
         <ActivityIndicator color="#fff" />
+      ) : icon ? (
+        <View style={styles.contentWithIcon}>
+          {icon}
+          <Text style={[styles.title, textStyle]}>{title}</Text>
+          <View style={{ width: 20 }} /> {/* to center align like space-evenly */}
+        </View>
       ) : (
         <Text style={[styles.title, textStyle]}>{title}</Text>
       )}
@@ -49,6 +66,13 @@ const styles = StyleSheet.create({
     color: '#fff',
     fontSize: 16,
     fontWeight: '500',
+    marginLeft: 8,
+  },
+  contentWithIcon: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
   },
 });
 

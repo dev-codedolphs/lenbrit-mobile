@@ -14,6 +14,10 @@ import PrivacyPolicy from '../screens/profile/PrivacyPolicy';
 import HelpAndSupport from '../screens/profile/HelpAndSupport';
 import Chat from '../screens/message/Chat';
 import PaymentMethods from '../screens/paymentMethods';
+import AddPaymentMethod from '../screens/paymentMethods/AddPaymentMethod';
+import PaymentSuccess from '../screens/paymentMethods/PaymentSuccess';
+import NotificationsScreen from '../screens/notifications';
+import DeleteNotificationSuccess from '../screens/notifications/DeleteNotificationSuccess';
 
 export type TabsParamList = {
   Home: undefined;
@@ -36,6 +40,10 @@ export type MainStackParamList = {
   HelpAndSupport: undefined;
   Chat:  { item: MessageItem };
   PaymentMethods: undefined;
+  AddPaymentMethod: undefined;
+  PaymentSuccess: undefined;
+  NotificationsScreen: undefined;
+  DeleteNotificationSuccess: undefined;
 
 };
 
@@ -56,6 +64,10 @@ const MainStack = () => {
       <Stack.Screen name="HelpAndSupport" component={HelpAndSupport} />
       <Stack.Screen name="Chat" component={Chat} />
       <Stack.Screen name="PaymentMethods" component={PaymentMethods} />
+      <Stack.Screen name="AddPaymentMethod" component={AddPaymentMethod} />
+      <Stack.Screen name="PaymentSuccess" component={PaymentSuccess} />
+      <Stack.Screen name="NotificationsScreen" component={NotificationsScreen} />
+      <Stack.Screen name="DeleteNotificationSuccess" component={DeleteNotificationSuccess} />
     </Stack.Navigator>
   );
 };

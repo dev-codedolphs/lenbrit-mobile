@@ -15,6 +15,9 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { color } from '../../theme/colors';
 import Header from '../../components/Header';
 import Button from '../../components/Button';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { MainStackParamList } from '../../navigation/MainStack';
 
 interface Wallet {
     id: string;
@@ -45,6 +48,7 @@ const wallets: Wallet[] = [
 ];
 
 const PaymentMethods = () => {
+      const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
         const [showDeleteModal, setShowDeleteModal] = useState<boolean>(false);
     
     const renderWallet = ({ item }: { item: Wallet }) => (
@@ -66,7 +70,7 @@ const PaymentMethods = () => {
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
                 {/* Header */}
-                <Header title='Payment Methods' goBack={() => console.log('....')} />
+                <Header title='Payment Methods' goBack={() => navigation.navigate('AddPaymentMethod')} />
 
                 {/* Wallets List */}
                 <FlatList
@@ -75,14 +79,14 @@ const PaymentMethods = () => {
                     renderItem={renderWallet}
                     contentContainerStyle={{ paddingBottom: hp('2%') }}
                     ListFooterComponent={
-                        <TouchableOpacity style={styles.addButton}>
+                        <TouchableOpacity style={styles.addButton} onPress={() => navigation.navigate('AddPaymentMethod')}>
                             <Icon name="plus" size={24} color="#fff" />
                             <Text style={styles.addText}>Add new wallet</Text>
                         </TouchableOpacity>
                     }
                 />
 
-                  {/* Logout Modal */}
+                  {/* Delete Modal */}
             <Modal animationType="slide" transparent visible={showDeleteModal} onRequestClose={() => setShowDeleteModal(false)}>
                 <View style={styles.overlay}>
                     <View style={styles.modalBox}>
@@ -91,7 +95,10 @@ const PaymentMethods = () => {
                         <Text style={styles.logoutDescrip}>Are you agree to logout?</Text>
 
                         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: 16}}>
-                            <Button title='Delete' backgroundColor={color.Red} style={styles.yesBtn} onPress={() => setShowDeleteModal(false)} />
+                                <TouchableOpacity style={styles.deleteBtn} onPress={() => setShowDeleteModal(false)}>
+                                    <MaterialIcons name='delete-outline' color={color.White} size={20} />
+                                    <Text style={styles.deleteBtnTitle}>Delete</Text>
+                                </TouchableOpacity>
                             <Button title='Cancel' backgroundColor={'#FFFFFF'} style={styles.cancelBtn} textStyle={{ color: '#000' }} onPress={() => setShowDeleteModal(false)} />
                         </View>
                     </View>
@@ -196,8 +203,20 @@ const styles = StyleSheet.create({
         borderColor: '#B9B9B9',
         borderWidth: 1
     },
-    yesBtn: {
+    deleteBtn: {
         width: '45%',
-        paddingVertical: hp(1.2)
+        paddingVertical: hp(1.2),
+        flexDirection: 'row', 
+        justifyContent: 'center', 
+        alignItems: 'center', 
+        padding: 4, 
+        backgroundColor: color.Red, 
+        borderRadius: 8,
+    },
+    deleteBtnTitle: {
+        fontFamily: 'DM Sans',
+        color: '#fff',
+        fontSize: 16,
+        fontWeight: '500',
     },
 });

@@ -1,10 +1,15 @@
 // components/home/Header.tsx
 import React from 'react';
-import { View, Text, StyleSheet, Image } from 'react-native';
-import { ArrowForward } from '../../assets/icons';
+import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { ArrowForward, NotificationIcon } from '../../assets/icons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { Touchable } from 'react-native';
 
-const Header = () => {
+interface Prop {
+  onPress: () => void;
+}
+
+const Header: React.FC<Prop> = ({ onPress }) => {
   return (
     <View style={styles.container}>
       <View style={styles.avatarWrapper}>
@@ -14,9 +19,9 @@ const Header = () => {
           <Text style={styles.name}>Faraz</Text>
         </View>
       </View>
-      <View style={styles.notification}>
-        <ArrowForward />
-      </View>
+      <TouchableOpacity style={styles.notification} onPress={onPress}>
+        <NotificationIcon />
+      </TouchableOpacity>
     </View>
   );
 };
@@ -42,14 +47,16 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   avatar: {
-    width: 36,
-    height: 36,
-    borderRadius: wp(5),
-    marginRight: wp(2),
+    width: 50,
+    height: 50,
+    borderRadius: wp(20),
+    marginRight: wp(3),
   },
   notification: {
-    alignSelf: 'center',
-    marginBottom: hp(1.5)
+    borderColor: '#EDEDED',
+    borderWidth: 1,
+    borderRadius: 8,
+    padding: wp(3)
   }
 });
 

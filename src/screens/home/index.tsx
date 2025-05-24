@@ -4,6 +4,9 @@ import Header from '../../components/home/Header';
 import PromoBanner from '../../components/home/Banner';
 import QuickStats from '../../components/home/QuickStats';
 import YourListings from '../../components/home/YourListings';
+import { useNavigation } from '@react-navigation/native';
+import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { MainStackParamList } from '../../navigation/MainStack';
 
 interface Item {
   id: string;
@@ -16,6 +19,7 @@ interface Item {
 }
 
 const HomeScreen = () => {
+    const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 
   const listings: Item[] = [
     {
@@ -60,7 +64,7 @@ const HomeScreen = () => {
   return (
     <SafeAreaView style={{ flex: 1 }} >
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
-        <Header />
+        <Header onPress={() => navigation.navigate('NotificationsScreen')} />
         <PromoBanner />
         <Text style={{ fontSize: 20, fontWeight: '600' }}>Quick Stats</Text>
         <QuickStats />
