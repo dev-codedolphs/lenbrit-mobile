@@ -17,10 +17,15 @@ import {
   OrderIcon,
   ProfileActive,
   ProfileIcon,
+  CartActive,
+  CartIcon,
 } from '../assets/icons';
 import TabIconWithLabel from '../components/TabIconWithLabel';
+import Earnings from '../screens/profile/Earnings';
+import MyCart from '../screens/myCart';
 
 const Tab = createBottomTabNavigator();
+const userRole = 'renter';
 
 export default function TabNavigator() {
   return (
@@ -30,8 +35,9 @@ export default function TabNavigator() {
         tabBarInactiveTintColor: '#9DB2CE',
         headerShown: false,
         tabBarStyle: {
-          height: hp('9%'),
-          paddingTop: hp('1%'),
+          height: hp('10%'),
+          paddingTop: hp('2%'),
+          backgroundColor: '#F7EAFF',
         },
         tabBarLabel: () => null,
       }}
@@ -50,20 +56,41 @@ export default function TabNavigator() {
           ),
         }}
       />
-      <Tab.Screen
-        name="MyItems"
-        component={MyItemsScreen}
-        options={{
-          tabBarIcon: ({ focused, color }) => (
-            <TabIconWithLabel
-              focused={focused}
-              color={color}
-              label="My Items"
-              Icon={focused ? <MyItemsActive color={color} /> : <MyItemsIcon />}
-            />
-          ),
-        }}
-      />
+
+
+      {userRole === 'renter' ? (
+        <Tab.Screen
+          name="MyCart"
+          component={MyCart}
+          options={{
+            tabBarIcon: ({ focused, color }) => (
+              <TabIconWithLabel
+                focused={focused}
+                color={color}
+                label="My Cart"
+                Icon={focused ? <CartActive /> : <CartIcon />}
+              />
+            ),
+          }}
+        />
+      ) : (
+        <Tab.Screen
+          name="MyItems"
+          component={MyItemsScreen}
+          options={{
+            tabBarIcon: ({ focused, color }) => (
+              <TabIconWithLabel
+                focused={focused}
+                color={color}
+                label="My Items"
+                Icon={focused ? <MyItemsActive color={color} /> : <MyItemsIcon />}
+              />
+            ),
+          }}
+        />
+      )}
+
+
       <Tab.Screen
         name="Message"
         component={MessageScreen}

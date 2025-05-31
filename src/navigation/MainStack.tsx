@@ -18,6 +18,7 @@ import AddPaymentMethod from '../screens/paymentMethods/AddPaymentMethod';
 import PaymentSuccess from '../screens/paymentMethods/PaymentSuccess';
 import NotificationsScreen from '../screens/notifications';
 import DeleteNotificationSuccess from '../screens/notifications/DeleteNotificationSuccess';
+import CheckoutScreen from '../screens/myCart/CheckoutScreen';
 
 export type TabsParamList = {
   Home: undefined;
@@ -44,6 +45,7 @@ export type MainStackParamList = {
   PaymentSuccess: undefined;
   NotificationsScreen: undefined;
   DeleteNotificationSuccess: undefined;
+  CheckoutScreen: undefined;
 
 };
 
@@ -68,6 +70,7 @@ const MainStack = () => {
       <Stack.Screen name="PaymentSuccess" component={PaymentSuccess} />
       <Stack.Screen name="NotificationsScreen" component={NotificationsScreen} />
       <Stack.Screen name="DeleteNotificationSuccess" component={DeleteNotificationSuccess} />
+      <Stack.Screen name="CheckoutScreen" component={CheckoutScreen} />
     </Stack.Navigator>
   );
 };
