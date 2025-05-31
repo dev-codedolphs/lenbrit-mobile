@@ -70,7 +70,7 @@ const PaymentMethods = () => {
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
                 {/* Header */}
-                <Header title='Payment Methods' goBack={() => navigation.navigate('AddPaymentMethod')} />
+                <Header title='Payment Methods' goBack={() => navigation.navigate('Earnings')} />
 
                 {/* Wallets List */}
                 <FlatList

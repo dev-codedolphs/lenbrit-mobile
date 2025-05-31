@@ -69,8 +69,8 @@ const HomeScreen = () => {
         <Text style={{ fontSize: 20, fontWeight: '600' }}>Quick Stats</Text>
         <QuickStats />
 
-        <YourListings title="Your Listings" data={listings} />
-        <YourListings title="Incoming Requests" data={requests} />
+        <YourListings title="Your Listings" data={listings} onPress={() => navigation.navigate('Tabs', {screen: 'MyItems'})} />
+        <YourListings title="Incoming Requests" data={requests} onPress={() => navigation.navigate('OffersScreen')} />
       </ScrollView>
     </SafeAreaView>
   );

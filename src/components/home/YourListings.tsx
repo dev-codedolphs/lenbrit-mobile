@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, StyleSheet, FlatList } from 'react-native';
+import { View, Text, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
 import ListingCard from './ListingCard';
 
 interface Item {
@@ -15,14 +15,17 @@ interface Item {
 interface YourListingsProps {
   title: string;
   data: Item[];
+  onPress: () => void;
 }
 
-const YourListings: React.FC<YourListingsProps> = ({ title, data }) => {
+const YourListings: React.FC<YourListingsProps> = ({ title, data, onPress }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
         <Text style={styles.title}>{title}</Text>
+        <TouchableOpacity onPress={onPress}>
         <Text style={styles.seeAll}>See All</Text>
+        </TouchableOpacity>
       </View>
       <FlatList
         data={data}

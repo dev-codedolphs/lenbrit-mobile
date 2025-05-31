@@ -25,7 +25,8 @@ import Earnings from '../screens/profile/Earnings';
 import MyCart from '../screens/myCart';
 
 const Tab = createBottomTabNavigator();
-const userRole = 'renter';
+type UserRole = 'renter' | 'lender';
+const userRole: UserRole = 'lender';
 
 export default function TabNavigator() {
   return (
