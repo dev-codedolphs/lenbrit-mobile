@@ -45,6 +45,7 @@ endif()
 if(NOT CMAKE_INSTALL_LOCAL_ONLY)
   # Include the install script for each subdirectory.
   include("/Users/apple/Downloads/lenbrit/mobile/android/app/.cxx/RelWithDebInfo/352q381i/x86/rngesturehandler_codegen_autolinked_build/cmake_install.cmake")
+  include("/Users/apple/Downloads/lenbrit/mobile/android/app/.cxx/RelWithDebInfo/352q381i/x86/RNImagePickerSpec_autolinked_build/cmake_install.cmake")
   include("/Users/apple/Downloads/lenbrit/mobile/android/app/.cxx/RelWithDebInfo/352q381i/x86/rnreanimated_autolinked_build/cmake_install.cmake")
   include("/Users/apple/Downloads/lenbrit/mobile/android/app/.cxx/RelWithDebInfo/352q381i/x86/safeareacontext_autolinked_build/cmake_install.cmake")
   include("/Users/apple/Downloads/lenbrit/mobile/android/app/.cxx/RelWithDebInfo/352q381i/x86/rnscreens_autolinked_build/cmake_install.cmake")
