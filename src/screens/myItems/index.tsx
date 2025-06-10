@@ -15,7 +15,7 @@ const MyItemsScreen = () => {
   const listings: ItemType[] = [
     {
       id: '1',
-      title: 'T Shirt',
+      title: 'Cotton T-Shirt',
       renter: 'Hira',
       price: 'PKR 500',
       date: '8 May to 10 May',
@@ -25,7 +25,7 @@ const MyItemsScreen = () => {
     },
     {
       id: '2',
-      title: 'Shoes',
+      title: 'Soft T-Shirt',
       renter: 'Hira',
       price: 'PKR 700',
       date: '14 May to 19 May',

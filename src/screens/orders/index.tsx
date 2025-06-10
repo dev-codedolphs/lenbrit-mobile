@@ -14,7 +14,7 @@ import { OrderItemType } from '../../types/types';
 const tabs = ['In Progress', 'Completed', 'Cancelled'];
 
 const orders = Array(8).fill({
-  item: 'T Shirt',
+  item: 'Soft Cotton T-Shirt',
   renter: 'Hira',
   date: '10 May to 12 May',
   price: 'PKR 400',

@@ -76,6 +76,9 @@ const OrderDetailScreen: React.FC<Props> = ({ route }) => {
                     </View>
                 </View>
 
+                <Text style={styles.sectionTitle}>{item.item}</Text>
+
+
                 {/* Description */}
                 <Text style={styles.sectionTitle}>Description</Text>
                 <View style={styles.descriptionBox}>
@@ -86,7 +89,6 @@ const OrderDetailScreen: React.FC<Props> = ({ route }) => {
 
                 {/* Details */}
                 <View style={styles.detailsContainer}>
-                    {renderRow('Item', item.item)}
                     {renderRow('Renter', item.renter)}
                     {renderRow('Date', item.date)}
                     {renderRow('Size', 'Large')}

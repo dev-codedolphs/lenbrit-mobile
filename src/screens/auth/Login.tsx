@@ -49,17 +49,20 @@ const Login = () => {
           <Text style={{ textAlign: 'right' }}>Forget Password?</Text>
         </TouchableOpacity>
         <space.s2 />
+        <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
         <Button
           title='SIGN IN AS LENTER'
           backgroundColor={color.Default}
+          style={{ width: '48%' }}
           onPress={() => dispatch(authSlice.actions.authenticate())}
         />
         <Button
           title='SIGN IN AS RENTER'
           backgroundColor='' textStyle={{ color: color.Default }}
-          style={{ borderColor: color.Default, borderWidth: 1 }}
+          style={{ borderColor: color.Default, borderWidth: 1, width: '48%' }}
           onPress={() => dispatch(authSlice.actions.authenticate())}
         />
+        </View>
         <space.s3 />
         <Text style={{ fontSize: 14, fontWeight: '700', textAlign: 'center' }}>OR</Text>
         <space.s3 />
