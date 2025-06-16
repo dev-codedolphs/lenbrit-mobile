@@ -1,8 +1,8 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 // Base URL (replace with actual backend URL)
 const API_BASE_URL = 'https://starfish-app-ajafk.ondigitalocean.app/api/v1'
-const token = '2343424'
   
 
 export default class Api {
@@ -17,8 +17,13 @@ export default class Api {
     }
 
     // User Signup
-    static signup(data) {
-        return axios.post(`${API_BASE_URL}/auth/register`, data);
+    static async signup(data) {
+        try {
+            const response = await axios.post(`${API_BASE_URL}/auth/register`, data);
+            return response;
+        } catch (error) {
+            throw new Error(error.response?.data?.message || "Registration failed");
+        }
     }
 
     // Email or Phone verification (send OTP)
@@ -27,8 +32,13 @@ export default class Api {
     }
 
     // Resend OTP
-    static resendOTP(data) {
-        return axios.post(`${API_BASE_URL}/auth/resend-otp`, data);
+    static async resendOTP(data) {
+        try {
+            const response = await axios.post(`${API_BASE_URL}/auth/resend-otp`, data);
+            return response;
+        } catch (error) {
+            throw new Error(error.response?.data?.message || "Login failed");
+        }
     }
 
     // Forgot Password (send reset email/phone)
@@ -37,13 +47,33 @@ export default class Api {
     }
 
     // Reset Password (after OTP verification)
-    static resetPassword(data) {
-        return axios.post(`${API_BASE_URL}/auth/reset-password?${token}`, data);
+    static async resetPassword(data) {
+        try {
+            const token = await AsyncStorage.getItem('accessToken');
+            const response = axios.post(`${API_BASE_URL}/auth/reset-password?token=${token}`, data);
+
+            return response;
+        } catch (error) {
+            throw new Error(error.response?.data?.message || "Login failed");
+        }
     }
 
     // Get User Info (after login or on-demand)
-    static getUserInfo() {
-        return axios.get(`${API_BASE_URL}/auth/get-me`);
+    static async getUserInfo() {
+        try {
+            const token = await AsyncStorage.getItem('accessToken');
+            console.log('tokeeeeeeeeeen', token)
+            const response = axios.get(`${API_BASE_URL}/auth/get-me`, {
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    Authorization: "Bearer " + token,
+                },
+            });
+
+            return response;
+        } catch (error) {
+            throw new Error(error.response?.data?.message || "Login failed");
+        }
     }
 
     // Update User Info

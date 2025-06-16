@@ -63,13 +63,14 @@ const Login = () => {
           loading={loading}
           title='SIGN IN AS LENTER'
           backgroundColor={color.Default}
+          textStyle={{ fontSize: 14, paddingVertical: 1 }}
           style={{ width: '48%' }}
           onPress={handleLogin}
         />
         <Button
-        loading={loading}
+          loading={loading}
           title='SIGN IN AS RENTER'
-          backgroundColor='' textStyle={{ color: color.Default }}
+          backgroundColor='' textStyle={{ color: color.Default, fontSize: 14 }}
           style={{ borderColor: color.Default, borderWidth: 1, width: '48%' }}
           onPress={() => dispatch(authSlice.actions.authenticate())}
         />
@@ -77,7 +78,7 @@ const Login = () => {
         <space.s3 />
         <Text style={{ fontSize: 14, fontWeight: '700', textAlign: 'center' }}>OR</Text>
         <space.s3 />
-        <TouchableOpacity style={styles.button} onPress={() => console.log('pressed')}>
+        <TouchableOpacity style={styles.button} onPress={() => navigation.navigate('NewPassword')}>
           <Google />
           <Text style={styles.text}>Continue with Google</Text>
         </TouchableOpacity>

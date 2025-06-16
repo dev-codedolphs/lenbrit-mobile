@@ -5,6 +5,7 @@ const initialState = {
     loading: false,
     isLoggedIn: false,
     isAuthenticated: false,
+    isVerified: null,
     error: null,
 }
 
@@ -65,6 +66,7 @@ const authSlice = createSlice({
         verifyEmailPhoneSuccess: (state) => ({
             ...state,
             loading: false,
+            isVerified: action.payload,
         }),
         verifyEmailPhoneFailure: (state, action) => ({
             ...state,

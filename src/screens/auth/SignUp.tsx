@@ -49,12 +49,12 @@ const SignUp = () => {
         const data: any = {
             email,
             password,
-            name,
+            role: 'BORROWER',
         };
 
         // Dispatch signup action
         dispatch(authSlice.actions.signup(data));
-        navigation.navigate('OtpVerification')
+        navigation.navigate('OtpVerification', { email })
     };
 
     return (

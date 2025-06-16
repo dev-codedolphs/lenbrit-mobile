@@ -1,16 +1,40 @@
 import { StyleSheet, Text, View, SafeAreaView, TouchableOpacity } from 'react-native'
-import React from 'react'
+import React, { useState } from 'react'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import Icon from 'react-native-vector-icons/Feather';
 import * as space from '../../utils/spacer';
 import { OtpInput } from "react-native-otp-entry";
 import { color } from '../../theme/colors';
 import Button from '../../components/Button';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation, useRoute } from '@react-navigation/native';
 import { AuthNavigationProp } from '../../types/navigation';
+import { useDispatch, useSelector } from 'react-redux';
+import authSlice from './redux/Slice';
 
 const OtpVerification = () => {
     const navigation = useNavigation<AuthNavigationProp>();
+    const { isVerified } = useSelector((state:any) => state.auth);
+    const route = useRoute();
+    const dispatch = useDispatch();
+    const { email } = route.params as { email: string };
+    const [otp, setOtp] = useState('');
+
+    const handleOtpVerification = () => {
+        const data: any = {
+            email,
+            otp,
+        };
+
+        dispatch(authSlice.actions.verifyEmailPhone(data));
+        if (isVerified) {
+            navigation.navigate('AccountCreated')
+        }
+    };
+
+    const handleResendOtp = () => {
+        const data:any = { email }
+        dispatch(authSlice.actions.resendOTP(data));
+    }
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -27,8 +51,8 @@ const OtpVerification = () => {
                     focusColor={color.Default}
                     placeholder="----"
                     type="numeric"
-                    onTextChange={(text) => console.log(text)}
-                    onFilled={(text) => console.log(`OTP is ${text}`)}
+                    onTextChange={(text) => setOtp(text)}
+                    onFilled={(text) => setOtp(text)}
                     textInputProps={{
                         accessibilityLabel: "One-Time Password",
                     }}
@@ -42,9 +66,14 @@ const OtpVerification = () => {
                         pinCodeContainerStyle: styles.pinCodeContainer,
                     }}
                 />
+                <space.s4 />
+                <Text style={{ fontSize: 15, fontWeight: '400', textAlign: 'center'}}>Didn't receive OTP?</Text>
+                <TouchableOpacity onPress={handleResendOtp}>
+                <Text style={{ fontSize: 16, fontWeight: '500', textAlign: 'center', textDecorationLine: 'underline'}}>Resend code</Text>
+                </TouchableOpacity>
             </View>
             <View style={{ padding: wp(2), backgroundColor: color.White }}>
-                <Button onPress={() => navigation.navigate('AccountCreated')} title='Next' backgroundColor={color.Default} style={{ width: '94%' }} />
+                <Button onPress={handleOtpVerification} title='Next' backgroundColor={color.Default} style={{ width: '94%' }} />
             </View>
         </SafeAreaView>
     )

@@ -38,11 +38,7 @@ function* login({ payload }) {
 function* signup({ payload }) {
     try {
         const response = yield call(authApi.signup, payload);
-        console.log("Signup Response:", response);
-        if (response.data.isAuthenticated) {
-            yield navigate('Home', {
-                userData: response.data,
-            });
+        if (response.data.status === 'success') {
             yield put(authSlice.actions.signupSuccess(response.data));
         } else {
             yield put(authSlice.actions.signupFailure(response.data.error));
@@ -57,7 +53,7 @@ function* verifyEmailPhone({ payload }) {
     try {
         const response = yield call(authApi.verifyEmailPhone, payload);
         console.log("Verify Email/Phone Response:", response);
-        yield put(authSlice.actions.verifyEmailPhoneSuccess(response.data));
+        yield put(authSlice.actions.verifyEmailPhoneSuccess(response.data.isVerified));
     } catch (error) {
         yield put(authSlice.actions.verifyEmailPhoneFailure(error.response?.data || error.message));
         console.log(error);
@@ -101,7 +97,9 @@ function* getUserInfo() {
     try {
         const response = yield call(authApi.getUserInfo);
         console.log("Get User Info Response:", response);
-        yield put(authSlice.actions.getUserInfoSuccess(response.data));
+        if (response?.status === 200){
+            yield put(authSlice.actions.getUserInfoSuccess(response.data.user));
+        }
     } catch (error) {
         yield put(authSlice.actions.getUserInfoFailure(error.response?.data || error.message));
         console.log(error);

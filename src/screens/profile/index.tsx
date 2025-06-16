@@ -32,6 +32,7 @@ const ProfileScreen = () => {
       await AsyncStorage.removeItem('accessToken');
       dispatch(authSlice.actions.reset());
     }, 2000);
+    setIsLoggingOut(false)
   };
   
   return (

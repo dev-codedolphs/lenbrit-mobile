@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { SafeAreaView, ScrollView, StyleSheet, Text, View } from 'react-native';
 import Header from '../../components/home/Header';
 import PromoBanner from '../../components/home/Banner';
@@ -7,6 +7,8 @@ import YourListings from '../../components/home/YourListings';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../../navigation/MainStack';
+import authSlice from '../auth/redux/Slice';
+import { useDispatch, useSelector } from 'react-redux';
 
 interface Item {
   id: string;
@@ -21,7 +23,17 @@ interface Item {
 }
 
 const HomeScreen = () => {
+  const dispatch = useDispatch();
+  const { user } = useSelector((state:any) => state.auth);
     const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
+
+  useEffect(() => {
+    const getuser = async () => {
+      dispatch(authSlice.actions.getUserInfo())
+    }
+
+    getuser();
+  }, [])
 
   const listings: Item[] = [
     {
