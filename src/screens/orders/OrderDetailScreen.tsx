@@ -7,6 +7,7 @@ import {
     TouchableOpacity,
     Image,
     ScrollView,
+    FlatList,
 } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { OrderItemType } from '../../types/types';
@@ -16,9 +17,50 @@ import { MainStackParamList } from '../../navigation/MainStack';
 import { color } from '../../theme/colors';
 import Button from '../../components/Button';
 import Header from '../../components/Header';
+import { Star } from '../../assets/icons';
 
 
 type Props = NativeStackScreenProps<MainStackParamList, 'OrderDetail'>;
+
+interface Review {
+    id: string;
+    name: string;
+    date: string;
+    rating: number;
+    review: string;
+    avatar: string;
+}
+
+const reviews: Review[] = [
+    {
+        id: '1',
+        name: 'Aspen Siphron',
+        date: 'May 12, 2024',
+        rating: 4.2,
+        review:
+            'The bridal dress was absolutely beautiful and exactly as shown in the pictures. It arrived on time and in perfect condition. The lender was very cooperative and professional. I would highly recommend renting from them again!',
+        avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
+    },
+    {
+        id: '2',
+        name: 'Aspen Siphron',
+        date: 'May 12, 2024',
+        rating: 3.9,
+        review:
+            'The bridal dress was absolutely beautiful and exactly as shown in the pictures. It arrived on time and in perfect condition. The lender was very cooperative and professional. I would highly recommend renting from them again!',
+        avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
+    },
+    {
+        id: '3',
+        name: 'Aspen Siphron',
+        date: 'May 12, 2024',
+        rating: 4.7,
+        review:
+            'The bridal dress was absolutely beautiful and exactly as shown in the pictures. It arrived on time and in perfect condition. The lender was very cooperative and professional. I would highly recommend renting from them again!',
+        avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
+    },
+    
+];
 
 const OrderDetailScreen: React.FC<Props> = ({ route }) => {
     const navigation = useNavigation();
@@ -44,7 +86,6 @@ const OrderDetailScreen: React.FC<Props> = ({ route }) => {
     };
 
     const getStatusColor = (status: string) => {
-        console.log('status.....', status)
         switch (status.toLowerCase()) {
             case 'completed':
                 return color.Green;
@@ -56,6 +97,25 @@ const OrderDetailScreen: React.FC<Props> = ({ route }) => {
                 return color.Gray;
         }
     };
+
+    const renderItem = ({ item }: { item: Review }) => (
+        <View style={styles.card}>
+            <View style={styles.header}>
+                <View style={styles.profile}>
+                    <Image source={{ uri: item.avatar }} style={styles.avatar} />
+                    <View>
+                        <Text style={styles.name}>{item.name}</Text>
+                        <Text style={styles.reviewDate}>{item.date}</Text>
+                    </View>
+                </View>
+                <View style={styles.rating}>
+                    <Star />
+                    <Text style={styles.ratingText}>{item.rating}</Text>
+                </View>
+            </View>
+            <Text style={styles.reviewText}>{item.review}</Text>
+        </View>
+    );
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -76,7 +136,13 @@ const OrderDetailScreen: React.FC<Props> = ({ route }) => {
                     </View>
                 </View>
 
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                 <Text style={styles.sectionTitle}>{item.item}</Text>
+                <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
+                    <Text style={{ marginRight: wp(2), fontSize: 17, fontWeight: '600'}}>5.0</Text>
+                    <Star />
+                </View>
+                </View>
 
 
                 {/* Description */}
@@ -94,6 +160,15 @@ const OrderDetailScreen: React.FC<Props> = ({ route }) => {
                     {renderRow('Size', 'Large')}
                     {renderRow('Price', 'PKR 400')}
                 </View>
+                <Text style={{ fontSize: 18, fontWeight: '400', fontFamily: 'DM Sans', color: '#8E8E8E', textDecorationLine: 'underline' }}>All Reviews</Text>
+                {/* FlatList for reviews */}
+                <FlatList
+                    data={reviews}
+                    keyExtractor={(item) => item.id}
+                    renderItem={renderItem}
+                    contentContainerStyle={styles.list}
+                    ListEmptyComponent={<Text>No reviews available</Text>}
+                />
 
                 {/* Actions */}
                 <Button title='Message to Renter' backgroundColor={color.Default} />
@@ -112,12 +187,11 @@ export default OrderDetailScreen;
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
         backgroundColor: '#fff',
         padding: wp(4),
     },
     contentContainer: {
-        // paddingBottom: hp('4%'),
+        paddingBottom: hp('4%'),
     },
     header: {
         flexDirection: 'row',
@@ -226,5 +300,55 @@ const styles = StyleSheet.create({
         color: '#fff',
         fontSize: hp('2%'),
         fontWeight: '600',
+    },
+    list: {
+        paddingVertical: 16,
+    },
+    card: {
+        backgroundColor: '#fff',
+        borderRadius: 12,
+        padding: 16,
+        marginBottom: 12,
+        shadowColor: '#000',
+        shadowOpacity: 0.08,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 6,
+        elevation: 3,
+    },
+    profile: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 8,
+    },
+    avatar: {
+        width: 36,
+        height: 36,
+        borderRadius: 18,
+        marginRight: 8,
+    },
+    name: {
+        fontWeight: '500',
+        fontSize: 12,
+    },
+    reviewDate: {
+        fontWeight: '400',
+        fontSize: 10,
+        color: '#898B8F',
+    },
+    rating: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        gap: 4,
+    },
+    ratingText: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: '#333',
+        marginLeft: 4,
+    },
+    reviewText: {
+        fontSize: 14,
+        color: '#444',
+        lineHeight: 20,
     },
 });

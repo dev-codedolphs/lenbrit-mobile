@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   View,
   Text,
@@ -6,19 +6,33 @@ import {
   Image,
   TouchableOpacity,
   SafeAreaView,
+  ActivityIndicator,
 } from 'react-native';
 import Icon from 'react-native-vector-icons/Feather';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { color } from '../../theme/colors';
-import { EarningIcon, PaymentIcon, PrivacyPolicy, SupportIcon } from '../../assets/icons';
+import { EarningIcon, Logout, PaymentIcon, PrivacyPolicy, SupportIcon } from '../../assets/icons';
 import OptionCard from '../../components/profile/OptionCard';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../../navigation/MainStack';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { useDispatch } from 'react-redux';
+import authSlice from '../auth/redux/Slice';
 
 
 const ProfileScreen = () => {
+  const dispatch = useDispatch();
   const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
+ 
+  const handleLogout = async () => {
+    setIsLoggingOut(true);
+    setTimeout(async () => {
+      await AsyncStorage.removeItem('accessToken');
+      dispatch(authSlice.actions.reset());
+    }, 2000);
+  };
   
   return (
       <SafeAreaView style={{ flex: 1 }}>
@@ -40,10 +54,20 @@ const ProfileScreen = () => {
         </View>
   
         {/* Option Cards */}
-        <OptionCard CardIcon={<EarningIcon />} label="Earnings" onPress={() => navigation.navigate('Earnings')} />
-        <OptionCard CardIcon={<PrivacyPolicy />} label="Privacy Policy" onPress={() => navigation.navigate('PrivacyPolicy')} />
-        <OptionCard CardIcon={<SupportIcon />} label="Help & Support" onPress={() => navigation.navigate('HelpAndSupport')} />
-        <OptionCard CardIcon={<PaymentIcon />} label="Payments Method" onPress={() => navigation.navigate('Earnings')} />
+        {isLoggingOut ? (
+          <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+            <ActivityIndicator size="large" color={color.Default} />
+            <Text style={{ marginTop: 10 }}>Logging out...</Text>
+          </View>
+        ) :
+          <>
+            <OptionCard CardIcon={<EarningIcon />} label="Earnings" onPress={() => navigation.navigate('Earnings')} />
+            <OptionCard CardIcon={<PrivacyPolicy />} label="Privacy Policy" onPress={() => navigation.navigate('PrivacyPolicy')} />
+            <OptionCard CardIcon={<SupportIcon />} label="Help & Support" onPress={() => navigation.navigate('HelpAndSupport')} />
+            <OptionCard CardIcon={<PaymentIcon />} label="Payments Method" onPress={() => navigation.navigate('Earnings')} />
+            <OptionCard CardIcon={<Logout />} label="Logout" onPress={handleLogout} />
+          </>
+        }
         </View>
       </SafeAreaView>
     );

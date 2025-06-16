@@ -1,4 +1,4 @@
-import { Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState, useMemo } from 'react';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/Feather';
@@ -8,8 +8,11 @@ import Button from '../../components/Button';
 import { color } from '../../theme/colors';
 import { useNavigation } from '@react-navigation/native';
 import { AuthNavigationProp } from '../../types/navigation';
+import { useDispatch } from 'react-redux';
+import authSlice from './redux/Slice';
 
 const SignUp = () => {
+    const dispatch = useDispatch();
     const navigation = useNavigation<AuthNavigationProp>();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
@@ -36,6 +39,23 @@ const SignUp = () => {
     };
 
     const passedChecksCount = Object.values(passwordChecks).filter(Boolean).length;
+
+    const handleSignup = () => {
+        // Validate password
+        if (password !== confirmPassword) {
+            return Alert.alert('Passwords do not match!');
+        }
+
+        const data: any = {
+            email,
+            password,
+            name,
+        };
+
+        // Dispatch signup action
+        dispatch(authSlice.actions.signup(data));
+        navigation.navigate('OtpVerification')
+    };
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -115,7 +135,7 @@ const SignUp = () => {
                 <space.s1 />
             </View>
             <View style={{ padding: wp(2), backgroundColor: color.White }}>
-                <Button onPress={() => navigation.navigate('OtpVerification')} title='Next' backgroundColor={color.Default} style={{ width: '94%'}} />
+                <Button onPress={handleSignup} title='Next' backgroundColor={color.Default} style={{ width: '94%'}} />
             </View>
         </SafeAreaView>
     );

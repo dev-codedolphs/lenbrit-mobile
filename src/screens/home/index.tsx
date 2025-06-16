@@ -14,6 +14,8 @@ interface Item {
   price: string;
   status?: string;
   date: string;
+  description: string;
+  renter?: string;
   rating: string;
   image: any;
 }
@@ -27,6 +29,7 @@ const HomeScreen = () => {
       title: 'T Shirts',
       price: 'PKR 500',
       date: '8 May to 10 May',
+      description: 'This soft, breathable cotton T-shirt offers comfort and style in one perfect package. Ideal for casual hangouts, college wear, or even semi-formal layering. The minimal print and slim fit make it suitable for both men and women looking for a trendy look without breaking the bank. Worn only twice and maintained in excellent condition.',
       rating: '5.0',
       image: require('../../assets/icons/shirt.png'),
     },
@@ -35,6 +38,7 @@ const HomeScreen = () => {
       title: 'Shoes',
       price: 'PKR 700',
       date: '14 May to 19 May',
+      description: 'This soft, breathable cotton T-shirt offers comfort and style in one perfect package. Ideal for casual hangouts, college wear, or even semi-formal layering. The minimal print and slim fit make it suitable for both men and women looking for a trendy look without breaking the bank. Worn only twice and maintained in excellent condition.',
       rating: '',
       image: require('../../assets/icons/watch.png'),
     },
@@ -47,6 +51,8 @@ const HomeScreen = () => {
       price: 'PKR 500',
       status: 'Pending',
       date: '8 May to 10 May',
+      renter: 'Ali',
+      description: 'This soft, breathable cotton T-shirt offers comfort and style in one perfect package. Ideal for casual hangouts, college wear, or even semi-formal layering. The minimal print and slim fit make it suitable for both men and women looking for a trendy look without breaking the bank. Worn only twice and maintained in excellent condition.',
       rating: '5.0',
       image: require('../../assets/icons/shirt.png'),
     },
@@ -56,7 +62,9 @@ const HomeScreen = () => {
       price: 'PKR 700',
       status: 'Pending',
       date: '14 May to 19 May',
-      rating: '',
+      renter: 'Ahmad',
+      description: 'This soft, breathable cotton T-shirt offers comfort and style in one perfect package. Ideal for casual hangouts, college wear, or even semi-formal layering. The minimal print and slim fit make it suitable for both men and women looking for a trendy look without breaking the bank. Worn only twice and maintained in excellent condition.',
+      rating: '4.8',
       image: require('../../assets/icons/watch.png'),
     },
   ];

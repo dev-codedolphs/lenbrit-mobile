@@ -14,7 +14,7 @@ export type OrderItemType = {
   export type ItemType = {
     id: string;
     title: string;
-    renter: string;
+    renter?: string;
     price: string;
     status?: string;
     description: string,

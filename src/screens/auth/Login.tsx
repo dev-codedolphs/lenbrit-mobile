@@ -8,16 +8,25 @@ import Button from '../../components/Button'
 import { color } from '../../theme/colors'
 import * as space from '../../utils/spacer'
 import { useNavigation } from '@react-navigation/native';
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import authSlice from './redux/Slice'
 import { AuthNavigationProp } from '../../types/navigation'
 
 const Login = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation<AuthNavigationProp>();
+  const { loading } = useSelector( (state: any) => state.auth)
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [hidePassword, setHidePassword] = useState(true);
+
+  const handleLogin = async () => {
+    const body: any = {
+      email,
+      password
+    }
+    dispatch(authSlice.actions.login(body))
+  }
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -51,12 +60,14 @@ const Login = () => {
         <space.s2 />
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
         <Button
+          loading={loading}
           title='SIGN IN AS LENTER'
           backgroundColor={color.Default}
           style={{ width: '48%' }}
-          onPress={() => dispatch(authSlice.actions.authenticate())}
+          onPress={handleLogin}
         />
         <Button
+        loading={loading}
           title='SIGN IN AS RENTER'
           backgroundColor='' textStyle={{ color: color.Default }}
           style={{ borderColor: color.Default, borderWidth: 1, width: '48%' }}

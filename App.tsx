@@ -8,6 +8,7 @@ import {
   Colors,
 } from 'react-native/Libraries/NewAppScreen';
 import { AppNavigator } from './src/navigation/AppNavigator';
+import { navigationRef } from './src/utils/navigate';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -31,7 +32,7 @@ function App(): React.JSX.Element {
         barStyle={'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <NavigationContainer>
+      <NavigationContainer ref={navigationRef}>
         {isLoading ? (
           <SplashScreen />
         ) : (

@@ -7,6 +7,8 @@ interface Item {
   title: string;
   price: string;
   status?: string;
+  description: string;
+  renter?: string;
   date: string;
   rating: string;
   image: any;
