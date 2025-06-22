@@ -28,9 +28,9 @@ export const AppNavigator = () => {
   }, [isLoggedIn]);
 
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator screenOptions={{ headerShown: false }} key={`${isLoggedIn}-${hasToken}`}>
       {(isLoggedIn || hasToken) ? (
-        <Stack.Screen name="MainTabs" component={MainStack} /> 
+        <Stack.Screen name="MainTabs" component={MainStack} />
       ) : (
         <Stack.Screen name="AuthStack" component={AuthStack} />
       )}

@@ -33,6 +33,7 @@ const ProfileScreen = () => {
       dispatch(authSlice.actions.reset());
     }, 2000);
     setIsLoggingOut(false)
+    console.log('here.....')
   };
   
   return (

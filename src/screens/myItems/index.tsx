@@ -12,7 +12,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import userSlice from '../redux/Slice';
 
 const MyItemsScreen = () => {
-  const { success } = useSelector((state: any) => state.user);
+  const { success, products } = useSelector((state: any) => state.user);
   const dispatch = useDispatch();
   const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 
