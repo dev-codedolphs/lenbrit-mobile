@@ -1,0 +1,71 @@
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import RNBlobUtil from 'react-native-blob-util';
+import axios from 'axios';
+
+const API_BASE_URL = 'https://starfish-app-ajafk.ondigitalocean.app/api/v1'
+
+export default class Api {
+
+  static async addProduct(data) {
+    try {
+      const token = await AsyncStorage.getItem('accessToken');
+      console.log('Using token:', token);
+
+      const response =await axios.post(`${API_BASE_URL}/listings`, data, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          Authorization: "Bearer " + token,
+        },
+      });
+      console.log('response in Api', response)
+      return response;
+    } catch (error) {
+      console.log('err', error)
+      console.log('err', error.response?.data?.message)
+      throw new Error(error.response?.data?.message || "Login failed");
+    }
+  }
+
+  static async getAllProducts() {
+    try {
+      const token = await AsyncStorage.getItem('accessToken');
+      const response = await axios.get(`${API_BASE_URL}/listings`, {
+        headers: {
+          "Access-Control-Allow-Origin": "*",
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      return response.data;
+    } catch (error) {
+      console.log('Get products error:', error);
+      throw new Error(error.response?.data?.message || 'Failed to fetch products');
+    }
+  }
+
+  static async uploadImageToServer(image) {
+    try {
+      const fileName = image.fileName || 'upload.jpg';
+      const fileType = image.type || 'image/jpeg';
+
+      // Step 1: Get presigned URL
+      const presignResponse = await axios.get(
+        `${API_BASE_URL}/presigned/images/${fileName}?type=${fileType}&mediaType=profile`
+      );
+
+      const { url, path } = presignResponse.data;
+
+      // Step 2: Upload the file using RNBlobUtil with required headers
+      const res = await RNBlobUtil.fetch('PUT', url, {
+        'Content-Type': fileType,
+        'x-amz-acl': 'public-read',
+      }, RNBlobUtil.wrap(image.uri));
+
+      if (res.respInfo.status !== 200) throw new Error('Upload failed');
+
+      return path;
+    } catch (error) {
+      console.log('Upload error:', error);
+    }
+  }
+
+}

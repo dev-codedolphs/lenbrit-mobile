@@ -62,7 +62,6 @@ export default class Api {
     static async getUserInfo() {
         try {
             const token = await AsyncStorage.getItem('accessToken');
-            console.log('tokeeeeeeeeeen', token)
             const response = axios.get(`${API_BASE_URL}/auth/get-me`, {
                 headers: {
                     "Access-Control-Allow-Origin": "*",
