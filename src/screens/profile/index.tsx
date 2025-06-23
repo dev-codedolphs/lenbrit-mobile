@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -13,27 +13,41 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { color } from '../../theme/colors';
 import { EarningIcon, Logout, PaymentIcon, PrivacyPolicy, SupportIcon } from '../../assets/icons';
 import OptionCard from '../../components/profile/OptionCard';
-import { useNavigation } from '@react-navigation/native';
+import { createNavigationContainerRef, useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../../navigation/MainStack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import authSlice from '../auth/redux/Slice';
+import { navigationRef } from '../../utils/navigate';
 
 
 const ProfileScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
+  const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
+
+  useEffect(() => {
+    if (!isLoggedIn && !isLoggingOut) {
+      if (navigationRef.isReady()) {
+        navigationRef.reset({
+          index: 0,
+          routes: [{ name: 'AuthStack' }],
+        });
+      }
+    }
+  }, [isLoggedIn, isLoggingOut]);
  
   const handleLogout = async () => {
     setIsLoggingOut(true);
-    setTimeout(async () => {
+
+    try {
       await AsyncStorage.removeItem('accessToken');
       dispatch(authSlice.actions.reset());
-    }, 2000);
-    setIsLoggingOut(false)
-    console.log('here.....')
+    } finally {
+      setIsLoggingOut(false);
+    }
   };
   
   return (

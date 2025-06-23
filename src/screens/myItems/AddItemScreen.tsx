@@ -25,20 +25,21 @@ import userSlice from '../redux/Slice';
 
 type Props = NativeStackScreenProps<MainStackParamList, 'AddItem'>;
 
-const AddItemScreen: React.FC<Props> = ({ navigation }) => {
+const AddItemScreen: React.FC<Props> = ({ navigation, route }) => {
   const { success } = useSelector((state: any) => state.user);
   const dispatch = useDispatch();
-  const [itemName, setItemName] = useState('My dress');
-  const [size, setSize] = useState('medium');
-  const [category, setCategory] = useState('ok');
-  const [price, setPrice] = useState<number>(0);
-  const [description, setDescription] = useState('description');
+  const { product } = route.params || {}; 
+  const [itemName, setItemName] = useState(product?.name || '');
+  const [size, setSize] = useState(product?.size || '');
+  const [category, setCategory] = useState(product?.category || '');
+  const [price, setPrice] = useState(product?.price || 0);
+  const [description, setDescription] = useState(product?.description || '');
+  const [startDate, setStartDate] = useState(product?.startDate ? new Date(product.startDate) : null);
+  const [endDate, setEndDate] = useState(product?.endDate ? new Date(product.endDate) : null);
+  const [images, setImages] = useState(product?.images || []);
   const [mediaList, setMediaList] = useState<Asset[]>([]);
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
   const [showStarDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
-  const [images, setImages] = useState([]);
 
 
   const isFormValid = itemName && size && category && price && startDate && endDate && description;
@@ -91,20 +92,29 @@ const AddItemScreen: React.FC<Props> = ({ navigation }) => {
   };
 
   const handleSubmit = () => {
-    const payload: any = {
+    const body: any = {
       name: itemName,
-      size: size,
+      size,
       price: Number(price),
       startDate: startDate?.toISOString(),
       endDate: endDate?.toISOString(),
       categoryId: 3,
       subCategoryId: 3,
-      description: description,
-      images: images,
+      description,
+      images,
     };
-    dispatch(userSlice.actions.addProduct(payload))
+  
+    if (product?.id) {
+      dispatch(userSlice.actions.updateProduct({
+        productId: product.id,
+        updatedData: body,
+      } as any));
+    } else {
+      dispatch(userSlice.actions.addProduct(body));
+    }
+  
     if (success) {
-      navigation.navigate('UploadItemSuccess')
+      navigation.navigate('UploadItemSuccess');
     }
   };
 
@@ -203,7 +213,7 @@ const AddItemScreen: React.FC<Props> = ({ navigation }) => {
 
         {/* Submit Button */}
         <Button
-          title="Upload Item"
+          title={product ? 'Update Item' : 'Upload Item'}
           backgroundColor={color.Default}
           onPress={handleSubmit}
         />

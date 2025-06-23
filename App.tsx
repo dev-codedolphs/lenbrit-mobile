@@ -3,6 +3,7 @@ import {  StatusBar, useColorScheme } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import SplashScreen from './src/screens/splash/SplashScreen';
+import Toast from 'react-native-toast-message';
 
 import {
   Colors,
@@ -38,7 +39,8 @@ function App(): React.JSX.Element {
         ) : (
           <AppNavigator />
         )}
-      </NavigationContainer>   
+      </NavigationContainer>
+      <Toast />   
     </SafeAreaProvider>
   );
 }

@@ -42,6 +42,44 @@ export default class Api {
     }
   }
 
+  static async updateProduct(productId, updatedData) {
+    try {
+      const token = await AsyncStorage.getItem('accessToken');
+
+      const response = await axios.put(
+        `${API_BASE_URL}/listings/${productId}`,
+        updatedData,
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
+
+      return response.data;
+    } catch (error) {
+      console.log('Update product error:', error);
+      throw new Error(error.response?.data?.message || 'Failed to update product');
+    }
+  }
+
+  static async deleteProduct(productId) {
+    try {
+      const token = await AsyncStorage.getItem('accessToken');
+      const response = await axios.delete(`${API_BASE_URL}/listings/${productId}`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.log('Delete product error:', error);
+      throw new Error(error.response?.data?.message || 'Failed to delete product');
+    }
+  }  
+  
+
   static async uploadImageToServer(image) {
     try {
       const fileName = image.fileName || 'upload.jpg';

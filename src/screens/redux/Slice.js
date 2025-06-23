@@ -25,6 +25,32 @@ const userSlice = createSlice({
         }),
         getAllProductsFailure: (state, action) => ({ ...state, loading: false, error: action.payload }),
 
+        // update product
+        updateProduct: (state) => ({ ...state, loading: true, error: null }),
+        updateProductSuccess: (state, action) => ({
+            ...state,
+            loading: false,
+            success: true,
+        }),
+        updateProductFailure: (state, action) => ({
+            ...state,
+            loading: false,
+            error: action.payload,
+        }),
+
+        // delete product
+        deleteProduct: (state) => ({...state, loading: true, error: null}),
+        deleteProductSuccess: (state, action) => {
+            const deletedId = action.payload;
+            return {
+                ...state,
+                products: state.products.filter(product => product.id !== deletedId),
+            };
+        },
+        deleteProductFailure: (state, action) => {
+            state.error = action.payload;
+        },
+
         reset: () => initialState,
     }
 })

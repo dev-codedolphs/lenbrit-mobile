@@ -72,7 +72,7 @@ const Login = () => {
           title='SIGN IN AS RENTER'
           backgroundColor='' textStyle={{ color: color.Default, fontSize: 14 }}
           style={{ borderColor: color.Default, borderWidth: 1, width: '48%' }}
-          onPress={() => dispatch(authSlice.actions.authenticate())}
+          onPress={handleLogin}
         />
         </View>
         <space.s3 />

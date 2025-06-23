@@ -3,6 +3,7 @@ import authSlice from './Slice';
 import authApi from './Api';
 import { navigate } from '../../../utils/navigate';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import Toast from 'react-native-toast-message';
 
 
 export default function* authFlow() {
@@ -24,6 +25,12 @@ function* login({ payload }) {
         if (response?.status === 200) {
             AsyncStorage.setItem('accessToken', response?.data?.token)
             yield put(authSlice.actions.loginSuccess(response?.data?.user));
+            Toast.show({
+                type: 'success',
+                text1: 'Login Successful',
+                topOffset: 20,
+                visibilityTime: 3000,
+            });
         } else {
             yield put(authSlice.actions.loginFailure());
         }

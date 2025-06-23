@@ -10,17 +10,20 @@ import {
 } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { useNavigation } from '@react-navigation/native';
-import { NativeStackScreenProps } from '@react-navigation/native-stack';
+import { NativeStackNavigationProp, NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../../navigation/MainStack';
 import { color } from '../../theme/colors';
 import Button from '../../components/Button';
 import Header from '../../components/Header';
+import { useDispatch } from 'react-redux';
+import userSlice from '../redux/Slice';
 
 
 type Props = NativeStackScreenProps<MainStackParamList, 'ItemDetail'>;
 
 const ItemDetailScreen: React.FC<Props> = ({ route }) => {
-    const navigation = useNavigation();
+    const dispatch = useDispatch();
+    const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
     const { item } = route.params;
 
     const renderRow = (label: string, value: any, color: string = '#000') => {
@@ -42,6 +45,11 @@ const ItemDetailScreen: React.FC<Props> = ({ route }) => {
         );
     };
 
+
+    const handleDelete = (id: string) => {
+        dispatch(userSlice.actions.deleteProduct(id as any));
+    };
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView contentContainerStyle={styles.container}>
@@ -56,9 +64,9 @@ const ItemDetailScreen: React.FC<Props> = ({ route }) => {
                         style={styles.image}
                         resizeMode="contain"
                     />
-                    <View style={styles.statusBadge}>
+                    <TouchableOpacity style={styles.statusBadge} onPress={() => navigation.navigate('AddItem', { product: item })} >
                         <Text style={styles.statusText}>Edit Item</Text>
-                    </View>
+                    </TouchableOpacity>
                 </View>
 
                 {/* Description */}
@@ -79,7 +87,7 @@ const ItemDetailScreen: React.FC<Props> = ({ route }) => {
                 </View>
 
                 {/* Actions */}
-                <Button title='Delete Item' backgroundColor={color.Red} />
+                <Button title='Delete Item' backgroundColor={color.Red} onPress={() => handleDelete(item.id)} />
 
             </ScrollView>
         </SafeAreaView>

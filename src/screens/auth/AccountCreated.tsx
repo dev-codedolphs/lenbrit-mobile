@@ -7,9 +7,11 @@ import { useNavigation } from '@react-navigation/native'
 import authSlice from './redux/Slice'
 import { useDispatch } from 'react-redux'
 import { SuccessIcon } from '../../assets/icons'
+import { AuthNavigationProp } from '../../types/navigation'
 
 const AccountCreated = () => {
     const dispatch = useDispatch();
+    const navigation = useNavigation<AuthNavigationProp>();
 
     return (
         <SafeAreaView style={{ flex: 1, backgroundColor: color.White }}>
@@ -19,7 +21,7 @@ const AccountCreated = () => {
                 <Text style={styles.subHeader}>Login to your account and start using the Lenbrit application for lending and renting accessories and many more things! </Text>
             </View>
             <View style={{ padding: wp(2), backgroundColor: color.White }}>
-                <Button onPress={() => dispatch(authSlice.actions.authenticate())} title='Next' backgroundColor={color.Default} style={{ width: '94%' }} />
+                <Button onPress={() => navigation.navigate('Login')} title='Next' backgroundColor={color.Default} style={{ width: '94%' }} />
             </View>
         </SafeAreaView>
     )
@@ -39,6 +41,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: '700',
         marginVertical: hp(2),
+        textAlign:'center',
     },
     subHeader: {
         fontSize: 15,

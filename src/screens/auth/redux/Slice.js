@@ -63,7 +63,7 @@ const authSlice = createSlice({
             loading: true,
             error: null,
         }),
-        verifyEmailPhoneSuccess: (state) => ({
+        verifyEmailPhoneSuccess: (state, action) => ({
             ...state,
             loading: false,
             isVerified: action.payload,

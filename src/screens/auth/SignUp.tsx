@@ -1,4 +1,4 @@
-import { Alert, Image, SafeAreaView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Image, KeyboardAvoidingView, Platform, SafeAreaView, ScrollView, StyleSheet, Switch, Text, TouchableOpacity, View } from 'react-native';
 import React, { useState, useMemo } from 'react';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Icon from 'react-native-vector-icons/Feather';
@@ -19,6 +19,7 @@ const SignUp = () => {
     const [name, setName] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [hidePassword, setHidePassword] = useState(true);
+    const [role, setRole] = useState<'BORROWER' | 'LENDER'>('BORROWER');
 
     // Password validation logic
     const passwordChecks = useMemo(() => ({
@@ -49,7 +50,7 @@ const SignUp = () => {
         const data: any = {
             email,
             password,
-            role: 'BORROWER',
+            role,
         };
 
         // Dispatch signup action
@@ -59,11 +60,16 @@ const SignUp = () => {
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
-            <View style={styles.container}>
-                <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginTop: hp(0.5) }}>
+            <KeyboardAvoidingView
+                style={{ flex: 1 }}
+                behavior={'padding'}
+                keyboardVerticalOffset={hp(2)} // adjust as needed
+            >
+            <ScrollView style={styles.container}>
+                <TouchableOpacity onPress={() => navigation.goBack()} style={{ marginTop: hp(0) }}>
                     <Icon name='arrow-left' size={24} />
                 </TouchableOpacity>
-                <Image style={styles.logo} source={require('../../assets/icons/logo.png')} />
+                {/* <Image style={styles.logo} source={require('../../assets/icons/logo.png')} /> */}
                 <Text style={styles.header}>Sign Up</Text>
                 <Text style={styles.subHeader}>Enter your credentials to create a new account on the app</Text>
 
@@ -109,6 +115,16 @@ const SignUp = () => {
                     onRightIconPress={() => setHidePassword(!hidePassword)}
                 />
 
+                <View style={styles.switchContainer}>
+                    <Text style={styles.switchLabel}>Sign Up as Lender</Text>
+                    <Switch
+                        value={role === 'LENDER'}
+                        onValueChange={(val) => setRole(val ? 'LENDER' : 'BORROWER')}
+                        thumbColor={color.Default}
+                        trackColor={{ false: '#ccc', true: color.Default }}
+                    />
+                </View>
+
                 {/* Password Strength Bar */}
                 {
                     password.length > 1 &&
@@ -133,7 +149,8 @@ const SignUp = () => {
                     </>
                 }
                 <space.s1 />
-            </View>
+            </ScrollView>
+            </KeyboardAvoidingView>
             <View style={{ padding: wp(2), backgroundColor: color.White }}>
                 <Button onPress={handleSignup} title='Next' backgroundColor={color.Default} style={{ width: '94%'}} />
             </View>
@@ -153,11 +170,13 @@ const styles = StyleSheet.create({
     header: {
         fontSize: 24,
         fontWeight: '700',
+        textAlign: 'center',
     },
     subHeader: {
         fontSize: 15,
         fontWeight: '400',
-        marginTop: hp(0.4),
+        marginVertical: hp(2),
+        textAlign: 'center',
     },
     strengthBarRow: {
         flexDirection: 'row',
@@ -193,7 +212,25 @@ const styles = StyleSheet.create({
     logo: {
         width: 120,
         height: 120,
+        marginTop: -30,
         resizeMode: 'contain',
         alignSelf: 'center',
       },
+    switchContainer: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginTop: hp(2),
+        marginBottom: hp(1),
+        paddingVertical: wp(3),
+        paddingLeft: wp(3),
+        borderRadius: wp(2),
+        borderColor: '#ccc',
+        borderWidth: 1,
+    },
+    switchLabel: {
+        fontSize: 14,
+        fontWeight: '600',
+        color: color.Black,
+    },
 });

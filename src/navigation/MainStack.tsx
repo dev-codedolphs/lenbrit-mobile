@@ -32,7 +32,7 @@ export type TabsParamList = {
 export type MainStackParamList = {
   Tabs: NavigatorScreenParams<TabsParamList>;
   OrderDetail: { item: OrderItemType };
-  AddItem: undefined;
+  AddItem: { product?: any } | undefined;
   ItemDetail: { item: ItemType};
   UploadItemSuccess: undefined;
   EditProfile: undefined;
