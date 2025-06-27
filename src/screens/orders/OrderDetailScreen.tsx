@@ -18,51 +18,13 @@ import { color } from '../../theme/colors';
 import Button from '../../components/Button';
 import Header from '../../components/Header';
 import { Star } from '../../assets/icons';
+import { useSelector } from 'react-redux';
 
 
 type Props = NativeStackScreenProps<MainStackParamList, 'OrderDetail'>;
 
-interface Review {
-    id: string;
-    name: string;
-    date: string;
-    rating: number;
-    review: string;
-    avatar: string;
-}
-
-const reviews: Review[] = [
-    {
-        id: '1',
-        name: 'Aspen Siphron',
-        date: 'May 12, 2024',
-        rating: 4.2,
-        review:
-            'The bridal dress was absolutely beautiful and exactly as shown in the pictures. It arrived on time and in perfect condition. The lender was very cooperative and professional. I would highly recommend renting from them again!',
-        avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
-    },
-    {
-        id: '2',
-        name: 'Aspen Siphron',
-        date: 'May 12, 2024',
-        rating: 3.9,
-        review:
-            'The bridal dress was absolutely beautiful and exactly as shown in the pictures. It arrived on time and in perfect condition. The lender was very cooperative and professional. I would highly recommend renting from them again!',
-        avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
-    },
-    {
-        id: '3',
-        name: 'Aspen Siphron',
-        date: 'May 12, 2024',
-        rating: 4.7,
-        review:
-            'The bridal dress was absolutely beautiful and exactly as shown in the pictures. It arrived on time and in perfect condition. The lender was very cooperative and professional. I would highly recommend renting from them again!',
-        avatar: 'https://randomuser.me/api/portraits/women/44.jpg',
-    },
-    
-];
-
 const OrderDetailScreen: React.FC<Props> = ({ route }) => {
+    const { user } = useSelector((state:any) => state.auth);
     const navigation = useNavigation();
     const { item } = route.params;
 
@@ -97,25 +59,6 @@ const OrderDetailScreen: React.FC<Props> = ({ route }) => {
                 return color.Gray;
         }
     };
-
-    const renderItem = ({ item }: { item: Review }) => (
-        <View style={styles.card}>
-            <View style={styles.header}>
-                <View style={styles.profile}>
-                    <Image source={{ uri: item.avatar }} style={styles.avatar} />
-                    <View>
-                        <Text style={styles.name}>{item.name}</Text>
-                        <Text style={styles.reviewDate}>{item.date}</Text>
-                    </View>
-                </View>
-                <View style={styles.rating}>
-                    <Star />
-                    <Text style={styles.ratingText}>{item.rating}</Text>
-                </View>
-            </View>
-            <Text style={styles.reviewText}>{item.review}</Text>
-        </View>
-    );
 
     return (
         <SafeAreaView style={{ flex: 1 }}>
@@ -160,18 +103,9 @@ const OrderDetailScreen: React.FC<Props> = ({ route }) => {
                     {renderRow('Size', 'Large')}
                     {renderRow('Price', 'PKR 400')}
                 </View>
-                <Text style={{ fontSize: 18, fontWeight: '400', fontFamily: 'DM Sans', color: '#8E8E8E', textDecorationLine: 'underline' }}>All Reviews</Text>
-                {/* FlatList for reviews */}
-                <FlatList
-                    data={reviews}
-                    keyExtractor={(item) => item.id}
-                    renderItem={renderItem}
-                    contentContainerStyle={styles.list}
-                    ListEmptyComponent={<Text>No reviews available</Text>}
-                />
 
                 {/* Actions */}
-                <Button title='Message to Renter' backgroundColor={color.Default} />
+                <Button title={ user.role == 'BORROWER' ? 'Message to Lender' : 'Message to Renter'} backgroundColor={color.Default} />
                 {
                     item.status == 'completed' &&
                     <Button title='Cancel' backgroundColor={color.Red} />
@@ -314,41 +248,5 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowRadius: 6,
         elevation: 3,
-    },
-    profile: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 8,
-    },
-    avatar: {
-        width: 36,
-        height: 36,
-        borderRadius: 18,
-        marginRight: 8,
-    },
-    name: {
-        fontWeight: '500',
-        fontSize: 12,
-    },
-    reviewDate: {
-        fontWeight: '400',
-        fontSize: 10,
-        color: '#898B8F',
-    },
-    rating: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 4,
-    },
-    ratingText: {
-        fontSize: 14,
-        fontWeight: '600',
-        color: '#333',
-        marginLeft: 4,
-    },
-    reviewText: {
-        fontSize: 14,
-        color: '#444',
-        lineHeight: 20,
     },
 });

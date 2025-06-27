@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { use } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import Home from '../screens/home';
@@ -23,12 +23,16 @@ import {
 import TabIconWithLabel from '../components/TabIconWithLabel';
 import Earnings from '../screens/profile/Earnings';
 import MyCart from '../screens/myCart';
+import { useSelector } from 'react-redux';
 
 const Tab = createBottomTabNavigator();
 type UserRole = 'renter' | 'lender';
 const userRole: UserRole = 'lender';
 
 export default function TabNavigator() {
+  const { user } = useSelector((state:any) => state.auth);
+
+console.log('mera user', user)
   return (
     <Tab.Navigator
       screenOptions={{
@@ -59,7 +63,7 @@ export default function TabNavigator() {
       />
 
 
-      {userRole === 'renter' ? (
+      {user?.role === 'BORROWER' ? (
         <Tab.Screen
           name="MyCart"
           component={MyCart}

@@ -15,7 +15,7 @@ export default function* userFlow() {
 function* addProduct({ payload }) {
     try {
         const response = yield call(userApi.addProduct, payload);
-        if (response?.status === 200) {
+        if (response?.status === 201) {
             yield put(userSlice.actions.addProductSuccess());
         }
     } catch (error) {

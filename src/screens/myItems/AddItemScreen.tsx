@@ -98,8 +98,8 @@ const AddItemScreen: React.FC<Props> = ({ navigation, route }) => {
       price: Number(price),
       startDate: startDate?.toISOString(),
       endDate: endDate?.toISOString(),
-      categoryId: 3,
-      subCategoryId: 3,
+      categoryId: 2,
+      subCategoryId: 2,
       description,
       images,
     };

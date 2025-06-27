@@ -28,16 +28,6 @@ const ProfileScreen = () => {
   const [isLoggingOut, setIsLoggingOut] = useState(false);
   const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
 
-  useEffect(() => {
-    if (!isLoggedIn && !isLoggingOut) {
-      if (navigationRef.isReady()) {
-        navigationRef.reset({
-          index: 0,
-          routes: [{ name: 'AuthStack' }],
-        });
-      }
-    }
-  }, [isLoggedIn, isLoggingOut]);
  
   const handleLogout = async () => {
     setIsLoggingOut(true);
