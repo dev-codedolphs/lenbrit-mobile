@@ -16,21 +16,35 @@ const ListingCard: React.FC<ListingCardProps> = ({ item }) => {
     const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
     
     const handlePress = () => {
-        navigation.navigate('ItemDetail', { item });
+        navigation.navigate('AddItem', { item });
     };
 
+    const startDate = item?.startDate && new Date(item.startDate).toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'long',
+    })
+
+    const endDate = item?.endDate && new Date(item.endDate).toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'long',
+    })
+    
     return (
         <Pressable style={styles.card} onPress={handlePress}>
             <View style={styles.imageContainer}>
-                <Image source={item.image} style={styles.image} />
+                {Array.isArray(item?.images) && item.images.length > 0 && item.images[0]?.url ? (
+                    <Image source={{ uri: item.images[0].url }} style={styles.image} />
+                ) : (
+                    <Image source={item.image} style={styles.image} />
+                )}
             </View>
             <View style={styles.textWrapper}>
-                <Text style={styles.title}>{item.title}</Text>
+                <Text style={styles.title}>{item.title ? item.title : item?.name}</Text>
                 <Text style={styles.rating}>{item.rating}</Text>
             </View>
             <View style={styles.textWrapper}>
                 <Text style={styles.title}>Availability</Text>
-                <Text style={styles.date}>{item.date}</Text>
+                <Text style={styles.date}>{item?.startDate ? `${startDate} to ${endDate}` :  item.date}</Text>
             </View>
             <View style={styles.textWrapper}>
                 <Text style={styles.title}>Price</Text>

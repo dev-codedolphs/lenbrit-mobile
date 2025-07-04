@@ -17,7 +17,7 @@ const MyItemsScreen = () => {
   const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 
 useEffect(() => {
-  dispatch(userSlice.actions.getAllProducts());
+  dispatch(userSlice.actions.getAllProducts({}));
 }, []);
 
   const listings: ItemType[] = [
@@ -89,7 +89,7 @@ useEffect(() => {
          <Button title='Add New Items' backgroundColor={color.Default} onPress={() => navigation.navigate('AddItem')} />
          <space.s2 />
         <FlatList
-          data={listings}
+          data={products}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
           numColumns={2}

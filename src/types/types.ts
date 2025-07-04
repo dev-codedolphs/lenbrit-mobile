@@ -15,8 +15,12 @@ export type OrderItemType = {
     id: string;
     title: string;
     renter?: string;
+    startDate?: string;
+    endDate?: string;
+    name?: string; 
     price: string;
     status?: string;
+    images?: any[];
     description: string,
     date: string;
     rating: string;

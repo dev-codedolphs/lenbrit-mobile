@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -22,27 +22,35 @@ import Button from '../../components/Button';
 import * as space from '../../utils/spacer';
 import { useDispatch, useSelector } from 'react-redux';
 import userSlice from '../redux/Slice';
+import Video from 'react-native-video';
 
 type Props = NativeStackScreenProps<MainStackParamList, 'AddItem'>;
 
 const AddItemScreen: React.FC<Props> = ({ navigation, route }) => {
-  const { success } = useSelector((state: any) => state.user);
+  const { success, loading } = useSelector((state: any) => state.user);
   const dispatch = useDispatch();
-  const { product } = route.params || {}; 
-  const [itemName, setItemName] = useState(product?.name || '');
-  const [size, setSize] = useState(product?.size || '');
-  const [category, setCategory] = useState(product?.category || '');
-  const [price, setPrice] = useState(product?.price || 0);
-  const [description, setDescription] = useState(product?.description || '');
-  const [startDate, setStartDate] = useState(product?.startDate ? new Date(product.startDate) : null);
-  const [endDate, setEndDate] = useState(product?.endDate ? new Date(product.endDate) : null);
-  const [images, setImages] = useState(product?.images || []);
-  const [mediaList, setMediaList] = useState<Asset[]>([]);
+  const { item }: any = route.params || {}; 
+  const [itemName, setItemName] = useState(item?.name || '');
+  const [size, setSize] = useState(item?.size || '');
+  const [category, setCategory] = useState(item?.category?.name || '');
+  const [price, setPrice] = useState(item?.price || 0);
+  const [description, setDescription] = useState(item?.description || '');
+  const [startDate, setStartDate] = useState(item?.startDate ? new Date(item.startDate) : null);
+  const [endDate, setEndDate] = useState(item?.endDate ? new Date(item.endDate) : null);
+  const [images, setImages] = useState(item?.images || []);
+  const [mediaList, setMediaList] = useState<any[]>(item?.images || []);
   const [showStarDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
 
 
   const isFormValid = itemName && size && category && price && startDate && endDate && description;
+
+  useEffect(() => {
+    if (success) {
+      navigation.navigate('UploadItemSuccess');
+      dispatch(userSlice.actions.clearSuccess({}));
+    }
+  }, [success]);
 
   const renderField = (
     label: string,
@@ -57,7 +65,7 @@ const AddItemScreen: React.FC<Props> = ({ navigation, route }) => {
         placeholder={placeholder}
         style={styles.input}
         placeholderTextColor="#999"
-        value={value}
+        value={value ? value.toString() : ''}
         onChangeText={setValue}
         keyboardType={keyboardType}
       />
@@ -74,7 +82,7 @@ const AddItemScreen: React.FC<Props> = ({ navigation, route }) => {
     if (result.assets && result.assets.length > 0) {
       const selectedAssets = result.assets.slice(0, 5);
       setMediaList(selectedAssets);
-      const res: any = await uploadAllImages(selectedAssets);
+      const res: string[] = await uploadAllImages(selectedAssets);
       setImages(res)
     }
   };
@@ -103,18 +111,24 @@ const AddItemScreen: React.FC<Props> = ({ navigation, route }) => {
       description,
       images,
     };
-  
-    if (product?.id) {
+
+    if (item?.id) {
+      const updatedData = {
+        name: itemName,
+        price: Number(price),
+        description: description,
+        size: size,
+        images: images.map((image: any) => image.url),
+        startDate: startDate?.toISOString(),
+        endDate: endDate?.toISOString(),
+      }
+
       dispatch(userSlice.actions.updateProduct({
-        productId: product.id,
-        updatedData: body,
+        productId: item.id,
+        updatedData: updatedData,
       } as any));
     } else {
       dispatch(userSlice.actions.addProduct(body));
-    }
-  
-    if (success) {
-      navigation.navigate('UploadItemSuccess');
     }
   };
 
@@ -130,7 +144,7 @@ const AddItemScreen: React.FC<Props> = ({ navigation, route }) => {
             mediaList[0].type?.startsWith('video') ? (
               <Text style={styles.uploadText}>Video Selected: {mediaList[0].fileName}</Text>
             ) : (
-              <Image source={{ uri: mediaList[0].uri }} style={styles.previewImage} />
+              <Image source={{ uri: mediaList[0]?.url }} style={styles.previewImage} />
             )
           ) : (
             <>
@@ -142,13 +156,25 @@ const AddItemScreen: React.FC<Props> = ({ navigation, route }) => {
 
         {mediaList.length > 1 && (
           <View style={styles.imageGrid}>
-            {mediaList.slice(1, 5).map((item, index) => (
-              <Image
-                key={index}
-                source={{ uri: item.uri }}
-                style={styles.gridImage}
-              />
-            ))}
+            {mediaList.slice(1, 5).map((item: any, index) => {
+              const isVideo = item.url?.endsWith('.mp4');
+              return isVideo ? (
+                <Video
+                  key={index}
+                  source={{ uri: item.url }}
+                  style={styles.gridImage}
+                  paused={true}
+                  resizeMode="cover"
+                  muted
+                />
+              ) : (
+                <Image
+                  key={index}
+                  source={{ uri: item.url }}
+                  style={styles.gridImage}
+                />
+              );
+            })}
           </View>
         )}
 
@@ -213,7 +239,8 @@ const AddItemScreen: React.FC<Props> = ({ navigation, route }) => {
 
         {/* Submit Button */}
         <Button
-          title={product ? 'Update Item' : 'Upload Item'}
+          title={item ? 'Update Item' : 'Upload Item'}
+          loading={loading}
           backgroundColor={color.Default}
           onPress={handleSubmit}
         />

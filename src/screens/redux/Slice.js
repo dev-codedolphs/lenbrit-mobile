@@ -2,6 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
     products: null,
+    orders: [],
+    selectedOrder: null,
+    cart: [],
     success: false,
     loading: false,
     error: null,
@@ -31,6 +34,9 @@ const userSlice = createSlice({
             ...state,
             loading: false,
             success: true,
+            products: state.products?.map((item) =>
+                item.id === action.payload.id ? action.payload : item
+            ),
         }),
         updateProductFailure: (state, action) => ({
             ...state,
@@ -51,6 +57,85 @@ const userSlice = createSlice({
             state.error = action.payload;
         },
 
+        // Create Order
+        createOrder: (state) => ({ ...state, loading: true, error: null }),
+        createOrderSuccess: (state, action) => ({
+            ...state,
+            loading: false,
+            success: true,
+            orders: [...state.orders, action.payload],
+        }),
+        createOrderFailure: (state, action) => ({
+            ...state,
+            loading: false,
+            error: action.payload,
+        }),
+
+        // Get All Orders
+        getAllOrders: (state) => ({ ...state, loading: true, error: null }),
+        getAllOrdersSuccess: (state, action) => ({
+            ...state,
+            loading: false,
+            orders: action.payload,
+        }),
+        getAllOrdersFailure: (state, action) => ({
+            ...state,
+            loading: false,
+            error: action.payload,
+        }),
+
+        // Get Order By ID
+        getOrderById: (state) => ({ ...state, loading: true, error: null }),
+        getOrderByIdSuccess: (state, action) => ({
+            ...state,
+            loading: false,
+            selectedOrder: action.payload,
+        }),
+        getOrderByIdFailure: (state, action) => ({
+            ...state,
+            loading: false,
+            error: action.payload,
+        }),
+
+        // Add to Cart
+        addToCart: (state) => ({ ...state, loading: true }),
+        addToCartSuccess: (state, action) => ({
+            ...state,
+            loading: false,
+            cart: [...state.cart, action.payload],
+        }),
+        addToCartFailure: (state, action) => ({ ...state, loading: false, error: action.payload }),
+
+        // Get All Cart Items
+        getAllCartItems: (state) => ({ ...state, loading: true }),
+        getAllCartItemsSuccess: (state, action) => ({
+            ...state,
+            loading: false,
+            cart: action.payload,
+        }),
+        getAllCartItemsFailure: (state, action) => ({ ...state, loading: false, error: action.payload }),
+
+        // Remove Item
+        removeItemFromCart: (state) => ({ ...state, loading: true }),
+        removeItemFromCartSuccess: (state, action) => ({
+            ...state,
+            loading: false,
+            cart: state.cart.filter((item) => item.id !== action.payload),
+        }),
+        removeItemFromCartFailure: (state, action) => ({ ...state, loading: false, error: action.payload }),
+
+        // Update Item
+        updateItemInCart: (state) => ({ ...state, loading: true }),
+        updateItemInCartSuccess: (state, action) => ({
+            ...state,
+            loading: false,
+            cart: state.cart.map((item) =>
+                item.id === action.payload.id ? action.payload : item
+            ),
+        }),
+        updateItemInCartFailure: (state, action) => ({ ...state, loading: false, error: action.payload }),
+
+        clearSuccess: (state) => ({ ...state, success: false }),
         reset: () => initialState,
     }
 })

@@ -9,6 +9,17 @@ export default function* userFlow() {
         takeEvery(userSlice.actions.getAllProducts.type, getAllProducts),
         takeEvery(userSlice.actions.updateProduct.type, updateProduct),
         takeEvery(userSlice.actions.deleteProduct.type, deleteProduct),
+
+        // Orders
+        takeEvery(userSlice.actions.createOrder.type, createOrder),
+        takeEvery(userSlice.actions.getAllOrders.type, getAllOrders),
+        takeEvery(userSlice.actions.getOrderById.type, getOrderById),
+        
+        // Cart
+        takeEvery(userSlice.actions.addToCart.type, addToCart),
+        takeEvery(userSlice.actions.getAllCartItems.type, getAllCartItems),
+        takeEvery(userSlice.actions.removeItemFromCart.type, removeItemFromCart),
+        takeEvery(userSlice.actions.updateItemInCart.type, updateItemInCart),
     ])
 }
 
@@ -50,5 +61,73 @@ function* deleteProduct({ payload }) {
         yield put(userSlice.actions.deleteProductSuccess(response));
     } catch (error) {
         yield put(userSlice.actions.deleteProductFailure(error.message));
+    }
+}
+
+// order functions
+function* createOrder({ payload }) {
+    try {
+        const response = yield call(userApi.createOrder, payload);
+        if (response?.status === 201 || response?.id) {
+            yield put(userSlice.actions.createOrderSuccess(response));
+        }
+    } catch (error) {
+        yield put(userSlice.actions.createOrderFailure(error.message));
+    }
+}
+
+function* getAllOrders() {
+    try {
+        const response = yield call(userApi.getAllOrders);
+        yield put(userSlice.actions.getAllOrdersSuccess(response));
+    } catch (error) {
+        yield put(userSlice.actions.getAllOrdersFailure(error.message));
+    }
+}
+
+function* getOrderById({ payload }) {
+    try {
+        const response = yield call(userApi.getOrderById, payload);
+        yield put(userSlice.actions.getOrderByIdSuccess(response));
+    } catch (error) {
+        yield put(userSlice.actions.getOrderByIdFailure(error.message));
+    }
+}
+
+// cart functions
+function* addToCart({ payload }) {
+    try {
+        const res = yield call(userApi.addToCart, payload);
+        yield put(userSlice.actions.addToCartSuccess(res));
+    } catch (e) {
+        yield put(userSlice.actions.addToCartFailure(e.message));
+    }
+}
+
+function* getAllCartItems() {
+    try {
+        const res = yield call(userApi.getAllCartItems);
+        yield put(userSlice.actions.getAllCartItemsSuccess(res));
+    } catch (e) {
+        yield put(userSlice.actions.getAllCartItemsFailure(e.message));
+    }
+}
+
+function* removeItemFromCart({ payload }) {
+    try {
+        const res = yield call(userApi.removeItemFromCart, payload);
+        yield put(userSlice.actions.removeItemFromCartSuccess(res));
+    } catch (e) {
+        yield put(userSlice.actions.removeItemFromCartFailure(e.message));
+    }
+}
+
+function* updateItemInCart({ payload }) {
+    try {
+        const { itemId, updatedData } = payload;
+        const res = yield call(userApi.updateItemInCart, itemId, updatedData);
+        yield put(userSlice.actions.updateItemInCartSuccess(res));
+    } catch (e) {
+        yield put(userSlice.actions.updateItemInCartFailure(e.message));
     }
 }

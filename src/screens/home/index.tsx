@@ -13,6 +13,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { CosmeticsIcon, ElectronicsIcon, ShirtIcon } from '../../assets/icons';
 import SearchBar from './SearchBar';
 import Filters from './Filters';
+import userSlice from '../redux/Slice';
 
 interface Item {
   id: string;
@@ -29,11 +30,14 @@ interface Item {
 const HomeScreen = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state:any) => state.auth);
+  const { orders, cart } = useSelector((state:any) => state.user);
     const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 
   useEffect(() => {
     const getuser = async () => {
       dispatch(authSlice.actions.getUserInfo())
+      dispatch(userSlice.actions.getAllOrders({}));
+      dispatch(userSlice.actions.getAllCartItems({}));
     }
 
     getuser();
