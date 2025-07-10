@@ -11,13 +11,30 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { color } from '../../theme/colors';
 import Header from '../../components/Header';
 import Button from '../../components/Button';
-import { useNavigation } from '@react-navigation/native';
+import { RouteProp, useNavigation, useRoute } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../../navigation/MainStack';
 
 const CheckoutScreen = () => {
+  const route = useRoute<RouteProp<MainStackParamList, 'CheckoutScreen'>>();
+  const { item } = route.params;
   const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
   
+  const startDate = item?.listing?.startDate && new Date(item?.listing?.startDate).toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+  })
+
+  const endDate = item?.listing?.endDate && new Date(item?.listing.endDate).toLocaleDateString('en-GB', {
+    day: 'numeric',
+    month: 'long',
+  })
+
+  const date = `${startDate} to ${endDate}`
+  const subTotal = item.listing.price * item.quantity
+  const shippingCost = 50;
+  const total = subTotal + shippingCost ;
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: color.White }}>
       <View style={styles.container}>
@@ -25,35 +42,31 @@ const CheckoutScreen = () => {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.imageWrapper}>
             <Image
-              source={require('../../assets/icons/shirt.png')}
+              source={item.listing.images[0].url as any}
               style={styles.image}
-              resizeMode="contain"
+              resizeMode="cover"
             />
           </View>
 
           <Text style={styles.sectionTitle}>Description</Text>
           <Text style={styles.descriptionBox}>
-            This soft, breathable cotton T-shirt offers comfort and style in one
-            perfect package. Ideal for casual hangouts, college wear, or even semi-
-            formal layering. The minimal print and slim fit make it suitable for both
-            men and women looking for a trendy look without breaking the bank. Worn
-            only twice and maintained in excellent condition.
+            {item.listing.description}
           </Text>
 
-          <View style={styles.detailRow}><Text style={styles.label}>Item</Text><Text style={styles.value}>T Shirt</Text></View>
-          <View style={styles.detailRow}><Text style={styles.label}>Category</Text><Text style={styles.value}>Random</Text></View>
-          <View style={styles.detailRow}><Text style={styles.label}>Date</Text><Text style={[styles.value, { color: color.Default }]}>10 May to 12 May</Text></View>
-          <View style={styles.detailRow}><Text style={styles.label}>Size</Text><Text style={styles.value}>Large</Text></View>
+          <View style={styles.detailRow}><Text style={styles.label}>Item</Text><Text style={styles.value}>{item.listing.name}</Text></View>
+          <View style={styles.detailRow}><Text style={styles.label}>Category</Text><Text style={styles.value}>{item.listing.category.name}</Text></View>
+          <View style={styles.detailRow}><Text style={styles.label}>Date</Text><Text style={[styles.value, { color: color.Default }]}>{date}</Text></View>
+          <View style={styles.detailRow}><Text style={styles.label}>Size</Text><Text style={styles.value}>{item.listing.size}</Text></View>
 
           <View style={styles.separator} />
 
           <Text style={styles.sectionTitle}>Order Info</Text>
-          <View style={styles.detailRow}><Text style={styles.subLabel}>Subtotal</Text><Text style={styles.value}>PKR 400</Text></View>
-          <View style={styles.detailRow}><Text style={styles.subLabel}>Shipping cost</Text><Text style={styles.value}>PKR 0</Text></View>
-          <View style={styles.detailRow}><Text style={styles.label}>Total</Text><Text style={styles.value}>PKR 400</Text></View>
+          <View style={styles.detailRow}><Text style={styles.subLabel}>Subtotal</Text><Text style={styles.value}>PKR {subTotal}</Text></View>
+          <View style={styles.detailRow}><Text style={styles.subLabel}>Shipping cost</Text><Text style={styles.value}>PKR {shippingCost}</Text></View>
+          <View style={styles.detailRow}><Text style={styles.label}>Total</Text><Text style={styles.value}>PKR {total.toFixed(2)}</Text></View>
         </ScrollView>
 
-          <Button title="Check out" backgroundColor={color.Default} style={{ marginBottom: 0}} />
+          <Button title="Check out" onPress={() => navigation.navigate('AddressScreen')} backgroundColor={color.Default} style={{ marginBottom: 0}} />
       </View>
     </SafeAreaView>
   );

@@ -9,14 +9,22 @@ import { ItemType, OrderItemType } from '../../types/types';
 
 
 interface ListingCardProps {
-    item: ItemType
+    item: any
+    from: string;
 }
 
-const ListingCard: React.FC<ListingCardProps> = ({ item }) => {
+const ListingCard: React.FC<ListingCardProps> = ({ item, from }) => {
     const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
     
     const handlePress = () => {
-        navigation.navigate('AddItem', { item });
+        // navigation.navigate('AddItem', { item });
+        if (from === 'requests') {
+            navigation.navigate('OffersScreen');
+          } else if (from === 'listings') {
+            navigation.navigate('AddItem', { item });
+          } else {
+            navigation.navigate('OrderDetail', { item });
+          }
     };
 
     const startDate = item?.startDate && new Date(item.startDate).toLocaleDateString('en-GB', {
@@ -50,7 +58,7 @@ const ListingCard: React.FC<ListingCardProps> = ({ item }) => {
                 <Text style={styles.title}>Price</Text>
                 <Text style={styles.price}>{item.price}</Text>
             </View>
-            {
+            {/* {
                 item.status && (
                     <View style={styles.textWrapper}>
                         <TouchableOpacity style={{ backgroundColor: '#01C944', width: '47%', paddingVertical: 4,  alignItems: 'center', borderRadius: 2}}>
@@ -61,7 +69,7 @@ const ListingCard: React.FC<ListingCardProps> = ({ item }) => {
                         </TouchableOpacity>
                     </View>
                 )
-            }
+            } */}
         </Pressable>
     );
 };
@@ -74,6 +82,7 @@ const styles = StyleSheet.create({
         backgroundColor: '#F9F9F9',
         padding: 8,
         marginRight: wp('4%'),
+        marginBottom: hp(3)
     },
     imageContainer: {
         paddingVertical: hp(2),

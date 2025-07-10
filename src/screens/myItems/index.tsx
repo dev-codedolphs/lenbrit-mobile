@@ -94,7 +94,7 @@ useEffect(() => {
           showsVerticalScrollIndicator={false}
           numColumns={2}
           columnWrapperStyle={{ justifyContent: 'space-between', marginBottom: 16 }}
-          renderItem={({ item }: {item: ItemType}) => <ListingCard item={item} />}
+          renderItem={({ item }: {item: ItemType}) => <ListingCard item={item} from='listings' />}
         />
       </View>
     </SafeAreaView>

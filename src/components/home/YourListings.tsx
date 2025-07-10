@@ -18,9 +18,10 @@ interface YourListingsProps {
   title: string;
   data: Item[];
   onPress: () => void;
+  from: string;
 }
 
-const YourListings: React.FC<YourListingsProps> = ({ title, data, onPress }) => {
+const YourListings: React.FC<YourListingsProps> = ({ title, data, onPress, from }) => {
   return (
     <View style={styles.container}>
       <View style={styles.header}>
@@ -34,7 +35,7 @@ const YourListings: React.FC<YourListingsProps> = ({ title, data, onPress }) => 
         keyExtractor={(item) => item.id}
         horizontal
         showsHorizontalScrollIndicator={false}
-        renderItem={({ item }) => <ListingCard item={item} />}
+        renderItem={({ item }) => <ListingCard item={item} from={from} />}
       />
     </View>
   );

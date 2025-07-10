@@ -2,7 +2,7 @@ import React from 'react';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import TabNavigator from './TabNavigator';
 import OrderDetailScreen from '../screens/orders/OrderDetailScreen';
-import { ItemType, MessageItem, OrderItemType } from '../types/types';
+import { CartItem, ItemType, MessageItem, OrderItemType } from '../types/types';
 import AddItemScreen from '../screens/myItems/AddItemScreen';
 import UploadItemSuccess from '../screens/myItems/UploadItemSuccess';
 import { NavigatorScreenParams } from '@react-navigation/native';
@@ -20,6 +20,8 @@ import NotificationsScreen from '../screens/notifications';
 import DeleteNotificationSuccess from '../screens/notifications/DeleteNotificationSuccess';
 import CheckoutScreen from '../screens/myCart/CheckoutScreen';
 import OffersScreen from '../screens/home/OffersScreen';
+import AddressScreen from '../screens/myCart/AddressScreen';
+import OrederPlacedSuccess from '../screens/myCart/OrderPlacedSuccess';
 
 export type TabsParamList = {
   Home: undefined;
@@ -27,11 +29,12 @@ export type TabsParamList = {
   Orders: undefined;
   Message: undefined;
   Profile: undefined;
+  MyCart: undefined;
 };
 
 export type MainStackParamList = {
   Tabs: NavigatorScreenParams<TabsParamList>;
-  OrderDetail: { item: OrderItemType };
+  OrderDetail: { item: OrderItemType } | undefined;
   AddItem: { item?: ItemType } | undefined;
   ItemDetail: { item: ItemType};
   UploadItemSuccess: undefined;
@@ -46,8 +49,10 @@ export type MainStackParamList = {
   PaymentSuccess: undefined;
   NotificationsScreen: undefined;
   DeleteNotificationSuccess: undefined;
-  CheckoutScreen: undefined;
+  CheckoutScreen: {item: CartItem};
   OffersScreen: undefined;
+  AddressScreen: undefined;
+  OrederPlacedSuccess: undefined;
 
 };
 
@@ -74,6 +79,8 @@ const MainStack = () => {
       <Stack.Screen name="DeleteNotificationSuccess" component={DeleteNotificationSuccess} />
       <Stack.Screen name="CheckoutScreen" component={CheckoutScreen} />
       <Stack.Screen name="OffersScreen" component={OffersScreen} />
+      <Stack.Screen name="AddressScreen" component={AddressScreen} />
+      <Stack.Screen name="OrederPlacedSuccess" component={OrederPlacedSuccess} />
     </Stack.Navigator>
   );
 };

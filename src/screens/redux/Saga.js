@@ -20,6 +20,9 @@ export default function* userFlow() {
         takeEvery(userSlice.actions.getAllCartItems.type, getAllCartItems),
         takeEvery(userSlice.actions.removeItemFromCart.type, removeItemFromCart),
         takeEvery(userSlice.actions.updateItemInCart.type, updateItemInCart),
+
+        // categories
+        takeEvery(userSlice.actions.getAllCategories.type, getAllCategories),
     ])
 }
 
@@ -68,6 +71,7 @@ function* deleteProduct({ payload }) {
 function* createOrder({ payload }) {
     try {
         const response = yield call(userApi.createOrder, payload);
+        console.log('response......', response)
         if (response?.status === 201 || response?.id) {
             yield put(userSlice.actions.createOrderSuccess(response));
         }
@@ -119,6 +123,15 @@ function* removeItemFromCart({ payload }) {
         yield put(userSlice.actions.removeItemFromCartSuccess(res));
     } catch (e) {
         yield put(userSlice.actions.removeItemFromCartFailure(e.message));
+    }
+}
+
+function* getAllCategories() {
+    try {
+        const res = yield call(userApi.getAllCategories);
+        yield put(userSlice.actions.getAllCategoriesSuccess(res));
+    } catch (e) {
+        yield put(userSlice.actions.getAllCategoriesFailure(e.message));
     }
 }
 

@@ -10,7 +10,7 @@ import {
     FlatList,
 } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { OrderItemType } from '../../types/types';
+import { ItemType, OrderItemType } from '../../types/types';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../../navigation/MainStack';
@@ -18,16 +18,31 @@ import { color } from '../../theme/colors';
 import Button from '../../components/Button';
 import Header from '../../components/Header';
 import { Star } from '../../assets/icons';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import userSlice from '../redux/Slice';
 
 
 type Props = NativeStackScreenProps<MainStackParamList, 'OrderDetail'>;
 
 const OrderDetailScreen: React.FC<Props> = ({ route }) => {
+    const dispatch = useDispatch();
     const { user } = useSelector((state:any) => state.auth);
+    const { loading } = useSelector((state:any) => state.user);
     const navigation = useNavigation();
-    const { item } = route.params;
+    const { item }: any = route.params;
+    const startDate = item?.startDate && new Date(item.startDate).toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'long',
+    })
 
+    const endDate = item?.endDate && new Date(item.endDate).toLocaleDateString('en-GB', {
+        day: 'numeric',
+        month: 'long',
+    })
+
+    const date =`${startDate} to ${endDate}`
+
+    console.log('item', item)
     const renderRow = (label: string, value: any, color: string = '#000') => {
         const isDate = label.toLowerCase() === 'date';
 
@@ -60,6 +75,17 @@ const OrderDetailScreen: React.FC<Props> = ({ route }) => {
         }
     };
 
+    const handleAddToCart = () => {
+        if (item?.id) {
+            dispatch(userSlice.actions.addToCart({ listingId: item.id }));
+            (navigation as any).navigate('Tabs', { screen: 'MyCart' });
+        }
+    };
+
+    const handleChatToLender = () => {
+        (navigation as any).navigate('Tabs', { screen: 'Message' });
+    }
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView contentContainerStyle={styles.container}>
@@ -70,9 +96,9 @@ const OrderDetailScreen: React.FC<Props> = ({ route }) => {
                 {/* Image and Status */}
                 <View style={styles.imageContainer}>
                     <Image
-                        source={item.image}
+                        source={item.images[1]}
                         style={styles.image}
-                        resizeMode="contain"
+                        resizeMode="cover"
                     />
                     <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) }]}>
                         <Text style={styles.statusText}>{item.status}</Text>
@@ -80,7 +106,7 @@ const OrderDetailScreen: React.FC<Props> = ({ route }) => {
                 </View>
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                <Text style={styles.sectionTitle}>{item.item}</Text>
+                <Text style={styles.sectionTitle}>{item.name}</Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                     <Text style={{ marginRight: wp(2), fontSize: 17, fontWeight: '600'}}>5.0</Text>
                     <Star />
@@ -98,14 +124,22 @@ const OrderDetailScreen: React.FC<Props> = ({ route }) => {
 
                 {/* Details */}
                 <View style={styles.detailsContainer}>
-                    {renderRow('Renter', item.renter)}
-                    {renderRow('Date', item.date)}
+                    {renderRow('Renter', item.user.firstName)}
+                    {renderRow('Date', date)}
                     {renderRow('Size', 'Large')}
                     {renderRow('Price', 'PKR 400')}
                 </View>
 
+                {/* <Button title={ user.role == 'BORROWER' ? 'Message to Lender' : 'Message to Renter'} backgroundColor={color.Default} /> */}
+
+
                 {/* Actions */}
-                <Button title={ user.role == 'BORROWER' ? 'Message to Lender' : 'Message to Renter'} backgroundColor={color.Default} />
+                <View style={styles.buttonContainer}>
+                <Button title='Chat with Lender' backgroundColor={color.Default} style={{ width: '48%', marginVertical: 0}} onPress={handleChatToLender} />
+                <Button title='Add to Cart' backgroundColor='#00826F' style={{ width: '48%'}} onPress={handleAddToCart} loading={loading} />
+                <Button title='Rent Now' backgroundColor={color.Black} style={{ width: '48%'}} />
+                <Button title='Make offer' backgroundColor='#FFAE00' style={{ width: '48%'}} />
+                </View>
                 {
                     item.status == 'completed' &&
                     <Button title='Cancel' backgroundColor={color.Red} />
@@ -248,5 +282,10 @@ const styles = StyleSheet.create({
         shadowOffset: { width: 0, height: 2 },
         shadowRadius: 6,
         elevation: 3,
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
     },
 });

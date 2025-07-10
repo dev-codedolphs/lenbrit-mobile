@@ -5,6 +5,7 @@ const initialState = {
     orders: [],
     selectedOrder: null,
     cart: [],
+    categories: null,
     success: false,
     loading: false,
     error: null,
@@ -134,6 +135,15 @@ const userSlice = createSlice({
             ),
         }),
         updateItemInCartFailure: (state, action) => ({ ...state, loading: false, error: action.payload }),
+
+        // get categories
+        getAllCategories: (state) => ({ ...state, loading: true }),
+        getAllCategoriesSuccess: (state, action) => ({
+            ...state,
+            loading: false,
+            categories: action.payload,
+        }),
+        getAllCategoriesFailure: (state, action) => ({ ...state, loading: false, error: action.payload }),
 
         clearSuccess: (state) => ({ ...state, success: false }),
         reset: () => initialState,

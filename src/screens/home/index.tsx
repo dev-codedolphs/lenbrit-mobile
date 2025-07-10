@@ -30,7 +30,7 @@ interface Item {
 const HomeScreen = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state:any) => state.auth);
-  const { orders, cart } = useSelector((state:any) => state.user);
+  const { orders, cart, categories, products } = useSelector((state:any) => state.user);
     const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 
   useEffect(() => {
@@ -38,6 +38,8 @@ const HomeScreen = () => {
       dispatch(authSlice.actions.getUserInfo())
       dispatch(userSlice.actions.getAllOrders({}));
       dispatch(userSlice.actions.getAllCartItems({}));
+      dispatch(userSlice.actions.getAllCategories({}));
+      dispatch(userSlice.actions.getAllProducts({}));
     }
 
     getuser();
@@ -131,7 +133,7 @@ const HomeScreen = () => {
     },
   ];
 
-  const categories = [
+  const Categories = [
     {
       id: '1',
       label: 'Cloths',
@@ -168,7 +170,7 @@ const HomeScreen = () => {
                 </TouchableOpacity>
               </View>
               <FlatList
-                data={categories}
+                data={Categories}
                 keyExtractor={(item) => item.id}
                 horizontal
                 showsHorizontalScrollIndicator={false}
@@ -182,8 +184,8 @@ const HomeScreen = () => {
                 )}
               />
             </View>
-            <YourListings title="Top Items" data={TopProducts} onPress={() => navigation.navigate('Tabs', { screen: 'MyItems' })} />
-            <YourListings title="Newly Added" data={NewlyAddedProducts} onPress={() => navigation.navigate('OffersScreen')} />
+            {/* <YourListings title="Top Items" data={TopProducts} onPress={() => navigation.navigate('Tabs', { screen: 'MyItems' })} /> */}
+            <YourListings title="Newly Added" data={products} onPress={() => navigation.navigate('OffersScreen')} from='products' />
           </>
         }
 
@@ -193,8 +195,8 @@ const HomeScreen = () => {
           <>
             <Text style={{ fontSize: 20, fontWeight: '600' }}>Quick Stats</Text>
             <QuickStats />
-            <YourListings title="Your Listings" data={listings} onPress={() => navigation.navigate('Tabs', { screen: 'MyItems' })} />
-            <YourListings title="Incoming Requests" data={requests} onPress={() => navigation.navigate('OffersScreen')} />
+            <YourListings title="Your Listings" data={listings} onPress={() => navigation.navigate('Tabs', { screen: 'MyItems' })} from='listings' />
+            <YourListings title="Incoming Requests" data={requests} onPress={() => navigation.navigate('OffersScreen')} from='requests' />
           </>
         }
 

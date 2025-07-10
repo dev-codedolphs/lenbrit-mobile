@@ -23,16 +23,19 @@ import * as space from '../../utils/spacer';
 import { useDispatch, useSelector } from 'react-redux';
 import userSlice from '../redux/Slice';
 import Video from 'react-native-video';
+import DropDownPicker from '../../components/DropDownPicker';
+import DropDown from '../../components/DropDownPicker';
 
 type Props = NativeStackScreenProps<MainStackParamList, 'AddItem'>;
 
 const AddItemScreen: React.FC<Props> = ({ navigation, route }) => {
-  const { success, loading } = useSelector((state: any) => state.user);
+  const { success, loading, categories } = useSelector((state: any) => state.user);
   const dispatch = useDispatch();
   const { item }: any = route.params || {}; 
   const [itemName, setItemName] = useState(item?.name || '');
   const [size, setSize] = useState(item?.size || '');
   const [category, setCategory] = useState(item?.category?.name || '');
+  const [subCategory, setSubCategory] = useState(item?.subCategory?.name || '');
   const [price, setPrice] = useState(item?.price || 0);
   const [description, setDescription] = useState(item?.description || '');
   const [startDate, setStartDate] = useState(item?.startDate ? new Date(item.startDate) : null);
@@ -42,6 +45,7 @@ const AddItemScreen: React.FC<Props> = ({ navigation, route }) => {
   const [showStarDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
 
+  const selectedCategory = categories.find((cat: any) => cat.name === category);
 
   const isFormValid = itemName && size && category && price && startDate && endDate && description;
 
@@ -144,7 +148,8 @@ const AddItemScreen: React.FC<Props> = ({ navigation, route }) => {
             mediaList[0].type?.startsWith('video') ? (
               <Text style={styles.uploadText}>Video Selected: {mediaList[0].fileName}</Text>
             ) : (
-              <Image source={{ uri: mediaList[0]?.url }} style={styles.previewImage} />
+              // <Image source={{ uri: mediaList[0]?.url }} style={styles.previewImage} />
+              <Image source={{ uri: mediaList[0]?.uri || mediaList[0]?.url }} style={styles.previewImage} />
             )
           ) : (
             <>
@@ -154,7 +159,7 @@ const AddItemScreen: React.FC<Props> = ({ navigation, route }) => {
           )}
         </TouchableOpacity>
 
-        {mediaList.length > 1 && (
+        {/* {mediaList.length > 1 && (
           <View style={styles.imageGrid}>
             {mediaList.slice(1, 5).map((item: any, index) => {
               const isVideo = item.url?.endsWith('.mp4');
@@ -176,12 +181,63 @@ const AddItemScreen: React.FC<Props> = ({ navigation, route }) => {
               );
             })}
           </View>
+        )} */}
+
+        {mediaList.length > 1 && (
+          <View style={styles.imageGrid}>
+            {mediaList.slice(1, 5).map((item: any, index) => {
+              const uri = item.uri || item.url; // Fix
+              const isVideo = uri?.endsWith('.mp4');
+              return isVideo ? (
+                <Video
+                  key={index}
+                  source={{ uri }}
+                  style={styles.gridImage}
+                  paused={true}
+                  resizeMode="cover"
+                  muted
+                />
+              ) : (
+                <Image
+                  key={index}
+                  source={{ uri }}
+                  style={styles.gridImage}
+                />
+              );
+            })}
+          </View>
         )}
 
         {/* Input Fields */}
         {renderField('Item Name', 'Enter Name', itemName, setItemName)}
         {renderField('Size', 'Enter Size', size, setSize)}
-        {renderField('Category', 'Enter category', category, setCategory)}
+        <Text style={styles.label}>Category</Text>
+        <DropDownPicker
+          value={category}
+          setValue={setCategory}
+          item={categories.map((cat: any) => ({
+            label: cat.name,
+            value: cat.name,
+          }))}
+          zIndex={1000}
+        />
+        
+        {/* Conditionally render subcategory dropdown if the category has subcategories */}
+        {selectedCategory?.subCategories?.length > 0 && (
+          <>
+            <Text style={styles.label}>Subcategory</Text>
+            <DropDownPicker
+              value={subCategory}
+              setValue={setSubCategory}
+              item={selectedCategory.subCategories.map((subCat: any) => ({
+                label: subCat.name,
+                value: subCat.name,
+              }))}
+              zIndex={999}
+            />
+          </>
+        )}
+
         {renderField('Price', 'Enter Price', price, setPrice, 'numeric')}
 
         {/* Availability */}

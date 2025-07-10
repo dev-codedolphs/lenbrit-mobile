@@ -162,6 +162,23 @@ export default class Api {
     return response.data;
   }
 
+  // get categories
+  static async getAllCategories() {
+    try {
+      const token = await AsyncStorage.getItem('accessToken');
+      const response = await axios.get(`${API_BASE_URL}/categories`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.log('Get all categories error:', error);
+      throw new Error(error.response?.data?.message || 'Failed to fetch categories');
+    }
+  }
+
   static async uploadImageToServer(image) {
     try {
       const fileName = image.fileName || 'upload.jpg';

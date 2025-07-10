@@ -36,14 +36,14 @@ const styles = StyleSheet.create({
   container: {
     flexDirection: 'row',
     flexWrap: 'nowrap',
-    gap: 10,
+    gap: 8,
   },
   dropdown: {
     flexDirection: 'row',
     alignItems: 'center',
     backgroundColor: '#F5F5F5',
     borderRadius: 10,
-    paddingHorizontal: 12,
+    paddingHorizontal: 8,
     height: 40,
   },
   label: {

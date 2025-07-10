@@ -32,7 +32,6 @@ const userRole: UserRole = 'lender';
 export default function TabNavigator() {
   const { user } = useSelector((state:any) => state.auth);
 
-console.log('mera user', user)
   return (
     <Tab.Navigator
       screenOptions={{

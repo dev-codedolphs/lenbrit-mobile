@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
     View,
     Text,
@@ -15,6 +15,9 @@ import { color } from '../../theme/colors';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../../navigation/MainStack';
+import { useDispatch, useSelector } from 'react-redux';
+import userSlice from '../redux/Slice';
+import { CartItem } from '../../types/types';
 
 const sampleCartItem = {
     id: '1',
@@ -27,15 +30,16 @@ const sampleCartItem = {
     image: require('../../assets/icons/shirt.png'),
 };
 
-const MyCart = () => {
-    const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
-    const [cartItems, setCartItems] = useState(
-        [1, 2, 3, 4, 5].map((i) => ({ ...sampleCartItem, id: i.toString(), quantity: 1 }))
-    );
 
-    const updateQuantity = (id: string, delta: number) => {
-        setCartItems(prev =>
-            prev.map(item =>
+const MyCart = () => {
+    const dispatch = useDispatch();
+    const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
+    const { cart } = useSelector((state:any) => state.user);
+    const [cartItems, setCartItems] = useState(cart || []);
+
+    const updateQuantity = (id: number, delta: number) => {
+        setCartItems((prev: any) =>
+            prev.map((item: CartItem) =>
                 item.id === id
                     ? { ...item, quantity: Math.max(1, item.quantity + delta) }
                     : item
@@ -43,40 +47,54 @@ const MyCart = () => {
         );
     };
 
-    const renderItem = ({ item }: { item: typeof sampleCartItem }) => (
-        <TouchableOpacity onPress={() => navigation.navigate('CheckoutScreen')} style={styles.card}>
-            <Image source={item.image} style={styles.image} resizeMode="contain" />
+    const renderItem = ({ item }: { item: CartItem }) => {
+        const startDate = item?.listing?.startDate && new Date(item?.listing?.startDate).toLocaleDateString('en-GB', {
+            day: 'numeric',
+            month: 'long',
+        })
+
+        const endDate = item?.listing?.endDate && new Date(item?.listing.endDate).toLocaleDateString('en-GB', {
+            day: 'numeric',
+            month: 'long',
+        })
+
+        const date = `${startDate} to ${endDate}`
+
+        return (
+        <TouchableOpacity onPress={() => navigation.navigate('CheckoutScreen', { item })} style={styles.card}>
+            <Image source={item.listing.images[0].url as any} style={styles.image} resizeMode="contain" />
             <View style={styles.infoContainer}>
-                <Text style={styles.title}>{item.title}</Text>
-                <Text style={styles.renter}>{item.renter}</Text>
-                <Text style={styles.size}>{item.size}</Text>
-                <Text style={styles.date}>{item.date}</Text>
-                <Text style={styles.price}>{item.price}</Text>
+                <Text style={styles.title}>{item.listing.name}</Text>
+                <Text style={styles.renter}>{item.listing.renter}</Text>
+                <Text style={styles.size}>{item.listing.size}</Text>
+                <Text style={styles.date}>{date}</Text>
+                <Text style={styles.price}>PKR {item?.listing?.price}</Text>
             </View>
             <View style={styles.actions}>
                 <TouchableOpacity>
                     <Icon name="trash-can-outline" size={20} color={color.Red} />
                 </TouchableOpacity>
                 <View style={styles.quantityRow}>
-                    <TouchableOpacity onPress={() => updateQuantity(item.id, 1)}>
+                    <TouchableOpacity onPress={() => updateQuantity(item.id, -1)}>
                         <Icon name="chevron-down" size={18} color='#8F959E' />
                     </TouchableOpacity>
                     <Text style={styles.quantity}>{item.quantity}</Text>
-                    <TouchableOpacity onPress={() => updateQuantity(item.id, -1)}>
+                    <TouchableOpacity onPress={() => updateQuantity(item.id, 1)}>
                         <Icon name="chevron-up" size={20} color='#8F959E' />
                     </TouchableOpacity>
                 </View>
             </View>
         </TouchableOpacity>
-    );
+        )
+    };
 
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
-                <Header title="My Cart" goBack={() => { }} />
+                <Header title="My Cart" goBack={() => navigation.goBack()} />
                 <FlatList
                     data={cartItems}
-                    keyExtractor={(item) => item.id}
+                    keyExtractor={(item: any) => item.id}
                     renderItem={renderItem}
                     contentContainerStyle={{ paddingBottom: hp('2%') }}
                     showsVerticalScrollIndicator={false}
