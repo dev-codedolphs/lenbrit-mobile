@@ -7,6 +7,8 @@ import ResetPassword from '../screens/auth/ResetPassword';
 import ResetPasswordSuccess from '../screens/auth/ResetPasswordSuccess';
 import OnboardingScreen from '../screens/auth/OnboardingScreen';
 import NewPassword from '../screens/auth/NewPassword';
+import { useEffect, useState } from 'react';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 export type AuthStackParamList = {
   Login: undefined;
@@ -22,8 +24,20 @@ export type AuthStackParamList = {
 const Stack = createNativeStackNavigator<AuthStackParamList>();
 
 const AuthStack = () => {
+  const [initialScreen, setInitialScreen] = useState<keyof AuthStackParamList | null>(null);
+
+  useEffect(() => {
+    const checkOnboardingStatus = async () => {
+      const hasSeenOnboarding = await AsyncStorage.getItem('hasSeenOnboarding');
+      setInitialScreen(hasSeenOnboarding === 'true' ? 'Login' : 'OnboardingScreen');
+    };
+    checkOnboardingStatus();
+  }, []);
+
+  if (!initialScreen) return null;
+
   return (
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
+    <Stack.Navigator screenOptions={{ headerShown: false }} initialRouteName={initialScreen}>
       <Stack.Screen name="OnboardingScreen" component={OnboardingScreen} />
       <Stack.Screen name="Login" component={Login} />
       <Stack.Screen name="SignUp" component={SignUp} />

@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { StyleSheet, Text, View, Image, TouchableOpacity } from 'react-native'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import { SafeAreaView } from 'react-native-safe-area-context'
@@ -15,18 +15,31 @@ import { AuthNavigationProp } from '../../types/navigation'
 const Login = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation<AuthNavigationProp>();
-  const { loading } = useSelector( (state: any) => state.auth)
+  const { user, error } = useSelector( (state: any) => state.auth)
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [hidePassword, setHidePassword] = useState(true);
+  const [lenderLoading, setLenderLoading] = useState(false);
+  const [renterLoading, setRenterLoading] = useState(false);
 
-  const handleLogin = async () => {
+  useEffect(() => {
+    if (user || error) {
+      setLenderLoading(false);
+      setRenterLoading(false);
+    }
+  }, [user, error]);
+
+  const handleLogin = (userType: 'lender' | 'renter') => {
+    if (userType === 'lender') setLenderLoading(true);
+    else setRenterLoading(true);
+
     const body: any = {
       email,
-      password
-    }
-    dispatch(authSlice.actions.login(body))
-  }
+      password,
+    };
+
+    dispatch(authSlice.actions.login(body));
+  };
 
   return (
     <SafeAreaView style={{ flex: 1 }}>
@@ -60,19 +73,19 @@ const Login = () => {
         <space.s2 />
         <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
         <Button
-          loading={loading}
-          title='SIGN IN AS LENTER'
+          loading={lenderLoading}
+          title='SIGN IN AS LENDER'
           backgroundColor={color.Default}
           textStyle={{ fontSize: 14, paddingVertical: 1 }}
           style={{ width: '48%' }}
-          onPress={handleLogin}
+          onPress={() => handleLogin('lender')}
         />
         <Button
-          loading={loading}
+          loading={renterLoading}
           title='SIGN IN AS RENTER'
           backgroundColor='' textStyle={{ color: color.Default, fontSize: 14 }}
           style={{ borderColor: color.Default, borderWidth: 1, width: '48%' }}
-          onPress={handleLogin}
+          onPress={() => handleLogin('renter')}
         />
         </View>
         <space.s3 />

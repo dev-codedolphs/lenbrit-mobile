@@ -9,6 +9,7 @@ import {
   View,
 } from 'react-native';
 import { heightPercentageToDP as hp } from 'react-native-responsive-screen';
+import { color } from '../theme/colors';
 
 interface CustomButtonProps {
   title: string;
@@ -37,7 +38,7 @@ const Button: React.FC<CustomButtonProps> = ({
       disabled={loading}
     >
       {loading ? (
-        <ActivityIndicator color="#fff" />
+        <ActivityIndicator color={ backgroundColor ? color.White : color.Default} />
       ) : icon ? (
         <View style={styles.contentWithIcon}>
           {icon}

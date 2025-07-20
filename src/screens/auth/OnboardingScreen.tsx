@@ -12,6 +12,7 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import { Onboarding1, Onboarding2, Onboarding3, Forward } from '../../assets/icons';
 import { color } from '../../theme/colors';
 import * as space from '../../utils/spacer'
+import AsyncStorage from '@react-native-async-storage/async-storage';
 
 interface SlideProps {
     title: string;
@@ -42,11 +43,12 @@ const OnboardingScreen = ({ navigation }: any) => {
     const [currentIndex, setCurrentIndex] = React.useState(0);
     const swiperRef = React.useRef<any>(null);
 
-    const handleNext = React.useCallback(() => {
+    const handleNext = React.useCallback(async () => {
         if (swiperRef.current) {
             if (currentIndex < slides.length - 1) {
                 swiperRef.current.scrollBy(1, true); // 'true' ensures animation
             } else {
+                await AsyncStorage.setItem('hasSeenOnboarding', 'true');
                 navigation.replace('Login');
             }
         }
@@ -57,7 +59,13 @@ const OnboardingScreen = ({ navigation }: any) => {
             <View style={styles.container} >
                 <StatusBar barStyle="dark-content" backgroundColor="#fff" />
 
-                <TouchableOpacity style={styles.skipButton} onPress={() => navigation.replace('Login')}>
+                <TouchableOpacity
+                    style={styles.skipButton}
+                    onPress={async () => {
+                        await AsyncStorage.setItem('hasSeenOnboarding', 'true');
+                        navigation.replace('Login');
+                    }}
+                >
                     <Text style={styles.skipText}>Skip</Text>
                 </TouchableOpacity>
 

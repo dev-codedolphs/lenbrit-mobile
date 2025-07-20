@@ -30,13 +30,36 @@ function* login({ payload }) {
                 text1: 'Login Successful',
                 topOffset: 20,
                 visibilityTime: 3000,
+                position:'bottom',
             });
         } else {
             yield put(authSlice.actions.loginFailure());
+            Toast.show({
+                type: 'error',
+                text1: 'Unexpected response',
+                text2: `Status: ${response?.status}`,
+                topOffset: 20,
+                visibilityTime: 3000,
+                position:'bottom',
+              });
         }
     }
     catch (error) {
         yield put(authSlice.actions.loginFailure());
+        const message =
+            error?.response?.data?.message ||
+            error?.message ||
+            'Something went wrong';
+
+        Toast.show({
+            type: 'error',
+            text1: 'Login Failed',
+            text2: message,
+            topOffset: 20,
+            visibilityTime: 3000,
+            position:'bottom',
+        });
+
         console.log(error)
     }
 

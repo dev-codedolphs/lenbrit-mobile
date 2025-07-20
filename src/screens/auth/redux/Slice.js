@@ -6,7 +6,7 @@ const initialState = {
     isLoggedIn: false,
     isAuthenticated: false,
     isVerified: null,
-    error: null,
+    error: false,
 }
 
 const authSlice = createSlice({
@@ -21,7 +21,7 @@ const authSlice = createSlice({
             ...state,
             loading: true,
             isLoggedIn: false,
-            error: null
+            error: false
         }),
         loginSuccess: (state, action) => ({
             ...state,
@@ -33,7 +33,7 @@ const authSlice = createSlice({
             ...state,
             loading: false,
             isLoggedIn: false,
-            error: action.payload,
+            error: true,
         }),
         logout: (state) => {
             state.isAuthenticated = false;
