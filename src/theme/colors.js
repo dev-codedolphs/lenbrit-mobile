@@ -12,7 +12,7 @@ const blue2 = '#A4B5FF';
 const blue3 = '#E7ECFF';
 
 const green = '#76A443';
-const green2 = '#C1EAE2';
+const green2 = '#00826F';
 const green3 = '#E4F9F5';
 
 const gold = '#EFCA30';

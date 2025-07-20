@@ -83,4 +83,72 @@ export type CartItem = {
     };
   };
 };
+
+export interface Category {
+  id: number;
+  name: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface SubCategory {
+  id: number;
+  name: string;
+  categoryId: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface Image {
+  id: number;
+  url: string;
+  listingId: number;
+}
+
+export type CustomOffer = {
+  id: number;
+  listingId: number;
+  borrowerId: number;
+  lenderId: number;
+  originalPrice: number;
+  offeredPrice: number;
+  message: string;
+  status: 'PENDING' | 'APPROVED' | 'REJECTED';
+  expiresAt: string;
+  createdAt: string;
+  updatedAt: string;
+  borrower: User;
+}
+
+export interface User {
+  id: number;
+  firstName: string | null;
+  lastName: string | null;
+  email: string;
+}
+
+export interface ListingItem {
+  id: number;
+  name: string;
+  size: string;
+  price: number;
+  slug: string | null;
+  sku: string | null;
+  weight: string | null;
+  description: string;
+  video: string | null;
+  startDate: string;
+  endDate: string;
+  status: 'AVAILABLE' | 'OCCUPIED' | 'APPROVED' | string;
+  categoryId: number;
+  subCategoryId: number;
+  userId: number;
+  createdAt: string;
+  updatedAt: string;
+  category: Category;
+  subCategory: SubCategory;
+  images: Image[];
+  user: User;
+  CustomOffer: CustomOffer[];
+}
   

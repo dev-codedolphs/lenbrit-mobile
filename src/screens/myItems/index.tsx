@@ -16,10 +16,6 @@ const MyItemsScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 
-useEffect(() => {
-  dispatch(userSlice.actions.getAllProducts({}));
-}, []);
-
   const listings: ItemType[] = [
     {
       id: '1',

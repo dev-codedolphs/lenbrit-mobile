@@ -14,6 +14,7 @@ import { CosmeticsIcon, ElectronicsIcon, ShirtIcon } from '../../assets/icons';
 import SearchBar from './SearchBar';
 import Filters from './Filters';
 import userSlice from '../redux/Slice';
+import { ListingItem } from '../../types/types';
 
 interface Item {
   id: string;
@@ -35,7 +36,7 @@ const HomeScreen = () => {
 
   useEffect(() => {
     const getuser = async () => {
-      dispatch(authSlice.actions.getUserInfo())
+      dispatch(authSlice.actions.getUserInfo({}))
       dispatch(userSlice.actions.getAllOrders({}));
       dispatch(userSlice.actions.getAllCartItems({}));
       dispatch(userSlice.actions.getAllCategories({}));
@@ -108,30 +109,30 @@ const HomeScreen = () => {
     },
   ];
 
-  const requests: Item[] = [
-    {
-      id: '1',
-      title: 'T Shirts',
-      price: 'PKR 500',
-      status: 'Pending',
-      date: '8 May to 10 May',
-      renter: 'Ali',
-      description: 'This soft, breathable cotton T-shirt offers comfort and style in one perfect package. Ideal for casual hangouts, college wear, or even semi-formal layering. The minimal print and slim fit make it suitable for both men and women looking for a trendy look without breaking the bank. Worn only twice and maintained in excellent condition.',
-      rating: '5.0',
-      image: require('../../assets/icons/shirt.png'),
-    },
-    {
-      id: '2',
-      title: 'Shoes',
-      price: 'PKR 700',
-      status: 'Pending',
-      date: '14 May to 19 May',
-      renter: 'Ahmad',
-      description: 'This soft, breathable cotton T-shirt offers comfort and style in one perfect package. Ideal for casual hangouts, college wear, or even semi-formal layering. The minimal print and slim fit make it suitable for both men and women looking for a trendy look without breaking the bank. Worn only twice and maintained in excellent condition.',
-      rating: '4.8',
-      image: require('../../assets/icons/watch.png'),
-    },
-  ];
+  // const requests: Item[] = [
+  //   {
+  //     id: '1',
+  //     title: 'T Shirts',
+  //     price: 'PKR 500',
+  //     status: 'Pending',
+  //     date: '8 May to 10 May',
+  //     renter: 'Ali',
+  //     description: 'This soft, breathable cotton T-shirt offers comfort and style in one perfect package. Ideal for casual hangouts, college wear, or even semi-formal layering. The minimal print and slim fit make it suitable for both men and women looking for a trendy look without breaking the bank. Worn only twice and maintained in excellent condition.',
+  //     rating: '5.0',
+  //     image: require('../../assets/icons/shirt.png'),
+  //   },
+  //   {
+  //     id: '2',
+  //     title: 'Shoes',
+  //     price: 'PKR 700',
+  //     status: 'Pending',
+  //     date: '14 May to 19 May',
+  //     renter: 'Ahmad',
+  //     description: 'This soft, breathable cotton T-shirt offers comfort and style in one perfect package. Ideal for casual hangouts, college wear, or even semi-formal layering. The minimal print and slim fit make it suitable for both men and women looking for a trendy look without breaking the bank. Worn only twice and maintained in excellent condition.',
+  //     rating: '4.8',
+  //     image: require('../../assets/icons/watch.png'),
+  //   },
+  // ];
 
   const Categories = [
     {
@@ -150,6 +151,10 @@ const HomeScreen = () => {
       icon: ElectronicsIcon,
     },
   ];
+
+  const requests = products?.filter((item: ListingItem) =>
+    Array.isArray(item.CustomOffer) && item.CustomOffer.length > 0
+  );
   
   return (
     <SafeAreaView style={{ flex: 1 }} >
@@ -195,7 +200,7 @@ const HomeScreen = () => {
           <>
             <Text style={{ fontSize: 20, fontWeight: '600' }}>Quick Stats</Text>
             <QuickStats />
-            <YourListings title="Your Listings" data={listings} onPress={() => navigation.navigate('Tabs', { screen: 'MyItems' })} from='listings' />
+            <YourListings title="Your Listings" data={products} onPress={() => navigation.navigate('Tabs', { screen: 'MyItems' })} from='listingsHome' />
             <YourListings title="Incoming Requests" data={requests} onPress={() => navigation.navigate('OffersScreen')} from='requests' />
           </>
         }

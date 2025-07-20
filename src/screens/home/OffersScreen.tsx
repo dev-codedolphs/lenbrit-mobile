@@ -14,6 +14,8 @@ import { color } from '../../theme/colors';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../../navigation/MainStack';
+import { useSelector } from 'react-redux';
+import { ListingItem } from '../../types/types';
 
 const sampleOffers = Array(8).fill({
     item: 'T Shirt',
@@ -24,47 +26,61 @@ const sampleOffers = Array(8).fill({
     description: 'This soft, breathable cotton T-shirt offers comfort and style in one perfect package. Ideal for casual hangouts, college wear, or even semi-formal layering. The minimal print and slim fit make it suitable for both men and women looking for a trendy look without breaking the bank. Worn only twice and maintained in excellent condition.',
     image: require('../../assets/icons/shirt.png'),
     status: 'completed',
-  });
+});
 
 export default function OffersScreen() {
-      const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
-    
-    const renderItem = ({ item }: { item: typeof sampleOffers[0] }) => (
-        <View style={styles.card}>
-            <View style={styles.imageContainer}>
-                <Image source={item.image} style={styles.image} resizeMode="contain" />
-            </View>
-            <View style={styles.details}>
-                <View style={styles.row}>
-                    <Text style={styles.label}>From</Text>
-                    <Text style={styles.valueRight}>{item.renter}</Text>
-                </View>
-                <View style={styles.row}>
-                    <Text style={styles.label}>Date</Text>
-                    <Text style={styles.date}>{item.date}</Text>
-                </View>
-                <View style={styles.row}>
-                    <Text style={styles.label}>Offer</Text>
-                    <Text style={styles.valueRight}>{item.price}</Text>
-                </View>
-                <View style={styles.buttonRow}>
-                    <Pressable style={styles.acceptButton}>
-                        <Text style={styles.buttonText}>Accept</Text>
-                    </Pressable>
-                    <Pressable style={styles.rejectButton}>
-                        <Text style={styles.buttonText}>Reject</Text>
-                    </Pressable>
-                </View>
-            </View>
-        </View>
+    const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
+    const { products } = useSelector((state: any) => state.user);
+    const requests = products?.filter((item: ListingItem) =>
+        Array.isArray(item.CustomOffer) && item.CustomOffer.length > 0
     );
+
+    const renderItem = ({ item }: { item: typeof sampleOffers[0] }) => {
+        const startDate = item?.startDate && new Date(item.startDate).toLocaleDateString('en-GB', {
+            day: 'numeric',
+        })
+
+        const endDate = item?.endDate && new Date(item.endDate).toLocaleDateString('en-GB', {
+            day: 'numeric',
+            month: 'long',
+        })
+        return (
+            <View style={styles.card}>
+                <View style={styles.imageContainer}>
+                    <Image source={{ uri: item.images[0].url }} style={styles.image} />
+                </View>
+                <View style={styles.details}>
+                    <View style={styles.row}>
+                        <Text style={styles.label}>From</Text>
+                        <Text style={styles.valueRight}>{item?.CustomOffer[0]?.borrower?.firstName ?? ''}</Text>
+                    </View>
+                    <View style={styles.row}>
+                        <Text style={styles.label}>Date</Text>
+                        <Text style={styles.date}>{`${startDate} to ${endDate}`}</Text>
+                    </View>
+                    <View style={styles.row}>
+                        <Text style={styles.label}>Offer</Text>
+                        <Text style={styles.valueRight}>{item.price}</Text>
+                    </View>
+                    <View style={styles.buttonRow}>
+                        <Pressable style={styles.acceptButton}>
+                            <Text style={styles.buttonText}>Accept</Text>
+                        </Pressable>
+                        <Pressable style={styles.rejectButton}>
+                            <Text style={styles.buttonText}>Reject</Text>
+                        </Pressable>
+                    </View>
+                </View>
+            </View>
+        )
+    };
 
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
                 <Header title='Offers' goBack={() => navigation.goBack()} />
                 <FlatList
-                    data={sampleOffers}
+                    data={requests}
                     keyExtractor={(_, index) => index.toString()}
                     renderItem={renderItem}
                 />
@@ -90,15 +106,15 @@ const styles = StyleSheet.create({
         padding: wp('3%'),
     },
     imageContainer: {
-        paddingVertical: hp(1),
-        paddingHorizontal: wp(3),
-        backgroundColor: '#F3F3F3',
-        marginRight: wp('8%'),
+        marginRight: wp('4%'),
+        width: wp(30),
         borderRadius: 4,
     },
     image: {
-        width: wp('18%'),
-        height: wp('18%'),
+        width: '100%',
+        height: '100%',
+        resizeMode: 'cover',
+        borderRadius: 4,
     },
     details: {
         flex: 1,
