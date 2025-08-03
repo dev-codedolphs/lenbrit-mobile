@@ -47,7 +47,6 @@ const HomeScreen = () => {
   useEffect(() => {
     const getuser = async () => {
       dispatch(authSlice.actions.getUserInfo({}))
-      // dispatch(userSlice.actions.getAllOrders({}));
       dispatch(userSlice.actions.getAllCategories({}));
       dispatch(userSlice.actions.getAllProducts({}));
     }

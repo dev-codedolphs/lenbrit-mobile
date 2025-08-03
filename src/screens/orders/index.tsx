@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   View,
   Text,
@@ -10,24 +10,23 @@ import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-nat
 import OrderItem from '../../components/orders/OrderItem';
 import TabBar from '../../components/orders/TabBar';
 import { OrderItemType } from '../../types/types';
+import { OrderActive } from '../../assets/icons';
+import { useDispatch, useSelector } from 'react-redux';
+import userSlice from '../redux/Slice';
 
 const tabs = ['In Progress', 'Completed', 'Cancelled'];
 
-const orders = Array(8).fill({
-  item: 'Soft Cotton T-Shirt',
-  renter: 'Hira',
-  date: '10 May to 12 May',
-  price: 'PKR 400',
-  size: 'large',
-  description: 'This soft, breathable cotton T-shirt offers comfort and style in one perfect package. Ideal for casual hangouts, college wear, or even semi-formal layering. The minimal print and slim fit make it suitable for both men and women looking for a trendy look without breaking the bank. Worn only twice and maintained in excellent condition.',
-  image: require('../../assets/icons/shirt.png'),
-  status: 'completed',
-});
-
 const OrdersScreen = () => {
+  const dispatch = useDispatch();
+  const { orders } = useSelector((state:any) => state.user);
   const [selectedTab, setSelectedTab] = useState('In Progress');
 
+  useEffect(() => {
+    dispatch(userSlice.actions.getAllOrders({}));
+  }, [])
+
   const renderOrder = ({ item }: { item: OrderItemType }) => <OrderItem item={item} />
+  const filteredOrders = orders.filter((order: any) => order.status.toLowerCase() === selectedTab.toLowerCase().replace(' ', ''));
 
   return (
     <SafeAreaView style={styles.container}>
@@ -41,13 +40,22 @@ const OrdersScreen = () => {
         onSelect={setSelectedTab}
       />
 
-      <FlatList
-        data={orders}
-        keyExtractor={(_, index) => index.toString()}
-        renderItem={renderOrder}
-        contentContainerStyle={styles.listContent}
-        showsVerticalScrollIndicator={false}
-      />
+      {filteredOrders.length === 0 ? (
+        <View style={styles.emptyStateContainer}>
+          <View style={{ padding: wp(4), backgroundColor: '#F5F5F5', borderRadius: wp(10)}}>
+          <OrderActive />
+          </View>
+          <Text style={styles.emptyStateText}>No {selectedTab.toLowerCase()} orders yet.</Text>
+        </View>
+      ) : (
+        <FlatList
+          data={filteredOrders}
+          keyExtractor={(_, index) => index.toString()}
+          renderItem={renderOrder}
+          contentContainerStyle={styles.listContent}
+          showsVerticalScrollIndicator={false}
+        />
+      )}
     </SafeAreaView>
   );
 };
@@ -76,5 +84,16 @@ const styles = StyleSheet.create({
   },
   listContent: {
     padding: wp('4%'),
+  },
+  emptyStateContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  emptyStateText: {
+    fontSize: hp('2%'),
+    marginTop: hp(1.5),
+    color: '#999',
+    textAlign: 'center',
   },
 });
