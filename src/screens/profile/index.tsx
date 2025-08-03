@@ -5,21 +5,20 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
-  SafeAreaView,
   ActivityIndicator,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Icon from 'react-native-vector-icons/Feather';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { color } from '../../theme/colors';
 import { EarningIcon, Logout, PaymentIcon, PrivacyPolicy, SupportIcon } from '../../assets/icons';
 import OptionCard from '../../components/profile/OptionCard';
-import { createNavigationContainerRef, useNavigation } from '@react-navigation/native';
+import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../../navigation/MainStack';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useDispatch, useSelector } from 'react-redux';
 import authSlice from '../auth/redux/Slice';
-import { navigationRef } from '../../utils/navigate';
 
 
 const ProfileScreen = () => {

@@ -6,9 +6,7 @@ import {
     StyleSheet,
     TouchableOpacity,
     ScrollView,
-    Image,
     Switch,
-    Alert,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { color } from '../../theme/colors'; // adjust as per your structure

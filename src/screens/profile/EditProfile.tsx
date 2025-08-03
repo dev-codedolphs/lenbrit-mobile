@@ -3,13 +3,13 @@ import {
     StyleSheet,
     Text,
     View,
-    SafeAreaView,
     TouchableOpacity,
     Image,
     Modal,
     TextInput,
     Pressable
 } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import InputField from '../../components/TextInput';
 import { color } from '../../theme/colors';

@@ -3,14 +3,11 @@ import {
     View,
     Text,
     StyleSheet,
-    SafeAreaView,
-    TouchableOpacity,
     Image,
     ScrollView,
-    FlatList,
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
-import { ItemType, OrderItemType } from '../../types/types';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../../navigation/MainStack';

@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react'
-import { StyleSheet, Text, View, SafeAreaView, FlatList } from 'react-native'
+import { StyleSheet, View, FlatList } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { color } from '../../theme/colors'
 import Button from '../../components/Button'
 import ListingCard from '../../components/home/ListingCard';
@@ -9,7 +10,6 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../../navigation/MainStack';
 import { ItemType } from '../../types/types';
 import { useDispatch, useSelector } from 'react-redux';
-import userSlice from '../redux/Slice';
 
 const MyItemsScreen = () => {
   const { success, products } = useSelector((state: any) => state.user);

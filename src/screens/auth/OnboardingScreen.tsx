@@ -5,8 +5,8 @@ import {
     StyleSheet,
     TouchableOpacity,
     StatusBar,
-    SafeAreaView
 } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Swiper from 'react-native-swiper';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Onboarding1, Onboarding2, Onboarding3, Forward } from '../../assets/icons';

@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import { FlatList, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { FlatList, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import Header from '../../components/home/Header';
 import PromoBanner from '../../components/home/Banner';
 import QuickStats from '../../components/home/QuickStats';
@@ -171,7 +172,7 @@ const HomeScreen = () => {
   }
 
   return (
-    <SafeAreaView style={{ flex: 1 }} >
+    <SafeAreaView >
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
         <Header onPress={() => navigation.navigate('NotificationsScreen')} />
         <PromoBanner />

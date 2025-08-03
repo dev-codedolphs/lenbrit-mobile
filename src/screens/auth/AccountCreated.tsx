@@ -1,16 +1,15 @@
-import { Image, SafeAreaView, StyleSheet, Text, View } from 'react-native'
+import { StyleSheet, Text, View } from 'react-native'
+import { SafeAreaView } from 'react-native-safe-area-context';
 import React from 'react'
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen'
 import Button from '../../components/Button'
 import { color } from '../../theme/colors'
 import { useNavigation } from '@react-navigation/native'
-import authSlice from './redux/Slice'
 import { useDispatch } from 'react-redux'
 import { SuccessIcon } from '../../assets/icons'
 import { AuthNavigationProp } from '../../types/navigation'
 
 const AccountCreated = () => {
-    const dispatch = useDispatch();
     const navigation = useNavigation<AuthNavigationProp>();
 
     return (
