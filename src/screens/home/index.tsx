@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { FlatList, SafeAreaView, ScrollView, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Header from '../../components/home/Header';
 import PromoBanner from '../../components/home/Banner';
@@ -15,6 +15,7 @@ import SearchBar from './SearchBar';
 import Filters from './Filters';
 import userSlice from '../redux/Slice';
 import { ListingItem } from '../../types/types';
+import HomeSkeleton from '../../components/home/HomeSkeleton';
 
 interface Item {
   id: string;
@@ -31,14 +32,21 @@ interface Item {
 const HomeScreen = () => {
   const dispatch = useDispatch();
   const { user } = useSelector((state:any) => state.auth);
-  const { orders, cart, categories, products } = useSelector((state:any) => state.user);
+  const { orders, cart, categories, products, loading } = useSelector((state:any) => state.user);
     const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
+    const [isInitialLoading, setIsInitialLoading] = useState(true);
+
+    useEffect(() => {
+      if (!loading && products?.length > 0 ) {
+        setIsInitialLoading(false);
+      }
+    }, [loading, products?.length]);
+
 
   useEffect(() => {
     const getuser = async () => {
       dispatch(authSlice.actions.getUserInfo({}))
-      dispatch(userSlice.actions.getAllOrders({}));
-      dispatch(userSlice.actions.getAllCartItems({}));
+      // dispatch(userSlice.actions.getAllOrders({}));
       dispatch(userSlice.actions.getAllCategories({}));
       dispatch(userSlice.actions.getAllProducts({}));
     }
@@ -156,6 +164,12 @@ const HomeScreen = () => {
     Array.isArray(item.CustomOffer) && item.CustomOffer.length > 0
   );
   
+  const approvedItems = products?.filter((item: ListingItem) => item.status === 'APPROVED');
+
+  if (isInitialLoading) {
+    return <HomeSkeleton />
+  }
+
   return (
     <SafeAreaView style={{ flex: 1 }} >
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
@@ -190,7 +204,7 @@ const HomeScreen = () => {
               />
             </View>
             {/* <YourListings title="Top Items" data={TopProducts} onPress={() => navigation.navigate('Tabs', { screen: 'MyItems' })} /> */}
-            <YourListings title="Newly Added" data={products} onPress={() => navigation.navigate('OffersScreen')} from='products' />
+            <YourListings title="Newly Added" data={approvedItems} onPress={() => navigation.navigate('OffersScreen')} from='products' />
           </>
         }
 
@@ -213,7 +227,7 @@ const HomeScreen = () => {
 const styles = StyleSheet.create({
   container: {
     paddingHorizontal: 16,
-    paddingBottom: 40,
+    paddingBottom: 60,
     backgroundColor: '#fff',
   },
   categoryHeader: {

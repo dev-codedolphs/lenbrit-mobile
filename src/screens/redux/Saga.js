@@ -14,6 +14,8 @@ export default function* userFlow() {
         takeEvery(userSlice.actions.createOrder.type, createOrder),
         takeEvery(userSlice.actions.getAllOrders.type, getAllOrders),
         takeEvery(userSlice.actions.getOrderById.type, getOrderById),
+        takeEvery(userSlice.actions.acceptOffer.type, acceptOffer),
+        takeEvery(userSlice.actions.rejectOffer.type, rejectOffer),
         
         // Cart
         takeEvery(userSlice.actions.addToCart.type, addToCart),
@@ -98,29 +100,60 @@ function* getOrderById({ payload }) {
     }
 }
 
+function* acceptOffer({ payload }) {
+    try {
+        const res = yield call(userApi.acceptOffer, payload);
+        yield put(userSlice.actions.acceptOfferSuccess(res));
+    } catch (e) {
+        yield put(userSlice.actions.acceptOfferFailure(e.message));
+    }
+}
+
+function* rejectOffer({ payload }) {
+    try {
+        const res = yield call(userApi.rejectOffer, payload);
+        yield put(userSlice.actions.rejectOfferSuccess(res));
+    } catch (e) {
+        yield put(userSlice.actions.rejectOfferFailure(e.message));
+    }
+}
+
 // cart functions
 function* addToCart({ payload }) {
     try {
         const res = yield call(userApi.addToCart, payload);
-        yield put(userSlice.actions.addToCartSuccess(res));
+        if (res.status === 200 || res.status === 201) {
+            yield put(userSlice.actions.addToCartSuccess(res.data));
+            yield put(userSlice.actions.getAllCartItems());
+        }
     } catch (e) {
         yield put(userSlice.actions.addToCartFailure(e.message));
     }
 }
 
-function* getAllCartItems() {
+function* getAllCartItems({ payload }) {
+    const isRefresh = payload?.isRefresh;
+    if (isRefresh) {
+        yield put(userSlice.actions.setLoading(false));
+    }
     try {
         const res = yield call(userApi.getAllCartItems);
         yield put(userSlice.actions.getAllCartItemsSuccess(res));
     } catch (e) {
         yield put(userSlice.actions.getAllCartItemsFailure(e.message));
+    } finally {
+        if (!isRefresh) {
+            yield put(userSlice.actions.setLoading(false));
+        }
     }
 }
 
 function* removeItemFromCart({ payload }) {
     try {
         const res = yield call(userApi.removeItemFromCart, payload);
-        yield put(userSlice.actions.removeItemFromCartSuccess(res));
+        if (res.status === 200){
+            yield put(userSlice.actions.removeItemFromCartSuccess(payload));
+        }
     } catch (e) {
         yield put(userSlice.actions.removeItemFromCartFailure(e.message));
     }

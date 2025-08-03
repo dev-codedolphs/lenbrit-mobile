@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
     View,
     Text,
@@ -20,6 +20,7 @@ import Header from '../../components/Header';
 import { Star } from '../../assets/icons';
 import { useDispatch, useSelector } from 'react-redux';
 import userSlice from '../redux/Slice';
+import Toast from 'react-native-toast-message';
 
 
 type Props = NativeStackScreenProps<MainStackParamList, 'OrderDetail'>;
@@ -27,7 +28,7 @@ type Props = NativeStackScreenProps<MainStackParamList, 'OrderDetail'>;
 const OrderDetailScreen: React.FC<Props> = ({ route }) => {
     const dispatch = useDispatch();
     const { user } = useSelector((state:any) => state.auth);
-    const { loading } = useSelector((state:any) => state.user);
+    const { loading, success } = useSelector((state:any) => state.user);
     const navigation = useNavigation();
     const { item }: any = route.params;
     const startDate = item?.startDate && new Date(item.startDate).toLocaleDateString('en-GB', {
@@ -42,7 +43,6 @@ const OrderDetailScreen: React.FC<Props> = ({ route }) => {
 
     const date =`${startDate} to ${endDate}`
 
-    console.log('item', item)
     const renderRow = (label: string, value: any, color: string = '#000') => {
         const isDate = label.toLowerCase() === 'date';
 
@@ -75,10 +75,23 @@ const OrderDetailScreen: React.FC<Props> = ({ route }) => {
         }
     };
 
+    useEffect(() => {
+        if (success) {
+            (navigation as any).navigate('Tabs', { screen: 'MyCart' });
+            Toast.show({
+                type: 'success',
+                text1: 'Product added to cart successfully',
+                topOffset: 20,
+                visibilityTime: 3000,
+                position: 'bottom',
+            });
+            dispatch(userSlice.actions.clearSuccess({})); 
+        }
+    }, [success])
+
     const handleAddToCart = () => {
         if (item?.id) {
             dispatch(userSlice.actions.addToCart({ listingId: item.id }));
-            (navigation as any).navigate('Tabs', { screen: 'MyCart' });
         }
     };
 
@@ -96,13 +109,10 @@ const OrderDetailScreen: React.FC<Props> = ({ route }) => {
                 {/* Image and Status */}
                 <View style={styles.imageContainer}>
                     <Image
-                        source={item.images[1]}
+                        source={{ uri: item.images[0].url }}
                         style={styles.image}
                         resizeMode="cover"
                     />
-                    <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) }]}>
-                        <Text style={styles.statusText}>{item.status}</Text>
-                    </View>
                 </View>
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
@@ -135,10 +145,10 @@ const OrderDetailScreen: React.FC<Props> = ({ route }) => {
 
                 {/* Actions */}
                 <View style={styles.buttonContainer}>
-                <Button title='Chat with Lender' backgroundColor={color.Default} style={{ width: '48%', marginVertical: 0}} onPress={handleChatToLender} />
-                <Button title='Add to Cart' backgroundColor='#00826F' style={{ width: '48%'}} onPress={handleAddToCart} loading={loading} />
-                <Button title='Rent Now' backgroundColor={color.Black} style={{ width: '48%'}} />
-                <Button title='Make offer' backgroundColor='#FFAE00' style={{ width: '48%'}} />
+                <Button title='Chat with Lender' textStyle={{ fontSize: 14 }} backgroundColor={color.Default} style={{ width: '48%', paddingVertical: hp(1.2)}} onPress={handleChatToLender} />
+                <Button title='Add to Cart' textStyle={{ fontSize: 14 }} backgroundColor='#00826F' style={{ width: '48%', paddingVertical: hp(1.2)}} onPress={handleAddToCart} loading={loading} />
+                <Button title='Rent Now' textStyle={{ fontSize: 14 }} backgroundColor={color.Black} style={{ width: '48%', paddingVertical: hp(1.2)}} />
+                <Button title='Make offer' textStyle={{ fontSize: 14 }} backgroundColor='#FFAE00' style={{ width: '48%', paddingVertical: hp(1.2)}} />
                 </View>
                 {
                     item.status == 'completed' &&
@@ -155,6 +165,7 @@ export default OrderDetailScreen;
 
 const styles = StyleSheet.create({
     container: {
+        flex:1,
         backgroundColor: '#fff',
         padding: wp(4),
     },
@@ -179,12 +190,13 @@ const styles = StyleSheet.create({
         backgroundColor: '#F8F8F8',
         borderRadius: 12,
         alignItems: 'center',
-        paddingVertical: hp('2%'),
+        height: hp(22),
+        width:'100%',
         position: 'relative',
     },
     image: {
-        width: wp('50%'),
-        height: hp('20%'),
+        width: '100%',
+        height: '100%',
     },
     statusBadge: {
         position: 'absolute',

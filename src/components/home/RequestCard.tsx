@@ -1,11 +1,13 @@
-import React from 'react';
-import { View, Text, Image, StyleSheet, ImageSourcePropType, TouchableOpacity, Pressable } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { View, Text, Image, StyleSheet, ImageSourcePropType, TouchableOpacity, Pressable, ActivityIndicator } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { color } from '../../theme/colors';
 import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../../navigation/MainStack';
 import { ListingItem } from '../../types/types';
+import { useDispatch, useSelector } from 'react-redux';
+import userSlice from '../../screens/redux/Slice';
 
 
 interface RequestCardProps {
@@ -14,9 +16,38 @@ interface RequestCardProps {
 
 const RequestCard: React.FC<RequestCardProps> = ({ item }) => {
     const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
+    const dispatch = useDispatch();
+    const { success, loading } = useSelector((state:any) => state.user);
+    const [isAccepting, setIsAccepting] = useState(false);
+    const [isRejecting, setIsRejecting] = useState(false);
+
+    useEffect(() => {
+        if (!loading && isAccepting) {
+            setIsAccepting(false);
+        } else if (!loading && isRejecting){
+        setIsRejecting(false)
+        }
+    }, [loading])
 
     const handlePress = () => {
         navigation.navigate('OffersScreen');
+    };
+
+    const handleAcceptOffer = () => {
+        const offer = item?.CustomOffer?.[0];
+        if (!offer?.id) return;
+      
+        setIsAccepting(true);
+        dispatch(userSlice.actions.acceptOffer(offer.id));
+      };
+
+    const handleRejectOffer = () => {
+        const offer = item?.CustomOffer?.[0];
+        if (offer?.id) {
+            dispatch(userSlice.actions.rejectOffer(offer.id));
+        } else {
+            console.warn('No valid offer to reject');
+        }
     };
 
     const startDate = item?.startDate && new Date(item.startDate).toLocaleDateString('en-GB', {
@@ -51,11 +82,13 @@ const RequestCard: React.FC<RequestCardProps> = ({ item }) => {
                 {
                     item.status && (
                         <View style={styles.textWrapper}>
-                            <TouchableOpacity style={{ backgroundColor: '#01C944', width: '47%', paddingVertical: 4, alignItems: 'center', borderRadius: 4 }}>
-                                <Text style={{ color: color.White, fontSize: 10, fontWeight: '500' }}>Accept</Text>
+                            <TouchableOpacity style={styles.acceptButton} onPress={handleAcceptOffer}>
+
+                                {isAccepting ? <ActivityIndicator /> : <Text style={{ color: color.White, fontSize: 10, fontWeight: '500' }}>Accept</Text>}
+
                             </TouchableOpacity>
-                            <TouchableOpacity style={{ backgroundColor: '#E90000', width: '47%', paddingVertical: 4, alignItems: 'center', borderRadius: 4 }}>
-                                <Text style={{ color: color.White, fontSize: 10, fontWeight: '500' }}>Reject</Text>
+                            <TouchableOpacity style={styles.rejectButton} onPress={handleRejectOffer}>
+                                {isRejecting ? <ActivityIndicator /> : <Text style={{ color: color.White, fontSize: 10, fontWeight: '500' }}>Reject</Text>}
                             </TouchableOpacity>
                         </View>
                     )
@@ -124,6 +157,20 @@ const styles = StyleSheet.create({
         color: color.White,
         fontWeight: '500',
     },
+    acceptButton: {
+        backgroundColor: '#01C944',
+        width: '47%',
+        paddingVertical: 4,
+        alignItems: 'center',
+        borderRadius: 4,
+    },
+    rejectButton: {
+        backgroundColor: '#E90000',
+        width: '47%',
+        paddingVertical: 4,
+        alignItems: 'center',
+        borderRadius: 4
+    }
 });
 
 export default RequestCard;

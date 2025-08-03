@@ -6,6 +6,7 @@ import { useNavigation } from '@react-navigation/native';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../../navigation/MainStack';
 import { ItemType, OrderItemType } from '../../types/types';
+import Button from '../Button';
 
 
 interface ListingCardProps {
@@ -15,16 +16,16 @@ interface ListingCardProps {
 
 const ListingCard: React.FC<ListingCardProps> = ({ item, from }) => {
     const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
-    
+
     const handlePress = () => {
         // navigation.navigate('AddItem', { item });
         if (from === 'requests') {
             navigation.navigate('OffersScreen');
-          } else if (from === 'listings') {
+        } else if (from === 'listings') {
             navigation.navigate('AddItem', { item });
-          } else {
+        } else {
             navigation.navigate('OrderDetail', { item });
-          }
+        }
     };
 
     const startDate = item?.startDate && new Date(item.startDate).toLocaleDateString('en-GB', {
@@ -35,9 +36,9 @@ const ListingCard: React.FC<ListingCardProps> = ({ item, from }) => {
         day: 'numeric',
         month: 'long',
     })
-    
+
     return (
-        <Pressable style={[styles.card, { marginRight: from == 'listings' ? 0 :  wp(2.8), marginBottom: from == 'listings' ? hp(2) :  0}]} onPress={handlePress}>
+        <Pressable style={[styles.card, { marginRight: from == 'listings' ? 0 : wp(2.8), marginBottom: from == 'listings' ? hp(2) : 0 }]} onPress={handlePress}>
             <View style={styles.imageContainer}>
                 {Array.isArray(item?.images) && item.images.length > 0 && item.images[0]?.url ? (
                     <Image source={{ uri: item.images[0].url }} style={styles.image} />
@@ -50,11 +51,11 @@ const ListingCard: React.FC<ListingCardProps> = ({ item, from }) => {
                         <Text style={styles.statusText}>{item.status}</Text>
                     </View>
                 }
-                
+
             </View>
             <View style={{ padding: wp(2) }}>
-            <View style={styles.textWrapper}>
-                <Text style={styles.title}>{item.title ? item.title : item?.name}</Text>
+                <View style={styles.textWrapper}>
+                    <Text style={styles.title}>{item.title ? item.title : item?.name}</Text>
                     {
                         item?.rating ?
                             <Text style={styles.rating}>{item.rating}</Text> :
@@ -62,16 +63,24 @@ const ListingCard: React.FC<ListingCardProps> = ({ item, from }) => {
                                 <Text style={{ color: color.White, fontSize: 12 }}>New</Text>
                             </View>
                     }
-                
-            </View>
-            <View style={styles.textWrapper}>
-                <Text style={styles.title}>Availability</Text>
-                <Text style={styles.date}>{item?.startDate ? `${startDate} to ${endDate}` :  item.date}</Text>
-            </View>
-            <View style={styles.textWrapper}>
-                <Text style={styles.title}>Price</Text>
-                <Text style={styles.price}>PKR {item.price}</Text>
-            </View>
+
+                </View>
+                <View style={styles.textWrapper}>
+                    <Text style={styles.title}>Availability</Text>
+                    <Text style={styles.date}>{item?.startDate ? `${startDate} to ${endDate}` : item.date}</Text>
+                </View>
+                <View style={styles.textWrapper}>
+                    <Text style={styles.title}>Price</Text>
+                    <Text style={styles.price}>PKR {item.price}</Text>
+                </View>
+                <Button
+                    loading={false}
+                    title='See Details'
+                    backgroundColor={color.Default} 
+                    textStyle={{ color: color.White, fontSize: 12 }}
+                    style={{ paddingVertical: hp(0.6), width: '100%', borderRadius: 2, marginBottom: 0 }}
+                    onPress={() =>  navigation.navigate('OrderDetail', { item })}
+                />
             </View>
         </Pressable>
     );

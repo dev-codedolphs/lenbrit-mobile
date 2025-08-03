@@ -42,7 +42,7 @@ const CheckoutScreen = () => {
         <ScrollView showsVerticalScrollIndicator={false}>
           <View style={styles.imageWrapper}>
             <Image
-              source={item.listing.images[0].url as any}
+              source={{ uri: item.listing.images[0].url }}
               style={styles.image}
               resizeMode="cover"
             />

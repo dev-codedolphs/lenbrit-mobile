@@ -1,6 +1,7 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import RNBlobUtil from 'react-native-blob-util';
 import axios from 'axios';
+import Toast from 'react-native-toast-message';
 
 const API_BASE_URL = 'https://starfish-app-ajafk.ondigitalocean.app/api/v1'
 
@@ -129,13 +130,58 @@ export default class Api {
     }
   }
 
+  static async acceptOffer(offerId) {
+    try {
+      const token = await AsyncStorage.getItem('accessToken');
+      const response = await axios.put(`${API_BASE_URL}/orders/custom-offers/${offerId}/accept`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.log('Accept offer error:', error);
+      throw new Error(error.response?.data?.message || 'Failed to accept offer');
+    }
+  }
+
+  static async rejectOffer(offerId) {
+    try {
+      const token = await AsyncStorage.getItem('accessToken');
+      const response = await axios.put(`${API_BASE_URL}/orders/custom-offers/${offerId}/reject`, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.log('Accept offer error:', error);
+      throw new Error(error.response?.data?.message || 'Failed to accept offer');
+    }
+  }
+
   // cart Apis
   static async addToCart(data) {
-    const token = await AsyncStorage.getItem('accessToken');
-    const response = await axios.post(`${API_BASE_URL}/cart`, data, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return response.data;
+    try {
+      const token = await AsyncStorage.getItem('accessToken');
+      const response = await axios.post(`${API_BASE_URL}/cart`, data, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response;
+    } catch (error) {
+      const message = error?.response?.data?.message || 'Something went wrong';
+
+      Toast.show({
+        type: 'error',
+        text1: message,
+        topOffset: 20,
+        visibilityTime: 3000,
+        position: 'bottom',
+      });
+      console.log('Error in add to cart', error?.response?.data || error.message)
+    }
   }
 
   static async getAllCartItems() {
@@ -147,11 +193,16 @@ export default class Api {
   }
 
   static async removeItemFromCart(itemId) {
-    const token = await AsyncStorage.getItem('accessToken');
-    const response = await axios.delete(`${API_BASE_URL}/cart/${itemId}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    return itemId;
+    try {
+      const token = await AsyncStorage.getItem('accessToken');
+      const response = await axios.delete(`${API_BASE_URL}/cart/${itemId}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      return response;
+    } catch (error) {
+      console.log('❌ ERROR:', error?.response?.data || error.message);
+      throw error;
+    }
   }
 
   static async updateItemInCart(itemId, updatedData) {

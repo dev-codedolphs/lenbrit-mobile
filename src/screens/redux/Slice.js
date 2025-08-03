@@ -98,14 +98,40 @@ const userSlice = createSlice({
             error: action.payload,
         }),
 
+        // accept offer
+        acceptOffer: (state) => ({ ...state, loading: true }),
+        acceptOfferSuccess: (state, action) => ({
+            ...state,
+            loading: false,
+            success: true,
+        }),
+        acceptOfferFailure: (state, action) => ({
+            ...state,
+            loading: false,
+            error: action.payload,
+        }),
+
+        // reject offer
+        rejectOffer: (state) => ({ ...state, loading: true }),
+        rejectOfferSuccess: (state, action) => ({
+            ...state,
+            loading: false,
+            success: true,
+        }),
+        rejectOfferFailure: (state, action) => ({
+            ...state,
+            loading: false,
+            error: action.payload,
+        }),
+
         // Add to Cart
-        addToCart: (state) => ({ ...state, loading: true }),
+        addToCart: (state) => ({ ...state, loading: true, success: false }),
         addToCartSuccess: (state, action) => ({
             ...state,
             loading: false,
-            cart: [...state.cart, action.payload],
+            success: true,
         }),
-        addToCartFailure: (state, action) => ({ ...state, loading: false, error: action.payload }),
+        addToCartFailure: (state, action) => ({ ...state, loading: false, error: action.payload, success: false }),
 
         // Get All Cart Items
         getAllCartItems: (state) => ({ ...state, loading: true }),
@@ -121,7 +147,8 @@ const userSlice = createSlice({
         removeItemFromCartSuccess: (state, action) => ({
             ...state,
             loading: false,
-            cart: state.cart.filter((item) => item.id !== action.payload),
+            success: true,
+            cart: state.cart.filter((item) => item.listingId !== action.payload),
         }),
         removeItemFromCartFailure: (state, action) => ({ ...state, loading: false, error: action.payload }),
 
@@ -146,6 +173,9 @@ const userSlice = createSlice({
         getAllCategoriesFailure: (state, action) => ({ ...state, loading: false, error: action.payload }),
 
         clearSuccess: (state) => ({ ...state, success: false }),
+        setLoading: (state, action) => {
+            state.loading = action.payload;
+        },
         reset: () => initialState,
     }
 })

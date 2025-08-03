@@ -58,10 +58,12 @@ const YourListings: React.FC<YourListingsProps> = ({ title, data, onPress, from 
 const styles = StyleSheet.create({
   container: {
     marginTop: 20,
+    marginBottom: 10,
   },
   header: {
     flexDirection: 'row',
     justifyContent: 'space-between',
+    alignItems: 'center',
     marginBottom: 10,
   },
   title: {
@@ -72,7 +74,6 @@ const styles = StyleSheet.create({
     fontSize: 14,
     fontWeight: '400',
     color: '#A020F0',
-    alignSelf:'flex-end'
   },
   emptyText: {
     fontSize: 14,
