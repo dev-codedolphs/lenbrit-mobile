@@ -80,7 +80,7 @@ const MyItemsScreen = () => {
   ];
   
   return (
-    <SafeAreaView style={{ flex: 1 }}>
+    <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
       <View style={styles.wrapper}>
          <Button title='Add New Items' backgroundColor={color.Default} onPress={() => navigation.navigate('AddItem')} />
          <space.s2 />

@@ -7,6 +7,7 @@ import {
   ScrollView,
   TouchableOpacity,
   Image,
+  Platform,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
@@ -15,6 +16,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { launchImageLibrary, ImagePickerResponse, Asset } from 'react-native-image-picker';
 import DatePicker from 'react-native-date-picker'
+import DateTimePicker from '@react-native-community/datetimepicker';
 import userApi from '../redux/Api'
 import { color } from '../../theme/colors';
 import Header from '../../components/Header';
@@ -44,6 +46,7 @@ const AddItemScreen: React.FC<Props> = ({ navigation, route }) => {
   const [mediaList, setMediaList] = useState<any[]>(item?.images || []);
   const [showStarDatePicker, setShowStartDatePicker] = useState(false);
   const [showEndDatePicker, setShowEndDatePicker] = useState(false);
+  const [showDatePicker, setShowDatePicker] = useState<'start' | 'end' | null>(null);
 
   const selectedCategory = categories.find((cat: any) => cat.name === category);
 
@@ -159,30 +162,6 @@ const AddItemScreen: React.FC<Props> = ({ navigation, route }) => {
           )}
         </TouchableOpacity>
 
-        {/* {mediaList.length > 1 && (
-          <View style={styles.imageGrid}>
-            {mediaList.slice(1, 5).map((item: any, index) => {
-              const isVideo = item.url?.endsWith('.mp4');
-              return isVideo ? (
-                <Video
-                  key={index}
-                  source={{ uri: item.url }}
-                  style={styles.gridImage}
-                  paused={true}
-                  resizeMode="cover"
-                  muted
-                />
-              ) : (
-                <Image
-                  key={index}
-                  source={{ uri: item.url }}
-                  style={styles.gridImage}
-                />
-              );
-            })}
-          </View>
-        )} */}
-
         {mediaList.length > 1 && (
           <View style={styles.imageGrid}>
             {mediaList.slice(1, 5).map((item: any, index) => {
@@ -210,7 +189,19 @@ const AddItemScreen: React.FC<Props> = ({ navigation, route }) => {
 
         {/* Input Fields */}
         {renderField('Item Name', 'Enter Name', itemName, setItemName)}
-        {renderField('Size', 'Enter Size', size, setSize)}
+        <Text style={styles.label}>Size</Text>
+        <DropDownPicker
+          value={size}
+          setValue={setSize}
+          item={[
+            { label: 'Extra Small', value: 'XS' },
+            { label: 'Small', value: 'S' },
+            { label: 'Medium', value: 'M' },
+            { label: 'Large', value: 'L' },
+            { label: 'Extra Large', value: 'XL' },
+          ]}
+          zIndex={1001}
+        />
         <Text style={styles.label}>Category</Text>
         <DropDownPicker
           value={category}
@@ -243,42 +234,41 @@ const AddItemScreen: React.FC<Props> = ({ navigation, route }) => {
         {/* Availability */}
         <Text style={styles.label}>Availability</Text>
         <View style={styles.availabilityRow}>
-          <TouchableOpacity style={styles.halfInput} onPress={() => setShowStartDatePicker(true)} >
+          <TouchableOpacity style={styles.halfInput} onPress={() => setShowDatePicker('start')}>
             <Text style={{ color: startDate ? '#000' : '#999' }}>
               {startDate ? startDate.toDateString() : 'From'}
             </Text>
           </TouchableOpacity>
 
-          <TouchableOpacity style={styles.halfInput} onPress={() => setShowEndDatePicker(true)} >
+          <TouchableOpacity style={styles.halfInput} onPress={() => setShowDatePicker('end')}>
             <Text style={{ color: endDate ? '#000' : '#999' }}>
               {endDate ? endDate.toDateString() : 'To'}
             </Text>
           </TouchableOpacity>
         </View>
 
-        <DatePicker
-          modal
-          mode="date"
-          open={showStarDatePicker}
-          date={startDate || new Date()}
-          onConfirm={(date) => {
-            setShowStartDatePicker(false);
-            setStartDate(date);
-          }}
-          onCancel={() => setShowStartDatePicker(false)}
-        />
 
-        <DatePicker
-          modal
-          open={showEndDatePicker}
-          mode="date"
-          date={endDate || new Date()}
-          onConfirm={(date) => {
-            setShowEndDatePicker(false);
-            setEndDate(date);
-          }}
-          onCancel={() => setShowEndDatePicker(false)}
-        />
+        {showDatePicker && (
+          <DateTimePicker
+            value={
+              showDatePicker === 'start'
+                ? startDate || new Date()
+                : endDate || new Date()
+            }
+            mode="date"
+            display={Platform.OS === 'ios' ? 'inline' : 'default'}
+            onChange={(event, selectedDate) => {
+              if (Platform.OS === 'android') setShowDatePicker(null);
+
+              if (selectedDate) {
+                if (showDatePicker === 'start') setStartDate(selectedDate);
+                else setEndDate(selectedDate);
+              }
+            }}
+          />
+        )}
+
+
 
         {/* Description */}
         <Text style={styles.label}>Description</Text>

@@ -171,7 +171,7 @@ const HomeScreen = () => {
   }
 
   return (
-    <SafeAreaView >
+    <SafeAreaView style={{ flex: 1, backgroundColor: '#fff' }} >
       <ScrollView showsVerticalScrollIndicator={false} style={styles.container}>
         <Header onPress={() => navigation.navigate('NotificationsScreen')} />
         <PromoBanner />
