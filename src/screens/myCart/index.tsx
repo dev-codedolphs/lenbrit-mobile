@@ -21,6 +21,8 @@ import { CartItem } from '../../types/types';
 import FullScreenLoader from '../../components/basic/FullScreenLoader';
 import Toast from 'react-native-toast-message';
 import ContentLoader, { Rect } from 'react-content-loader/native';
+import { CartActive } from '../../assets/icons';
+import Button from '../../components/Button';
 
 const sampleCartItem = {
     id: '1',
@@ -43,7 +45,7 @@ const MyCart = () => {
     const [isInitialLoading, setIsInitialLoading] = useState(true);
 
     useEffect(() => {
-        if (!loading && cart?.length > 0) {
+        if (!loading) {
             setIsInitialLoading(false);
         }
     }, [loading, cart?.length]);
@@ -176,9 +178,21 @@ const MyCart = () => {
                         showsVerticalScrollIndicator={false}
                         refreshing={refreshing}
                         onRefresh={onRefresh}
+                            ListEmptyComponent={
+                                <View style={styles.emptyStateContainer}>
+                                    <View style={{ padding: wp(4), backgroundColor: '#F5F5F5', borderRadius: wp(10) }}>
+                                        <CartActive />
+                                    </View>
+                                    <Text style={styles.emptyStateText}>Your cart is empty.</Text>
+                                </View>
+                            }                          
                     />
                 )}
                 {loading && !refreshing && !isInitialLoading && <FullScreenLoader />}
+                {
+                    cart.length > 0 &&
+                    <Button title='Place order' backgroundColor={color.Default} onPress={() => navigation.navigate('CheckoutScreen' as never)} />
+                }
             </View>
         </SafeAreaView>
     );
@@ -189,11 +203,11 @@ export default MyCart;
 const styles = StyleSheet.create({
     safeArea: {
         flex: 1,
-        backgroundColor: color.White,
     },
     container: {
         flex: 1,
-        padding: wp('5%'),
+        paddingHorizontal: wp('5%'),
+        paddingTop: hp(1),
     },
     card: {
         flex: 1,
@@ -252,5 +266,17 @@ const styles = StyleSheet.create({
     quantity: {
         fontSize: hp('1.6%'),
         marginHorizontal: wp('2.5%'),
+    },
+    emptyStateContainer: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        marginTop: hp('30%')
+    },
+    emptyStateText: {
+        fontSize: hp('2%'),
+        marginTop: hp(1.5),
+        color: '#999',
+        textAlign: 'center',
     },
 });

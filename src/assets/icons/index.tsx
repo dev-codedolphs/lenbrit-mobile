@@ -125,14 +125,14 @@ export const DownloadIcon = ({ size = 30 }) => (
     </Svg>
 )
 
-export const ArrowForward = () => (
-    <Svg width={13} height={24} viewBox="0 0 13 14" fill="none">
+export const ArrowForward = ({ width = 13, height= 24 }) => (
+    <Svg width={width} height={height} viewBox="0 0 13 14" fill="none">
         <Path fill-rule="evenodd" clip-rule="evenodd" d="M10.6569 12.7106L4.99994 18.3676L3.58594 16.9536L8.53594 12.0036L3.58594 7.05365L4.99994 5.63965L10.6569 11.2966C10.8444 11.4842 10.9497 11.7385 10.9497 12.0036C10.9497 12.2688 10.8444 12.5231 10.6569 12.7106Z" fill="#2E2E2E" />
     </Svg>
 )
 
-export const ArrowBack = () => (
-    <Svg width={13} height={24} viewBox="0 0 13 14" fill="none">
+export const ArrowBack = ({ width = 13, height= 24 }) => (
+    <Svg width={width} height={height} viewBox="0 0 13 14" fill="none">
         <Path fill-rule="evenodd" clip-rule="evenodd" d="M2.34306 12.7106L8.00006 18.3676L9.41406 16.9536L4.46406 12.0036L9.41406 7.05365L8.00006 5.63965L2.34306 11.2966C2.15559 11.4842 2.05028 11.7385 2.05028 12.0036C2.05028 12.2688 2.15559 12.5231 2.34306 12.7106Z" fill="#2E2E2E" />
     </Svg>
 )

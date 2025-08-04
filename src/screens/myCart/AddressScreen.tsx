@@ -66,7 +66,12 @@ const AddressScreen = () => {
             phoneNumber: phone,
         };
 
-        dispatch(userSlice.actions.createOrder({ newShippingAddress }));
+        const payload = {
+            newShippingAddress,
+            billingSameAsShipping: true,
+        }
+
+        dispatch(userSlice.actions.createOrder(payload));
         (navigation as any).navigate('OrederPlacedSuccess')
     };
 

@@ -1,15 +1,56 @@
 // types.ts
 
-export type OrderItemType = {
-  item: string;
-  renter: string;
-  date: string;
-  size: string;
-  price: string;
-  description: string;
-  image: any;
-  status: 'inProgress' | 'completed' | 'cancelled';
-};
+export interface OrderItemType {
+  id: number;
+  orderId: number;
+  listingId: number;
+  quantity: number;
+  price: number;
+  createdAt?: string;
+  status?: string; // from parent order
+
+  listing: {
+    id: number;
+    name: string;
+    size: string;
+    price: number;
+    slug: string | null;
+    sku: string | null;
+    weight: number | null;
+    description: string;
+    video: string | null;
+    startDate: string;
+    endDate: string;
+    status: string;
+    categoryId: number;
+    subCategoryId: number;
+    userId: number;
+    createdAt: string;
+    updatedAt: string;
+
+    images: {
+      id: number;
+      url: string;
+      listingId: number;
+    }[];
+
+    category: {
+      id: number;
+      name: string;
+      createdAt: string;
+      updatedAt: string;
+    };
+
+    subCategory: {
+      id: number;
+      name: string;
+      categoryId: number;
+      createdAt: string;
+      updatedAt: string;
+    };
+  };
+}
+
 
 export type ItemType = {
   id: string;

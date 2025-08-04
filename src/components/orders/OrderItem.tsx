@@ -18,23 +18,39 @@ const OrderItem: React.FC<Props> = ({ item }) => {
         navigation.navigate('OrderDetail', { item });
     };
 
+    function formatDateRange(start: string, end: string): string {
+        const startDate = new Date(start);
+        const endDate = new Date(end);
+      
+        const options: Intl.DateTimeFormatOptions = {
+          day: 'numeric',
+          month: 'long',
+          year: 'numeric',
+        };
+      
+        const formattedStart = startDate.toLocaleDateString('en-GB', options);
+        const formattedEnd = endDate.toLocaleDateString('en-GB', options);
+      
+        return `${formattedStart} to ${formattedEnd}`;
+      }
+
     return (
         <Pressable style={styles.orderCard} onPress={handlePress}>
             <View style={styles.imageContainer}>
-                <Image source={item.image} style={styles.image} resizeMode="contain" />
+                <Image source={{ uri: item?.listing.images[0]?.url }} style={styles.image} resizeMode="cover" />
             </View>
             <View style={styles.infoContainer}>
                 <View style={styles.infoRow}>
                     <Text style={styles.label}>Item</Text>
-                    <Text style={styles.value}>{item.item}</Text>
+                    <Text style={styles.value}>{item?.listing?.name}</Text>
                 </View>
                 <View style={styles.infoRow}>
                     <Text style={styles.label}>Renter</Text>
-                    <Text style={styles.value}>{item.renter}</Text>
+                    <Text style={styles.value}>{item.listing.userId}</Text>
                 </View>
                 <View style={styles.infoRow}>
                     <Text style={styles.label}>Date</Text>
-                    <Text style={styles.highlightValue}>{item.date}</Text>
+                    <Text style={styles.highlightValue}>{formatDateRange(item.listing.startDate, item.listing.endDate)}</Text>
                 </View>
                 <View style={styles.infoRow}>
                     <Text style={styles.label}>Price</Text>
@@ -56,15 +72,12 @@ const styles = StyleSheet.create({
         padding: wp('2%'),
     },
     imageContainer: {
-        paddingVertical: hp(1),
-        paddingHorizontal: wp(3),
-        backgroundColor: '#F3F3F3',
         marginRight: wp('8%'),
         borderRadius: 4,
     },
     image: {
-        width: wp('18%'),
-        height: wp('18%'),
+        width: wp('20%'),
+        height: wp('20%'),
     },
     infoContainer: {
         flex: 1,
