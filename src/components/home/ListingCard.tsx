@@ -24,7 +24,7 @@ const ListingCard: React.FC<ListingCardProps> = ({ item, from }) => {
         } else if (from === 'listings' || from === 'listingsHome') {
             navigation.navigate('AddItem', { item });
         } else {
-            navigation.navigate('OrderDetail', { item });
+            navigation.navigate('ItemDetail', { item });
         }
     };
 

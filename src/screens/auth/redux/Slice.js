@@ -49,7 +49,6 @@ const authSlice = createSlice({
             ...state,
             loading: false,
             user: action.payload,
-            isLoggedIn: true,
         }),
         signupFailure: (state, action) => ({
             ...state,

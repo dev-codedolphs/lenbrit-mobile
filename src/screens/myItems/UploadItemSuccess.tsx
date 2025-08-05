@@ -20,7 +20,7 @@ const UploadItemSuccess = () => {
                 <Text style={styles.subHeader}>Your listing is now under review by our team. Once approved, you’ll receive a notification and your item will be visible to renters. </Text>
             </View>
             <View style={{ padding: wp(2), backgroundColor: color.White }}>
-                <Button onPress={() => navigation.navigate('Tabs', {screen: 'Home'})} title='Back To Home' backgroundColor={color.Default} style={{ width: '94%' }} />
+                <Button onPress={() => navigation.navigate('Tabs', {screen: 'MyItems'})} title='Back To Home' backgroundColor={color.Default} style={{ width: '94%' }} />
             </View>
         </SafeAreaView>
     )

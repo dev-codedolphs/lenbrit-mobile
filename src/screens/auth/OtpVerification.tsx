@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View, TouchableOpacity } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { heightPercentageToDP as hp, widthPercentageToDP as wp } from 'react-native-responsive-screen'
 import Icon from 'react-native-vector-icons/Feather';
 import * as space from '../../utils/spacer';
@@ -14,11 +14,17 @@ import authSlice from './redux/Slice';
 
 const OtpVerification = () => {
     const navigation = useNavigation<AuthNavigationProp>();
-    const { isVerified } = useSelector((state:any) => state.auth);
+    const { isVerified, loading } = useSelector((state:any) => state.auth);
     const route = useRoute();
     const dispatch = useDispatch();
     const { email } = route.params as { email: string };
     const [otp, setOtp] = useState('');
+
+    useEffect(() => {
+        if (isVerified) {
+            navigation.navigate('AccountCreated')
+        }
+    }, [isVerified])
 
     const handleOtpVerification = () => {
         const data: any = {
@@ -27,9 +33,6 @@ const OtpVerification = () => {
         };
 
         dispatch(authSlice.actions.verifyEmailPhone(data));
-        if (isVerified) {
-            navigation.navigate('AccountCreated')
-        }
     };
 
     const handleResendOtp = () => {
@@ -74,7 +77,7 @@ const OtpVerification = () => {
                 </TouchableOpacity>
             </View>
             <View style={{ padding: wp(2), backgroundColor: color.White }}>
-                <Button onPress={handleOtpVerification} title='Next' backgroundColor={color.Default} style={{ width: '94%' }} />
+                <Button onPress={handleOtpVerification} title='Next' backgroundColor={color.Default} style={{ width: '94%' }} loading={loading} />
             </View>
         </SafeAreaView>
     )
