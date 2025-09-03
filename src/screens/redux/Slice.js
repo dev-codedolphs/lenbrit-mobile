@@ -46,17 +46,20 @@ const userSlice = createSlice({
         }),
 
         // delete product
-        deleteProduct: (state) => ({...state, loading: true, error: null}),
+        deleteProduct: (state) => ({...state, loading: true, success: false, error: null}),
         deleteProductSuccess: (state, action) => {
             const deletedId = action.payload;
             return {
                 ...state,
+                success: true,
                 products: state.products.filter(product => product.id !== deletedId),
             };
         },
-        deleteProductFailure: (state, action) => {
-            state.error = action.payload;
-        },
+        deleteProductFailure: (state, action) => ({
+            error:  action.payload,
+            loading: false,
+            success: false
+        }),
 
         // Create Order
         createOrder: (state) => ({ ...state, loading: true, error: null }),
@@ -67,6 +70,19 @@ const userSlice = createSlice({
             orders: [...state.orders, action.payload],
         }),
         createOrderFailure: (state, action) => ({
+            ...state,
+            loading: false,
+            error: action.payload,
+        }),
+
+        // Cancel order
+        cancelOrder: (state) => ({ ...state, loading: true, error: null }),
+        cancelOrderSuccess: (state, action) => ({
+            ...state,
+            loading: false,
+            success: true,
+        }),
+        cancelOrderFailure: (state, action) => ({
             ...state,
             loading: false,
             error: action.payload,

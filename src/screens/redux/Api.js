@@ -3,7 +3,8 @@ import RNBlobUtil from 'react-native-blob-util';
 import axios from 'axios';
 import Toast from 'react-native-toast-message';
 
-const API_BASE_URL = 'https://starfish-app-ajafk.ondigitalocean.app/api/v1'
+// const API_BASE_URL = 'https://starfish-app-ajafk.ondigitalocean.app/api/v1'
+const API_BASE_URL = 'https://lenbrit-api-vb3nh.ondigitalocean.app/api/v1'
 
 export default class Api {
 
@@ -97,6 +98,23 @@ export default class Api {
       throw new Error(error.response?.data?.message || 'Failed to create order');
     }
   }
+
+  static async cancelOrder(orderId) {
+    try {
+      const token = await AsyncStorage.getItem('accessToken');
+      const response = await axios.patch(`${API_BASE_URL}/orders/${orderId}/cancel`,{}, {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+
+      return response.data;
+    } catch (error) {
+      console.log('cancel order error:', error);
+      throw new Error(error.response?.data?.message || 'Failed to create order');
+    }
+  }
+
 
   static async getAllOrders() {
     try {

@@ -38,10 +38,10 @@ const HomeScreen = () => {
     const [isInitialLoading, setIsInitialLoading] = useState(true);
 
     useEffect(() => {
-      if (!loading && products?.length > 0 ) {
+      if (!loading && products?.results?.length > 0 ) {
         setIsInitialLoading(false);
       }
-    }, [loading, products?.length]);
+    }, [loading, products?.results?.length]);
 
 
   useEffect(() => {
@@ -160,11 +160,11 @@ const HomeScreen = () => {
     },
   ];
 
-  const requests = products?.filter((item: ListingItem) =>
+  const requests = products?.results?.filter((item: ListingItem) =>
     Array.isArray(item.CustomOffer) && item.CustomOffer.length > 0
   );
   
-  const approvedItems = products?.filter((item: ListingItem) => item.status === 'APPROVED');
+  const approvedItems = products?.results?.filter((item: ListingItem) => item.status === 'APPROVED');
 
   if (isInitialLoading) {
     return <HomeSkeleton />

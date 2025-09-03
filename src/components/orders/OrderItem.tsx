@@ -37,7 +37,15 @@ const OrderItem: React.FC<Props> = ({ item }) => {
     return (
         <Pressable style={styles.orderCard} onPress={handlePress}>
             <View style={styles.imageContainer}>
-                <Image source={{ uri: item?.listing.images[0]?.url }} style={styles.image} resizeMode="cover" />
+                <Image 
+                    source={
+                        item?.listing?.images?.length > 0 && item.listing.images[0]?.url
+                            ? { uri: item.listing.images[0].url }
+                            : require('../../assets/images/default.jpg')
+                    }
+                style={styles.image} 
+                resizeMode="cover" 
+                />
             </View>
             <View style={styles.infoContainer}>
                 <View style={styles.infoRow}>
@@ -88,7 +96,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between',
     },
     label: {
-        color: '#8E8E8E',
+        color: color.Black,
         fontSize: 12,
         fontWeight: '300',
     },

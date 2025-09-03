@@ -28,15 +28,18 @@ const OrderDetailScreen: React.FC<Props> = ({ route }) => {
     const { loading, success } = useSelector((state:any) => state.user);
     const navigation = useNavigation();
     const { item }: any = route.params;
-    const startDate = item?.startDate && new Date(item.startDate).toLocaleDateString('en-GB', {
-        day: 'numeric',
-        month: 'long',
-    })
+    console.log('itemmmmm', item)
+    const startDate = item?.listing?.startDate &&
+        new Date(item.listing.startDate).toLocaleDateString('en-GB', {
+            day: 'numeric',
+            month: 'long',
+        });
 
-    const endDate = item?.endDate && new Date(item.endDate).toLocaleDateString('en-GB', {
-        day: 'numeric',
-        month: 'long',
-    })
+    const endDate = item?.listing?.endDate &&
+        new Date(item.listing.endDate).toLocaleDateString('en-GB', {
+            day: 'numeric',
+            month: 'long',
+        });
 
     const date =`${startDate} to ${endDate}`
 
@@ -60,12 +63,12 @@ const OrderDetailScreen: React.FC<Props> = ({ route }) => {
     };
 
     const getStatusColor = (status: string) => {
-        switch (status.toLowerCase()) {
-            case 'completed':
+        switch (status) {
+            case 'COMPLETED':
                 return color.Green;
-            case 'in progress':
+            case 'IN_PROGRESS':
                 return '#FFAE00';
-            case 'cancelled':
+            case 'CANCELLED':
                 return color.Red;
             default:
                 return color.Gray;
@@ -74,7 +77,7 @@ const OrderDetailScreen: React.FC<Props> = ({ route }) => {
 
     useEffect(() => {
         if (success) {
-            (navigation as any).navigate('Tabs', { screen: 'MyCart' });
+            (navigation as any).navigate('Tabs', { screen: 'Orders' });
             Toast.show({
                 type: 'success',
                 text1: 'Product added to cart successfully',
@@ -83,6 +86,7 @@ const OrderDetailScreen: React.FC<Props> = ({ route }) => {
                 position: 'bottom',
             });
             dispatch(userSlice.actions.clearSuccess({})); 
+            dispatch(userSlice.actions.getAllOrders({}));
         }
     }, [success])
 
@@ -96,6 +100,20 @@ const OrderDetailScreen: React.FC<Props> = ({ route }) => {
         (navigation as any).navigate('Tabs', { screen: 'Message' });
     }
 
+    const handleCancelClick = (orderId: number | string): void => {
+        if (!orderId) {
+            console.warn("Cancel order failed: orderId is missing");
+            return;
+        }
+
+        dispatch(
+            userSlice.actions.cancelOrder({
+                orderId,
+            })
+        );
+    };
+
+
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView contentContainerStyle={styles.container}>
@@ -106,14 +124,23 @@ const OrderDetailScreen: React.FC<Props> = ({ route }) => {
                 {/* Image and Status */}
                 <View style={styles.imageContainer}>
                     <Image
-                        source={{ uri: item.images[0].url }}
+                        source={
+                            item?.listing?.images?.length > 0 && item.listing.images[0]?.url
+                                ? { uri: item.listing.images[0].url }
+                                : require('../../assets/images/default.jpg')
+                        }
                         style={styles.image}
                         resizeMode="cover"
                     />
+                    <View style={[styles.statusBadge, { backgroundColor: getStatusColor(item.status) }]}>
+                        <Text style={styles.statusText}>
+                            {item?.status}
+                        </Text>
+                    </View>
                 </View>
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
-                <Text style={styles.sectionTitle}>{item.name}</Text>
+                <Text style={styles.sectionTitle}>{item?.listing?.name}</Text>
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                     <Text style={{ marginRight: wp(2), fontSize: 17, fontWeight: '600'}}>5.0</Text>
                     <Star />
@@ -125,31 +152,36 @@ const OrderDetailScreen: React.FC<Props> = ({ route }) => {
                 <Text style={styles.sectionTitle}>Description</Text>
                 <View style={styles.descriptionBox}>
                     <Text style={styles.descriptionText}>
-                        {item.description}
+                        {item.listing.description}
                     </Text>
                 </View>
 
                 {/* Details */}
                 <View style={styles.detailsContainer}>
-                    {renderRow('Renter', item.user.firstName)}
+                    {renderRow(
+                        'Renter',
+                        item.listing.user?.firstName
+                            ? item.listing.user.firstName
+                            : item.listing.user?.email?.split('@')[0] ?? 'N/A'
+                    )}                 
                     {renderRow('Date', date)}
-                    {renderRow('Size', 'Large')}
-                    {renderRow('Price', 'PKR 400')}
+                    {renderRow('Size', item.listing.size)}
+                    {renderRow('Price', `PKR ${item.listing.price}`)}
                 </View>
 
-                {/* <Button title={ user.role == 'BORROWER' ? 'Message to Lender' : 'Message to Renter'} backgroundColor={color.Default} /> */}
+                <Button title={ user.role == 'BORROWER' ? 'Message to Lender' : 'Message to Renter'} backgroundColor={color.Default} />
 
 
                 {/* Actions */}
                 <View style={styles.buttonContainer}>
-                <Button title='Chat with Lender' textStyle={{ fontSize: 14 }} backgroundColor={color.Default} style={{ width: '48%', paddingVertical: hp(1.2)}} onPress={handleChatToLender} />
+                {/* <Button title='Chat with Lender' textStyle={{ fontSize: 14 }} backgroundColor={color.Default} style={{ width: '48%', paddingVertical: hp(1.2)}} onPress={handleChatToLender} />
                 <Button title='Add to Cart' textStyle={{ fontSize: 14 }} backgroundColor='#00826F' style={{ width: '48%', paddingVertical: hp(1.2)}} onPress={handleAddToCart} loading={loading} />
                 <Button title='Rent Now' textStyle={{ fontSize: 14 }} backgroundColor={color.Black} style={{ width: '48%', paddingVertical: hp(1.2)}} />
-                <Button title='Make offer' textStyle={{ fontSize: 14 }} backgroundColor='#FFAE00' style={{ width: '48%', paddingVertical: hp(1.2)}} />
+                <Button title='Make offer' textStyle={{ fontSize: 14 }} backgroundColor='#FFAE00' style={{ width: '48%', paddingVertical: hp(1.2)}} /> */}
                 </View>
                 {
-                    item.status == 'completed' &&
-                    <Button title='Cancel' backgroundColor={color.Red} />
+                    item.status == 'IN_PROGRESS' &&
+                    <Button title='Cancel' backgroundColor={color.Red} loading={loading} onPress={() => handleCancelClick(item?.orderId)} />
                 }
 
             </ScrollView>

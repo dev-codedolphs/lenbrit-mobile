@@ -12,6 +12,7 @@ export default function* userFlow() {
 
         // Orders
         takeEvery(userSlice.actions.createOrder.type, createOrder),
+        takeEvery(userSlice.actions.cancelOrder.type, cancelOrder),
         takeEvery(userSlice.actions.getAllOrders.type, getAllOrders),
         takeEvery(userSlice.actions.getOrderById.type, getOrderById),
         takeEvery(userSlice.actions.acceptOffer.type, acceptOffer),
@@ -73,6 +74,20 @@ function* deleteProduct({ payload }) {
 function* createOrder({ payload }) {
     try {
         const response = yield call(userApi.createOrder, payload);
+        console.log('response......', response)
+        if (response?.status === 201 || response?.id) {
+            yield put(userSlice.actions.createOrderSuccess(response));
+        }
+    } catch (error) {
+        yield put(userSlice.actions.createOrderFailure(error.message));
+    }
+}
+
+function* cancelOrder({ payload }) {
+    const orderId = payload?.orderId; // 👈 correct way
+    console.log('orderIdddd', orderId)
+    try {
+        const response = yield call(userApi.cancelOrder, orderId);
         console.log('response......', response)
         if (response?.status === 201 || response?.id) {
             yield put(userSlice.actions.createOrderSuccess(response));

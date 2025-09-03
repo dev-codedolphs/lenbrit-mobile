@@ -2,7 +2,8 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 // Base URL (replace with actual backend URL)
-const API_BASE_URL = 'https://starfish-app-ajafk.ondigitalocean.app/api/v1'
+// const API_BASE_URL = 'https://starfish-app-ajafk.ondigitalocean.app/api/v1'
+const API_BASE_URL = 'https://lenbrit-api-vb3nh.ondigitalocean.app/api/v1'
   
 
 export default class Api {
