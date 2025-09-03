@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, Text, Image, StyleSheet, ImageSourcePropType, TouchableOpacity, Pressable } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { color } from '../../theme/colors';
@@ -7,6 +7,10 @@ import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import { MainStackParamList } from '../../navigation/MainStack';
 import { ItemType, OrderItemType } from '../../types/types';
 import Button from '../Button';
+import { DeleteIcon } from '../../assets/icons';
+import GenericModal from '../basic/Modal';
+import { useDispatch, useSelector } from 'react-redux';
+import userSlice from '../../screens/redux/Slice';
 
 
 interface ListingCardProps {
@@ -15,7 +19,16 @@ interface ListingCardProps {
 }
 
 const ListingCard: React.FC<ListingCardProps> = ({ item, from }) => {
+    const dispatch = useDispatch();
     const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
+    const { success } = useSelector((state: any) => state.user);
+    const [modalVisible, setModalVisible] = useState(false);
+
+    useEffect(() => {
+        if (success) {
+            setModalVisible(false)
+        }
+    }, [success])
 
     const handlePress = () => {
         // navigation.navigate('AddItem', { item });
@@ -36,6 +49,12 @@ const ListingCard: React.FC<ListingCardProps> = ({ item, from }) => {
         day: 'numeric',
         month: 'long',
     })
+    
+
+    const handleDelete = () => {
+        dispatch(userSlice.actions.deleteProduct({ productItem: item.id}))
+        setModalVisible(false);
+    };
 
     return (
         <Pressable style={[styles.card, { marginRight: from == 'listings' ? 0 : wp(2.8), marginBottom: from == 'listings' ? hp(2) : 0 }]} onPress={handlePress}>
@@ -51,6 +70,11 @@ const ListingCard: React.FC<ListingCardProps> = ({ item, from }) => {
                         <Text style={styles.statusText}>{item.status}</Text>
                     </View>
                 }
+                  {from === 'listings' && (
+                    <TouchableOpacity style={styles.deleteIcon} onPress={() => setModalVisible(true)}>
+                        <DeleteIcon size={20} />
+                    </TouchableOpacity>
+                )}
 
             </View>
             <View style={{ padding: wp(2) }}>
@@ -79,9 +103,21 @@ const ListingCard: React.FC<ListingCardProps> = ({ item, from }) => {
                     backgroundColor={color.Default} 
                     textStyle={{ color: color.White, fontSize: 12 }}
                     style={{ paddingVertical: hp(0.6), width: '100%', borderRadius: 2, marginBottom: 0 }}
-                    onPress={() =>  navigation.navigate('OrderDetail', { item })}
+                    // onPress={() =>  navigation.navigate('OrderDetail', { item })}
                 />
             </View>
+
+            <GenericModal visible={modalVisible}>
+                <Text style={styles.modalTitle}>Are you sure you want to delete?</Text>
+                <View style={styles.buttonsContainer}>
+                    <TouchableOpacity style={[styles.button, styles.cancelButton]} onPress={() => setModalVisible(false)}>
+                        <Text style={styles.buttonText}>Cancel</Text>
+                    </TouchableOpacity>
+                    <TouchableOpacity style={[styles.button, styles.deleteButton]} onPress={handleDelete}>
+                        <Text style={styles.buttonText}>Delete</Text>
+                    </TouchableOpacity>
+                </View>
+            </GenericModal>
         </Pressable>
     );
 };
@@ -141,6 +177,44 @@ const styles = StyleSheet.create({
     statusText: {
         fontSize: 10,
         color: color.White,
+        fontWeight: '500',
+    },
+    deleteIcon: {
+        position: 'absolute',
+        top: 6,
+        left: 6,
+        backgroundColor: color.White,
+        padding: 5,
+        borderRadius: 20,
+        zIndex: 10,
+    },
+
+    modalTitle: {
+        fontSize: 18,
+        fontWeight: '500',
+        marginBottom: hp(3),
+    },
+    buttonsContainer: {
+        flexDirection: 'row',
+        width: '100%',
+        justifyContent: 'space-between',
+    },
+    button: {
+        width: '45%',
+        paddingVertical: hp(1),
+        borderRadius: wp(2),
+        justifyContent: 'center',
+        alignItems: 'center',
+    },
+    cancelButton: {
+        backgroundColor: color.Gray,  // Customize cancel button background color
+    },
+    deleteButton: {
+        backgroundColor: color.Red,  // Customize delete button background color
+    },
+    buttonText: {
+        color: color.White,
+        fontSize: 14,
         fontWeight: '500',
     },
 });
