@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import {  StatusBar, useColorScheme } from 'react-native';
+import { StatusBar, useColorScheme } from 'react-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import SplashScreen from './src/screens/splash/SplashScreen';
@@ -10,6 +10,8 @@ import {
 } from 'react-native/Libraries/NewAppScreen';
 import { AppNavigator } from './src/navigation/AppNavigator';
 import { navigationRef } from './src/utils/navigate';
+import { BottomSheetModalProvider } from '@gorhom/bottom-sheet';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 function App(): React.JSX.Element {
   const isDarkMode = useColorScheme() === 'dark';
@@ -33,14 +35,19 @@ function App(): React.JSX.Element {
         barStyle={'dark-content'}
         backgroundColor={backgroundStyle.backgroundColor}
       />
-      <NavigationContainer ref={navigationRef}>
-        {isLoading ? (
-          <SplashScreen />
-        ) : (
-          <AppNavigator />
-        )}
-      </NavigationContainer>
-      <Toast />   
+      <GestureHandlerRootView style={{ flex: 1 }}>
+        <NavigationContainer ref={navigationRef}>
+          <BottomSheetModalProvider>
+
+            {isLoading ? (
+              <SplashScreen />
+            ) : (
+              <AppNavigator />
+            )}
+          </BottomSheetModalProvider>
+        </NavigationContainer>
+      </GestureHandlerRootView>
+      <Toast />
     </SafeAreaProvider>
   );
 }

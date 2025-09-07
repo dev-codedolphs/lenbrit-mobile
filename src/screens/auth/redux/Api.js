@@ -77,7 +77,19 @@ export default class Api {
     }
 
     // Update User Info
-    static updateUserInfo(data) {
-        return axios.put(`${API_BASE_URL}/auth/update-me`, data);
+    static async updateUserInfo(data) {
+        try {
+            const token = await AsyncStorage.getItem('accessToken');
+            const response = axios.patch(`${API_BASE_URL}/auth/update-me`, data, {
+                headers: {
+                    "Access-Control-Allow-Origin": "*",
+                    Authorization: "Bearer " + token,
+                },
+            });
+
+            return response;
+        } catch (error) {
+            throw new Error(error.response?.data?.message || "Login failed");
+        }
     }
 }

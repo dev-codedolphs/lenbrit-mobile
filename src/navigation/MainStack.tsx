@@ -8,6 +8,7 @@ import UploadItemSuccess from '../screens/myItems/UploadItemSuccess';
 import { NavigatorScreenParams } from '@react-navigation/native';
 import ItemDetailScreen from '../screens/myItems/ItemDetailScreen';
 import EditProfile from '../screens/profile/EditProfile';
+import EditProfile2 from '../screens/profile/EditProfile2';
 import Earnings from '../screens/profile/Earnings';
 import WithdrawSuccess from '../screens/profile/WithdrawSuccess';
 import PrivacyPolicy from '../screens/profile/PrivacyPolicy';
@@ -39,6 +40,7 @@ export type MainStackParamList = {
   ItemDetail: { item: ItemType};
   UploadItemSuccess: undefined;
   EditProfile: undefined;
+  EditProfile2: undefined;
   Earnings: undefined;
   WithdrawSuccess: undefined;
   PrivacyPolicy: undefined;
@@ -67,6 +69,7 @@ const MainStack = () => {
       <Stack.Screen name="ItemDetail" component={ItemDetailScreen} />
       <Stack.Screen name="UploadItemSuccess" component={UploadItemSuccess} />
       <Stack.Screen name="EditProfile" component={EditProfile} />
+      <Stack.Screen name="EditProfile2" component={EditProfile2} />
       <Stack.Screen name="Earnings" component={Earnings} />
       <Stack.Screen name="WithdrawSuccess" component={WithdrawSuccess} />
       <Stack.Screen name="PrivacyPolicy" component={PrivacyPolicy} />
