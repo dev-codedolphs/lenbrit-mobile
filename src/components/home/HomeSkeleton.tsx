@@ -4,6 +4,8 @@ import { View, StyleSheet } from 'react-native';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 
 const HomeSkeleton = () => {
+    const categoriesCount = 4; 
+
     return (
         <View style={styles.container}>
             {/* Header */}
@@ -25,23 +27,40 @@ const HomeSkeleton = () => {
                 height={hp('20%')}
                 backgroundColor="#f3f3f3"
                 foregroundColor="#ecebeb"
-                style={{ marginTop: hp('2%') }}
+                style={{ marginTop: hp('-2%') }}
             >
                 <Rect x="0" y="0" rx="10" ry="10" width="100%" height="100%" />
             </ContentLoader>
 
-            {/* Categories */}
             <ContentLoader
-                width={wp('100%')}
+                width={wp('92%')}
                 height={hp('6%')}
                 backgroundColor="#f3f3f3"
                 foregroundColor="#ecebeb"
                 style={{ marginTop: hp('3%') }}
             >
-                <Rect x="0" y="10" rx="8" ry="8" width="70" height="70" />
-                <Rect x="80" y="10" rx="8" ry="8" width="70" height="70" />
-                <Rect x="160" y="10" rx="8" ry="8" width="70" height="70" />
-                <Rect x="240" y="10" rx="8" ry="8" width="70" height="70" />
+                <Rect x="0" y="0" rx="12" ry="12" width="100%" height={hp('5%')} />
+            </ContentLoader>
+
+            {/* Categories */}
+            <ContentLoader
+                width={wp('92%')}
+                height={hp('6%')}
+                backgroundColor="#f3f3f3"
+                foregroundColor="#ecebeb"
+                style={{ marginTop: hp('1%') }}
+            >
+                {Array.from({ length: categoriesCount }).map((_, i) => (
+                    <Rect
+                        key={i}
+                        x={`${(i * 100) / categoriesCount + 5 / categoriesCount}%`}
+                        y="10"
+                        rx="8"
+                        ry="8"
+                        width={`${90 / categoriesCount}%`} // evenly split width
+                        height={hp('6%')}
+                    />
+                ))}
             </ContentLoader>
 
             {/* Product Cards */}
@@ -64,7 +83,7 @@ const HomeSkeleton = () => {
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        paddingTop: hp(4),
+        paddingTop: hp(8),
         paddingHorizontal: wp('4%'),
         backgroundColor: '#fff',
     },

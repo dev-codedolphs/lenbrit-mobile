@@ -34,6 +34,7 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   container: {
+    flex: 1,
     flexDirection: 'row',
     flexWrap: 'nowrap',
     gap: 8,
@@ -41,10 +42,12 @@ const styles = StyleSheet.create({
   dropdown: {
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 10,
     backgroundColor: '#F5F5F5',
     borderRadius: 10,
-    paddingHorizontal: 8,
-    height: 40,
+    paddingHorizontal: 12,
+    paddingVertical: hp(1.8),
   },
   label: {
     fontSize: 14,

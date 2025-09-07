@@ -78,6 +78,11 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         marginBottom: hp('2%'),
         padding: wp('2%'),
+        shadowColor: '#000',
+        shadowOpacity: 0.08,
+        shadowOffset: { width: 0, height: 2 },
+        shadowRadius: 6,
+        elevation: 3,
     },
     imageContainer: {
         marginRight: wp('8%'),

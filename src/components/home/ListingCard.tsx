@@ -11,6 +11,7 @@ import { DeleteIcon } from '../../assets/icons';
 import GenericModal from '../basic/Modal';
 import { useDispatch, useSelector } from 'react-redux';
 import userSlice from '../../screens/redux/Slice';
+import Toast from 'react-native-toast-message';
 
 
 interface ListingCardProps {
@@ -27,6 +28,15 @@ const ListingCard: React.FC<ListingCardProps> = ({ item, from }) => {
     useEffect(() => {
         if (success) {
             setModalVisible(false)
+            Toast.show({
+                type: 'success',
+                text1: 'Product added to cart successfully',
+                topOffset: 20,
+                visibilityTime: 3000,
+                position: 'bottom',
+            });
+            dispatch(userSlice.actions.clearSuccess({}));
+            dispatch(userSlice.actions.getAllProducts({}));
         }
     }, [success])
 
@@ -52,8 +62,10 @@ const ListingCard: React.FC<ListingCardProps> = ({ item, from }) => {
     
 
     const handleDelete = () => {
-        dispatch(userSlice.actions.deleteProduct({ productItem: item.id}))
-        setModalVisible(false);
+        if (item && item?.id){
+            dispatch(userSlice.actions.deleteProduct(item?.id))
+            setModalVisible(false);
+        }
     };
 
     return (

@@ -62,8 +62,7 @@ function* updateProduct({ payload }) {
 
 function* deleteProduct({ payload }) {
     try {
-        const productId = payload;
-        const response = yield call(userApi.deleteProduct, productId);
+        const response = yield call(userApi.deleteProduct, payload);
         yield put(userSlice.actions.deleteProductSuccess(response));
     } catch (error) {
         yield put(userSlice.actions.deleteProductFailure(error.message));
@@ -165,7 +164,7 @@ function* getAllCartItems({ payload }) {
 
 function* removeItemFromCart({ payload }) {
     try {
-        const res = yield call(userApi.removeItemFromCart, payload);
+        const res = yield call(userApi.removeItemFromCart, payload.productId);
         if (res.status === 200){
             yield put(userSlice.actions.removeItemFromCartSuccess(payload));
         }

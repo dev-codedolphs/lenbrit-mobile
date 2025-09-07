@@ -29,7 +29,7 @@ const MyItemsScreen = () => {
          <Button title='Add New Items' backgroundColor={color.Default} onPress={() => navigation.navigate('AddItem')} />
          <space.s2 />
         <FlatList
-          data={products}
+          data={products?.results}
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
           numColumns={2}

@@ -24,10 +24,14 @@ const OrdersScreen = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    setIsLoading(true);
     dispatch(userSlice.actions.getAllOrders({}));
-    setTimeout(() => setIsLoading(false), 1200);
   }, [])
+
+  useEffect(() => {
+    if (orders){
+      setIsLoading(false);
+    }
+  }, [orders])
 
   const renderOrder = ({ item }: { item: OrderItemType }) => <OrderItem item={item} />
   const filteredOrders = orders.filter((order: any) => order.status === selectedTab.toUpperCase().replace(' ', '_'));

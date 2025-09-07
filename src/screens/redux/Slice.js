@@ -48,11 +48,9 @@ const userSlice = createSlice({
         // delete product
         deleteProduct: (state) => ({...state, loading: true, success: false, error: null}),
         deleteProductSuccess: (state, action) => {
-            const deletedId = action.payload;
             return {
                 ...state,
                 success: true,
-                products: state.products.filter(product => product.id !== deletedId),
             };
         },
         deleteProductFailure: (state, action) => ({

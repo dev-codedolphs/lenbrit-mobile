@@ -28,7 +28,6 @@ const OrderDetailScreen: React.FC<Props> = ({ route }) => {
     const { loading, success } = useSelector((state:any) => state.user);
     const navigation = useNavigation();
     const { item }: any = route.params;
-    console.log('itemmmmm', item)
     const startDate = item?.listing?.startDate &&
         new Date(item.listing.startDate).toLocaleDateString('en-GB', {
             day: 'numeric',
@@ -138,6 +137,21 @@ const OrderDetailScreen: React.FC<Props> = ({ route }) => {
                         </Text>
                     </View>
                 </View>
+                {item?.listing?.images?.length > 1 && (
+                    <View style={styles.otherImagesRow}>
+                        {item.listing.images.slice(1).map((img: any, index: number) => (
+                            <Image
+                                key={index}
+                                source={{ uri: img.url }}
+                                style={[
+                                    styles.otherImage,
+                                    { flex: 1 / (item.listing.images.length - 1) }, // distribute evenly
+                                ]}
+                                resizeMode="cover"
+                            />
+                        ))}
+                    </View>
+                )}
 
                 <View style={{ flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center'}}>
                 <Text style={styles.sectionTitle}>{item?.listing?.name}</Text>
@@ -328,5 +342,15 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         justifyContent: 'space-between',
+    },
+    otherImagesRow: {
+        flexDirection: 'row',
+        marginTop: hp(1),
+        gap: wp(2),
+    },
+
+    otherImage: {
+        height: hp(10),
+        borderRadius: 8,
     },
 });

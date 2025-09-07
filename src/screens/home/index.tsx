@@ -214,7 +214,7 @@ const HomeScreen = () => {
           <>
             <Text style={{ fontSize: 20, fontWeight: '600' }}>Quick Stats</Text>
             <QuickStats />
-            <YourListings title="Your Listings" data={products} onPress={() => navigation.navigate('Tabs', { screen: 'MyItems' })} from='listingsHome' />
+            <YourListings title="Your Listings" data={products?.results} onPress={() => navigation.navigate('Tabs', { screen: 'MyItems' })} from='listingsHome' />
             <YourListings title="Incoming Requests" data={requests} onPress={() => navigation.navigate('OffersScreen')} from='requests' />
           </>
         }
