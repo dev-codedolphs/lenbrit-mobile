@@ -19,7 +19,7 @@ const tabs = ['In Progress', 'Completed', 'Cancelled'];
 
 const OrdersScreen = () => {
   const dispatch = useDispatch();
-  const { orders } = useSelector((state:any) => state.user);
+  const { orders, loading } = useSelector((state:any) => state.user);
   const [selectedTab, setSelectedTab] = useState('In Progress');
   const [isLoading, setIsLoading] = useState(true);
 
@@ -72,7 +72,7 @@ const OrdersScreen = () => {
         onSelect={setSelectedTab}
       />
 
-      {isLoading ? (
+      {loading ? (
         <FlatList
           data={[1, 2, 3, 4]}
           keyExtractor={(item, index) => index.toString()}
