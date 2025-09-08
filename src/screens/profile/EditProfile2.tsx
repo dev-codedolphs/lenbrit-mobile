@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import {
     StyleSheet,
     Text,
@@ -23,12 +23,13 @@ import Button from '../../components/Button';
 import userApi from '../redux/Api'
 import userSlice from '../redux/Slice';
 import authSlice from '../auth/redux/Slice';
+import Toast from 'react-native-toast-message';
 
 
 const EditProfile2 = () => {
     const dispatch = useDispatch();
     const navigation = useNavigation();
-    const { user, loading } = useSelector((state: any) => state.auth);
+    const { user, loading, success } = useSelector((state: any) => state.auth);
 
     const [firstName, setFirstName] = useState(user?.firstName ?? '');
     const [lastName, setLastName] = useState(user?.lastName ?? '');
@@ -42,6 +43,18 @@ const EditProfile2 = () => {
 
     const modalRef = useRef<BottomSheetModal | null>(null);
     const [selectedType, setSelectedType] = useState<'profile' | 'cnicFront' | 'cnicBack' | null>(null);
+
+    useEffect(() => {
+        if (success) {
+            Toast.show({
+                type: 'success',
+                text1: 'User updated successfully',
+                topOffset: 20,
+                visibilityTime: 3000,
+                position: 'bottom',
+            });
+        }
+    }, [success])
 
     const openModal = (type: 'profile' | 'cnicFront' | 'cnicBack') => {
         setSelectedType(type);

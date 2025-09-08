@@ -166,6 +166,15 @@ export interface User {
   firstName: string | null;
   lastName: string | null;
   email: string;
+  phoneNumber: string;
+  address: string;
+  city: string;
+  role: "BORROWER" | "ADMIN" | "LENDER" | string;
+  loginMethod: string | null;
+  isEmailVerified: boolean;
+  profileImage: string;
+  cnicFrontImage: string;
+  cnicBackImage: string;
 }
 
 export interface ListingItem {

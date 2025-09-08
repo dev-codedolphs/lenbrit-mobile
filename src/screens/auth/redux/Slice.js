@@ -6,6 +6,7 @@ const initialState = {
     isLoggedIn: false,
     isAuthenticated: false,
     isVerified: null,
+    success: false,
     error: false,
 }
 
@@ -143,16 +144,19 @@ const authSlice = createSlice({
             ...state,
             loading: true,
             error: null,
+            success: false,
         }),
         updateUserInfoSuccess: (state, action) => ({
             ...state,
             loading: false,
-            user: { ...state.user, ...action.payload },
+            success: true,
+            user: state.user ? { ...state.user, ...action.payload } : action.payload,
         }),
         updateUserInfoFailure: (state, action) => ({
             ...state,
             loading: false,
             error: action.payload,
+            success: false,
         }),
         reset: () => initialState,
     }

@@ -4,19 +4,21 @@ import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
 import { ArrowForward, NotificationIcon } from '../../assets/icons';
 import { widthPercentageToDP as wp, heightPercentageToDP as hp } from 'react-native-responsive-screen';
 import { Touchable } from 'react-native';
+import { User } from '../../types/types';
 
 interface Prop {
   onPress: () => void;
+  user: User
 }
 
-const Header: React.FC<Prop> = ({ onPress }) => {
+const Header: React.FC<Prop> = ({ onPress, user }) => {
   return (
     <View style={styles.container}>
       <View style={styles.avatarWrapper}>
-        <Image source={{ uri: 'https://i.pravatar.cc/150?img=12' }} style={styles.avatar} />
+        <Image source={{ uri: user?.profileImage ? user.profileImage : 'https://i.pravatar.cc/150?img=12' }} style={styles.avatar} />
         <View>
           <Text style={styles.welcome}>Welcome Back</Text>
-          <Text style={styles.name}>Faraz</Text>
+          <Text style={styles.name}>{user?.firstName}{user?.lastName}</Text>
         </View>
       </View>
       <TouchableOpacity style={styles.notification} onPress={onPress}>

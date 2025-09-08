@@ -25,7 +25,7 @@ const ProfileScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
   const [isLoggingOut, setIsLoggingOut] = useState(false);
-  const isLoggedIn = useSelector((state: any) => state.auth.isLoggedIn);
+  const { user } = useSelector((state: any) => state.auth);
 
  
   const handleLogout = async () => {
@@ -45,12 +45,12 @@ const ProfileScreen = () => {
         {/* Profile Info */}
         <View style={styles.profileSection}>
           <Image
-            source={{ uri: 'https://i.pravatar.cc/150?img=12' }}
+            source={{ uri: user?.profileImage ? user.profileImage : 'https://i.pravatar.cc/150?img=12' }}
             style={styles.avatar}
           />
           <View style={styles.infoWrapper}>
-            <Text style={styles.name}>Faraz</Text>
-            <Text style={styles.username}>@farazii</Text>
+            <Text style={styles.name}>{user?.firstName}{user?.lastName}</Text>
+            <Text style={styles.username}>{user?.email}</Text>
           </View>
           <TouchableOpacity style={styles.editButton} onPress={() => navigation.navigate('EditProfile2')}>
             <Icon name="edit" size={14} color={color.White} />

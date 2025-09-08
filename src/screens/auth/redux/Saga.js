@@ -140,7 +140,7 @@ function* updateUserInfo({ payload }) {
     try {
         const response = yield call(authApi.updateUserInfo, payload);
         console.log("Update User Info Response:", response);
-        yield put(authSlice.actions.updateUserInfoSuccess(response.data));
+        yield put(authSlice.actions.updateUserInfoSuccess(response.data.user));
     } catch (error) {
         yield put(authSlice.actions.updateUserInfoFailure(error.response?.data || error.message));
         console.log(error);
