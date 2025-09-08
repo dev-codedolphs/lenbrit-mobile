@@ -146,19 +146,11 @@ function* addToCart({ payload }) {
 }
 
 function* getAllCartItems({ payload }) {
-    const isRefresh = payload?.isRefresh;
-    if (isRefresh) {
-        yield put(userSlice.actions.setLoading(false));
-    }
     try {
         const res = yield call(userApi.getAllCartItems);
         yield put(userSlice.actions.getAllCartItemsSuccess(res));
     } catch (e) {
         yield put(userSlice.actions.getAllCartItemsFailure(e.message));
-    } finally {
-        if (!isRefresh) {
-            yield put(userSlice.actions.setLoading(false));
-        }
     }
 }
 

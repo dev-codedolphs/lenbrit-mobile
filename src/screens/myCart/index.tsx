@@ -42,13 +42,12 @@ const MyCart = () => {
     const { cart, success, loading } = useSelector((state:any) => state.user);
     const [cartItems, setCartItems] = useState(cart || []);
     const [refreshing, setRefreshing] = useState(false);
-    const [isInitialLoading, setIsInitialLoading] = useState(true);
 
     useEffect(() => {
         if (!loading) {
-            setIsInitialLoading(false);
+            setRefreshing(false)
         }
-    }, [loading, cart?.length]);
+    }, [loading]);
 
     useEffect(() => {
         dispatch(userSlice.actions.getAllCartItems({}));
@@ -155,14 +154,13 @@ const MyCart = () => {
     const onRefresh = () => {
         setRefreshing(true);
         dispatch(userSlice.actions.getAllCartItems({ isRefresh: true }));
-        setRefreshing(false);
     };
 
     return (
         <SafeAreaView style={styles.safeArea}>
             <View style={styles.container}>
                 <Header title="My Cart" goBack={() => navigation.goBack()} />
-                {isInitialLoading && !refreshing ? (
+                {loading && !refreshing ? (
                     <FlatList
                         data={[1, 2, 3, 4]}
                         keyExtractor={(item, index) => index.toString()}
@@ -188,7 +186,6 @@ const MyCart = () => {
                             }                          
                     />
                 )}
-                {loading && !refreshing && !isInitialLoading && <FullScreenLoader />}
                 {
                     cart.length > 0 &&
                     <Button title='Place order' backgroundColor={color.Default} onPress={() => navigation.navigate('CheckoutScreen' as never)} />
