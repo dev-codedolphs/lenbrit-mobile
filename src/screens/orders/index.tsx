@@ -34,7 +34,7 @@ const OrdersScreen = () => {
   }, [orders])
 
   const renderOrder = ({ item }: { item: OrderItemType }) => <OrderItem item={item} />
-  const filteredOrders = orders.filter((order: any) => order.status === selectedTab.toUpperCase().replace(' ', '_'));
+  const filteredOrders = orders?.filter((order: any) => order.status === selectedTab.toUpperCase().replace(' ', '_'));
   const flattenedOrderItems = filteredOrders.flatMap((order: any) =>
     order.orderItems.map((item: any) => ({
       ...item,

@@ -61,11 +61,14 @@ export type ItemType = {
   name?: string;
   price: string;
   status?: string;
-  images?: any[];
+  images?: { id: number; url: string }[];
   description: string,
   date: string;
   rating: string;
   image: any;
+  size?: string;
+  user?: any;
+
 }
 
 export type MessageItem = {

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import { StyleSheet, View, FlatList } from 'react-native'
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { color } from '../../theme/colors'
@@ -17,11 +17,22 @@ const MyItemsScreen = () => {
   const dispatch = useDispatch();
   const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 
+  const [refreshing, setRefreshing] = useState(false);
+
   useFocusEffect(
     useCallback(() => {
       dispatch(userSlice.actions.getAllProducts({}));
     }, [dispatch])
   );
+
+  useEffect(() => {
+    if (refreshing) setRefreshing(false);
+  }, [products, refreshing]);
+
+  const onRefresh = useCallback(() => {
+    setRefreshing(true);
+    dispatch(userSlice.actions.getAllProducts({}));
+  }, [dispatch]);
   
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: "#fff" }}>
@@ -33,6 +44,8 @@ const MyItemsScreen = () => {
           keyExtractor={(item) => item.id}
           showsVerticalScrollIndicator={false}
           numColumns={2}
+          refreshing={refreshing}
+          onRefresh={onRefresh}
           columnWrapperStyle={{ justifyContent: 'space-between', marginBottom: 16 }}
           renderItem={({ item }: {item: ItemType}) => <ListingCard item={item} from='listings' />}
         />

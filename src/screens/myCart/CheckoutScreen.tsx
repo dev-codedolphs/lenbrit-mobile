@@ -18,10 +18,10 @@ import { MainStackParamList } from '../../navigation/MainStack';
 import { useSelector } from 'react-redux';
 import { ArrowBack, ArrowForward } from '../../assets/icons';
 import { CartItem } from '../../types/types';
+import ImageSlider from '../../components/checkout/ImageSlider';
 
 const CheckoutScreen = () => {
   const cart = useSelector((state: any) => state.user.cart);
-  const scrollRef = useRef<ScrollView>(null);
   const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
 
   const subTotal = cart.reduce(
@@ -31,12 +31,7 @@ const CheckoutScreen = () => {
   const shippingCost = 50;
   const total = subTotal + shippingCost;
 
-  let currentOffset = 0;
-  const handleArrowPress = (direction: 'left' | 'right') => {
-    const screenWidth = wp('100%');
-    currentOffset += direction === 'right' ? screenWidth : -screenWidth;
-    scrollRef.current?.scrollTo({ x: currentOffset, animated: true });
-  };
+
 
   function formatDate(dateString: string | undefined | null): string | null {
     if (!dateString) return null;
@@ -53,43 +48,26 @@ const CheckoutScreen = () => {
     }
   }
 
+  console.log('cart.....', cart)
+
   return (
     <SafeAreaView style={{ flex: 1, backgroundColor: color.White }}>
-      <View style={styles.container}>
+        <View style={{ flex: 1 }}>
+      <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: wp(4) }}>
         <View style={{ paddingHorizontal: wp(4) }}>
           <Header title="Checkout" goBack={() => navigation.goBack()} />
         </View>
 
         <View style={styles.sliderContainer}>
-          <TouchableOpacity style={styles.leftArrow} onPress={() => handleArrowPress('left')}>
-            <ArrowBack width={20} height={38} />
-          </TouchableOpacity>
-
-          <ScrollView
-            ref={scrollRef}
-            horizontal
-            pagingEnabled
-            showsHorizontalScrollIndicator={false}
-            decelerationRate="fast"
-            snapToInterval={wp('100%')}
-            snapToAlignment="center"
-            contentContainerStyle={{ paddingHorizontal: wp(4), alignItems: 'center', }}
-          >
             {cart.map((item: CartItem, index: number) => {
-              const imageSrc = item.listing.images?.[0]?.url
-                ? { uri: item.listing.images[0].url }
-                : require('../../assets/images/default.jpg');
-              const isLast = index === cart.length - 1;
-
               return (
                 <View key={index}
                   style={[
                     styles.card,
-                    !isLast && { marginRight: wp('4%') } // margin only if not last
                   ]}
                 >
                   <View style={{ padding: wp('3%') }}>
-                    <Image source={imageSrc} style={styles.image} />
+                    <ImageSlider images={item.listing.images} />
                     <Text style={styles.sectionTitle}>Description</Text>
                     <Text style={styles.descriptionBox}>
                       {item.listing.description}
@@ -103,11 +81,6 @@ const CheckoutScreen = () => {
                 </View>
               );
             })}
-          </ScrollView>
-
-          <TouchableOpacity style={styles.rightArrow} onPress={() => handleArrowPress('right')}>
-            <ArrowForward width={20} height={38} />
-          </TouchableOpacity>
         </View>
 
         <View style={{ paddingHorizontal: wp(4) }}>
@@ -117,16 +90,19 @@ const CheckoutScreen = () => {
           <View style={styles.detailRow}><Text style={styles.subLabel}>Shipping cost</Text><Text style={styles.value}>PKR {shippingCost}</Text></View>
           <View style={styles.detailRow}><Text style={styles.label}>Total</Text><Text style={styles.value}>PKR {total.toFixed(2)}</Text></View>
         </View>
+        </ScrollView>
+
 
         <View style={styles.footer}>
           <Button
             title="Check out"
             onPress={() => navigation.navigate('AddressScreen')}
             backgroundColor={color.Default}
+            style={{ width: '92%'}}
           />
         </View>
+        </View>
 
-      </View>
     </SafeAreaView>
   );
 };
@@ -139,11 +115,7 @@ const styles = StyleSheet.create({
     paddingTop: wp(4),
   },
   footer: {
-    position: 'absolute',
-    bottom: 0,
-    left: 0,
-    right: 0,
-    padding: wp(4),
+    padding: wp(1),
     backgroundColor: color.White,
   },
   imageWrapper: {
@@ -198,7 +170,8 @@ const styles = StyleSheet.create({
 
   sliderContainer: {
     marginVertical: hp('1%'),
-    position: 'relative',
+    justifyContent:'center',
+    alignItems:'center',
   },
   card: {
     width: wp('100%') - wp(4) * 2,

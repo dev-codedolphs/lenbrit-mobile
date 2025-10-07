@@ -30,7 +30,7 @@ const ListingCard: React.FC<ListingCardProps> = ({ item, from }) => {
             setModalVisible(false)
             Toast.show({
                 type: 'success',
-                text1: 'Product added to cart successfully',
+                text1: 'Product deleted successfully',
                 topOffset: 20,
                 visibilityTime: 3000,
                 position: 'bottom',
@@ -115,7 +115,7 @@ const ListingCard: React.FC<ListingCardProps> = ({ item, from }) => {
                     backgroundColor={color.Default} 
                     textStyle={{ color: color.White, fontSize: 12 }}
                     style={{ paddingVertical: hp(0.6), width: '100%', borderRadius: 2, marginBottom: 0 }}
-                    // onPress={() =>  navigation.navigate('OrderDetail', { item })}
+                    onPress={() =>  handlePress()}
                 />
             </View>
 

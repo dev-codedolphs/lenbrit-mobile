@@ -23,6 +23,7 @@ import CheckoutScreen from '../screens/myCart/CheckoutScreen';
 import OffersScreen from '../screens/home/OffersScreen';
 import AddressScreen from '../screens/myCart/AddressScreen';
 import OrederPlacedSuccess from '../screens/myCart/OrderPlacedSuccess';
+import ListingsScreen from '../screens/listings';
 
 export type TabsParamList = {
   Home: undefined;
@@ -55,6 +56,7 @@ export type MainStackParamList = {
   OffersScreen: undefined;
   AddressScreen: undefined;
   OrederPlacedSuccess: undefined;
+  Listings: undefined;
 
 };
 
@@ -84,6 +86,7 @@ const MainStack = () => {
       <Stack.Screen name="OffersScreen" component={OffersScreen} />
       <Stack.Screen name="AddressScreen" component={AddressScreen} />
       <Stack.Screen name="OrederPlacedSuccess" component={OrederPlacedSuccess} />
+      <Stack.Screen name="Listings" component={ListingsScreen} />
     </Stack.Navigator>
   );
 };

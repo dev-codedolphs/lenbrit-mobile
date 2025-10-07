@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import {
     View,
     Text,
@@ -16,7 +16,7 @@ import { MainStackParamList } from '../../navigation/MainStack';
 import { color } from '../../theme/colors';
 import Button from '../../components/Button';
 import Header from '../../components/Header';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import userSlice from '../redux/Slice';
 import { Star } from '../../assets/icons';
 
@@ -67,25 +67,19 @@ const ItemDetailScreen: React.FC<Props> = ({ route }) => {
     const dispatch = useDispatch();
     const navigation = useNavigation<NativeStackNavigationProp<MainStackParamList>>();
     const { item } = route.params;
+    const { loading } = useSelector((state:any) => state.user);
 
-    const renderRow = (label: string, value: any, color: string = '#000') => {
+    const renderRow = useCallback((label: string, value: any, color: string = '#000') => {
         const isDate = label.toLowerCase() === 'date';
-
         return (
             <View style={styles.detailRow}>
                 <Text style={styles.detailLabel}>{label}</Text>
-                <Text
-                    style={[
-                        styles.detailValue,
-                        { color },
-                        isDate && styles.date,
-                    ]}
-                >
+                <Text style={[styles.detailValue, { color }, isDate && styles.date]}>
                     {value}
                 </Text>
             </View>
         );
-    };
+    }, []);
 
     const renderItem = ({ item }: { item: Review }) => (
         <View style={styles.card}>
@@ -107,10 +101,32 @@ const ItemDetailScreen: React.FC<Props> = ({ route }) => {
     );
 
 
+    const fmtDayShortMonth = useCallback((d?: string | number | Date) => {
+        return d
+            ? new Date(d).toLocaleDateString('en-GB', { day: 'numeric', month: 'short' })
+            : '';
+    }, []);
+
+    const startStr = fmtDayShortMonth(item?.startDate);
+    const endStr = fmtDayShortMonth(item?.endDate);
+
+    const rangeStr = startStr && endStr ? `${startStr} to ${endStr}` : startStr || endStr;
+
+    const handleAddToCart = () => {
+        if (item?.id) {
+            dispatch(userSlice.actions.addToCart({ listingId: item.id }));
+        }
+    };
+
+    const handleChatToLender = () => {
+        (navigation as any).navigate('Tabs', { screen: 'Message' });
+    }
+
     const handleDelete = (id: string) => {
         dispatch(userSlice.actions.deleteProduct(id as any));
     };
 
+    const userName = `${item?.user?.firstName} ${item?.user?.lastName}`;
     return (
         <SafeAreaView style={{ flex: 1 }}>
             <ScrollView contentContainerStyle={styles.container}>
@@ -121,13 +137,10 @@ const ItemDetailScreen: React.FC<Props> = ({ route }) => {
                 {/* Image and Status */}
                 <View style={styles.imageContainer}>
                     <Image
-                        source={item.image}
+                        source={{ uri: (item.images as any)?.[0]?.url }}
                         style={styles.image}
-                        resizeMode="contain"
+                        resizeMode="cover"
                     />
-                    <TouchableOpacity style={styles.statusBadge} onPress={() => navigation.navigate('AddItem', { product: item })} >
-                        <Text style={styles.statusText}>Edit Item</Text>
-                    </TouchableOpacity>
                 </View>
 
                 {/* Description */}
@@ -146,13 +159,19 @@ const ItemDetailScreen: React.FC<Props> = ({ route }) => {
 
                 {/* Details */}
                 <View style={styles.detailsContainer}>
-                    {renderRow('Item', item.title)}
-                    {renderRow('Renter', item.renter)}
-                    {renderRow('Date', item.date)}
-                    {renderRow('Size', 'Large')}
+                    {renderRow('Item', item.name)}
+                    {renderRow('Renter', userName)}
+                    {renderRow('Date', rangeStr)}
+                    {renderRow('Size', item.size)}
                     {renderRow('Price', 'PKR 400')}
                 </View>
 
+                <View style={styles.buttonContainer}>
+                <Button title='Chat with Lender' textStyle={{ fontSize: 14 }} backgroundColor={color.Default} style={{ width: '48%', paddingVertical: hp(1.2)}} onPress={handleChatToLender} />
+                <Button title='Add to Cart' textStyle={{ fontSize: 14 }} backgroundColor='#00826F' style={{ width: '48%', paddingVertical: hp(1.2)}} onPress={handleAddToCart} loading={loading} />
+                <Button title='Rent Now' textStyle={{ fontSize: 14 }} backgroundColor={color.Black} style={{ width: '48%', paddingVertical: hp(1.2)}} />
+                <Button title='Make offer' textStyle={{ fontSize: 14 }} backgroundColor='#FFAE00' style={{ width: '48%', paddingVertical: hp(1.2)}} /> 
+                </View>
                 <Text style={{ fontSize: 18, fontWeight: '400', fontFamily: 'DM Sans', color: '#8E8E8E' }}>All Reviews</Text>
                 {/* FlatList for reviews */}
                 <FlatList
@@ -164,7 +183,7 @@ const ItemDetailScreen: React.FC<Props> = ({ route }) => {
                 />
 
                 {/* Actions */}
-                <Button title='Delete Item' backgroundColor={color.Red} onPress={() => handleDelete(item.id)} />
+                {/* <Button title='Delete Item' backgroundColor={color.Red} onPress={() => handleDelete(item.id)} /> */}
 
             </ScrollView>
         </SafeAreaView>
@@ -180,6 +199,11 @@ const styles = StyleSheet.create({
     },
     contentContainer: {
         paddingBottom: hp('4%'),
+    },
+    buttonContainer: {
+        flexDirection: 'row',
+        flexWrap: 'wrap',
+        justifyContent: 'space-between',
     },
     header: {
         flexDirection: 'row',
@@ -204,8 +228,8 @@ const styles = StyleSheet.create({
         position: 'relative',
     },
     image: {
-        width: wp('50%'),
-        height: hp('20%'),
+        width: '95%',
+        height: hp('25%'),
     },
     statusBadge: {
         position: 'absolute',
